@@ -42,4 +42,9 @@ public class Funcionario {
     public void setCargo(String cargo) {
         this.cargo = cargo;
     }
+    public Funcionario(Long id, String nome, String cargo) {
+        this.id = id;
+        this.nome = nome;
+        this.cargo = cargo;
+    }
 }

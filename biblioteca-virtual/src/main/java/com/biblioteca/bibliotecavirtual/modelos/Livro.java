@@ -67,4 +67,14 @@ public class Livro {
     public void setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
     }
+    public Livro(Long id, String titulo, Integer anoPublicacao, Autor autor, boolean disponivel) {
+        this.id = id;
+        this.titulo = titulo;
+        this.anoPublicacao = anoPublicacao;
+        this.autor = autor;
+        this.disponivel = disponivel;
+    }
+    public Livro() {
+        
+    }
 }
