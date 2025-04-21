@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.biblioteca.bibliotecavirtual.modelos.Livro;
+import com.biblioteca.bibliotecavirtual.DTO.LivroDTO;
 
-public interface LivroRepositorio extends JpaRepository<Livro, Long> {
-    List<Livro> findByDisponivelTrue();
-    List<Livro> findByAutorId(Long autorId);
-    List<Livro> findByTituloContainingIgnoreCase(String titulo);
+public interface LivroRepositorio extends JpaRepository<LivroDTO, Long> {
+    List<LivroDTO> findByDisponivelTrue();
+    List<LivroDTO> findByAutorId(Long autorId);
+    List<LivroDTO> findByTituloContainingIgnoreCase(String titulo);
 }

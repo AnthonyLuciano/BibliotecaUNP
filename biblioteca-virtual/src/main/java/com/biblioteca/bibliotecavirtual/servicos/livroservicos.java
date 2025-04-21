@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.biblioteca.bibliotecavirtual.modelos.Livro;
+import com.biblioteca.bibliotecavirtual.DTO.LivroDTO;
 import com.biblioteca.bibliotecavirtual.repositorios.LivroRepositorio;
 
 @Service
@@ -14,27 +14,27 @@ public class livroservicos {
     @Autowired
     private LivroRepositorio livroRepositorio;
 
-    public List<Livro> buscarTodosLivros() {
+    public List<LivroDTO> buscarTodosLivros() {
         return livroRepositorio.findAll();
     }
 
-    public Optional<Livro> buscarLivroPorId(Long id) {
+    public Optional<LivroDTO> buscarLivroPorId(Long id) {
         return livroRepositorio.findById(id);
     }
 
-    public List<Livro> buscarLivrosDisponiveis() {
+    public List<LivroDTO> buscarLivrosDisponiveis() {
         return livroRepositorio.findByDisponivelTrue();
     }
 
-    public List<Livro> buscarLivrosPorAutor(Long autorId) {
+    public List<LivroDTO> buscarLivrosPorAutor(Long autorId) {
         return livroRepositorio.findByAutorId(autorId);
     }
 
-    public List<Livro> buscarLivrosPorTitulo(String titulo) {
+    public List<LivroDTO> buscarLivrosPorTitulo(String titulo) {
         return livroRepositorio.findByTituloContainingIgnoreCase(titulo);
     }
 
-    public Livro salvarLivro(Livro livro) {
+    public LivroDTO salvarLivro(LivroDTO livro) {
         return livroRepositorio.save(livro);
     }
 

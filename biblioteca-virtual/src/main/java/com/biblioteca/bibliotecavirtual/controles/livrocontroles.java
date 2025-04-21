@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.biblioteca.bibliotecavirtual.modelos.Livro;
+import com.biblioteca.bibliotecavirtual.DTO.LivroDTO;
 import com.biblioteca.bibliotecavirtual.servicos.livroservicos;
 
 @RestController
@@ -22,24 +22,24 @@ public class livrocontroles {
     private livroservicos livroService;
 
     @GetMapping
-    public List<Livro> listarTodos() {
+    public List<LivroDTO> listarTodos() {
         return livroService.buscarTodosLivros();
     }
 
     @GetMapping("/disponiveis")
-    public List<Livro> listarDisponiveis() {
+    public List<LivroDTO> listarDisponiveis() {
         return livroService.buscarLivrosDisponiveis();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Livro> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<LivroDTO> buscarPorId(@PathVariable Long id) {
         return livroService.buscarLivroPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Livro adicionar(@RequestBody Livro livro) {
+    public LivroDTO adicionar(@RequestBody LivroDTO livro) {
         return livroService.salvarLivro(livro);
     }
 
