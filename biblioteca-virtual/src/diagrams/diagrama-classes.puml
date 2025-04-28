@@ -1,0 +1,80 @@
+@startuml diagrama-classes
+
+class Usuario {
+    + id: int
+    + nome: String
+    + email: String
+    + endereco: String
+    + telefone: String
+    + cpf: String
+    + login: String
+    + senha: String
+    + cadastrar(): void
+    + editarPerfil(): void
+    + excluirConta(): void
+    + visualizarPerfil(): void
+    + visualizarHistorico(): void
+    + realizarLogin(): boolean
+    + realizarLogout(): void
+}
+
+class Cliente {
+    + comentarios: String[]
+    + avaliacoes: String[]
+    + preferencias: String[]
+    + livrosLidos: String[]
+    + livrosDesejados: String[]
+    + status: String
+    + buscarLivros(): void
+    + visualizarDetalhesLivro(): void
+    + solicitarEmprestimo(): void
+    + renovarEmprestimo(): void
+    + devolverLivro(): void
+    + pagarMulta(): void
+    + visualizarMultas(): void
+}
+
+class Admin {
+    + cargo: String
+    + aprovarCadastroUsuarios(): void
+    + editarDadosUsuarios(): void
+    + desativarUsuarios(): void
+    + cadastrarNovosExemplares(): void
+    + editarDadosExemplares(): void
+    + excluirExemplares(): void
+    + gerarRelatorios(): void
+    + visualizarRelatorios(): void
+    + gerarMultas(): void
+    + visualizarHistoricoEmprestimos(): void
+    + visualizarHistoricoDevolucoes(): void
+    + controlarEstoqueLivros(): void
+}
+
+class Livro {
+    + id: int
+    + titulo: String
+    + autor: String
+    + categoria: String
+    + anoPublicacao: int
+    + editora: String
+    + isbn: String
+    + sinopse: String
+    + estoque: int
+    + disponibilidade: boolean
+    + cadastrarLivro(): void
+    + editarLivro(): void
+    + excluirLivro(): void
+    + buscarLivro(): void   
+    + visualizarDetalhesLivro(): void
+    + verificarDisponibilidade(): boolean
+    + emprestarLivro(): void
+    + devolverLivro(): void
+    + renovarEmprestimo(): void
+}
+
+Cliente --|> Usuario
+Admin --|> Usuario
+Cliente "1" --> "*" Livro : empresta
+Admin "1" --> "*" Livro : gerencia
+
+@enduml
