@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS loginapp;
 USE loginapp;
 
 -- Criação da tabela usuario
