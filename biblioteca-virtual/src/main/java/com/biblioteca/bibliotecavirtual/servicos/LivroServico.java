@@ -10,7 +10,7 @@ import com.biblioteca.bibliotecavirtual.modelos.Livro;
 import com.biblioteca.bibliotecavirtual.repositorios.LivroRepositorio;
 
 @Service
-public class livroservicos {
+public class LivroServico {
     @Autowired
     private LivroRepositorio livroRepositorio;
 
@@ -41,4 +41,5 @@ public class livroservicos {
     public void deletarLivro(Long id) {
         livroRepositorio.deleteById(id);
     }
+    
 }

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.biblioteca.bibliotecavirtual.modelos.Livro;
-import com.biblioteca.bibliotecavirtual.servicos.livroservicos;
+import com.biblioteca.bibliotecavirtual.servicos.LivroServico;
 
 @RestController
 @RequestMapping("/api/livros")
 public class livrocontroles {
     @Autowired
-    private livroservicos livroService;
+    private LivroServico livroService;
 
     @GetMapping
     public List<Livro> listarTodos() {

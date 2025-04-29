@@ -1,0 +1,49 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Usuário" as Usuario <<Geral>>
+actor "Usuário Comum" as UsuarioComum <<Cliente>>
+actor "Administrador" as Administrador <<Funcionário>>
+
+UsuarioComum --|> Usuario
+Administrador --|> Usuario
+
+package "Biblioteca Virtual" {
+
+    usecase "RF1 - Login no sistema" as RF001_Login
+    usecase "RF2 - Cadastro de novos usuários" as RF002_Cadastro
+    usecase "RF3 - Controle de usuários (editar/desativar)" as RF003_Controle
+    usecase "RF4 - Cadastro de novos livros/exemplares" as RF004_CadLivro
+    usecase "RF5 - Buscar livros" as RF005_Busca
+    usecase "RF6 - Visualizar detalhes do livro" as RF006_Detalhes
+    usecase "RF7 - Realizar empréstimo" as RF007_Emprestimo
+    usecase "RF8 - Controle de disponibilidade de exemplares" as RF008_Disponibilidade
+    usecase "RF9 - Gerar multas" as RF009_Multas
+    usecase "RF10 - Enviar lembrete de devolução" as RF010_Lembrete
+    usecase "RF11 - Gerar relatórios de empréstimos" as RF011_Relatorios
+    usecase "RF12 - Aprovar/gerir cadastro de usuários" as RF012_Aprovar
+    usecase "RF13 - Recomendar livros" as RF013_Recomendar
+}
+
+Usuario --> RF001_Login
+Usuario --> RF005_Busca
+Usuario --> RF006_Detalhes
+
+UsuarioComum --> RF002_Cadastro
+
+Administrador --> RF003_Controle
+Administrador --> RF004_CadLivro
+Administrador --> RF008_Disponibilidade
+Administrador --> RF010_Lembrete
+Administrador --> RF011_Relatorios
+Administrador --> RF012_Aprovar
+Administrador --> RF009_Multas
+
+RF013_Recomendar --> RF001_Login : <<include>>
+RF001_Login --> (RF007_Emprestimo) : <<include>>
+RF007_Emprestimo <-- (RF008_Disponibilidade) : <<include>>
+RF007_Emprestimo <-- (RF009_Multas) : <<extend>> \nEm caso de atraso
+RF007_Emprestimo <-- (RF010_Lembrete) : <<include>>
+
+@enduml

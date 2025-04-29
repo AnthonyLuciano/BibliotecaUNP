@@ -46,4 +46,11 @@ public class Autor {
     public void setLivros(Set<Livro> livros) {
         this.livros = livros;
     }
+    public Autor(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+    public Autor() {
+
+    }
 }
