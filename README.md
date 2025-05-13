@@ -22,6 +22,7 @@
  RF9: Cálculo e gerenciamento de multas por atraso
  RF10: Envio de lembretes sobre devolução (ex: email/notificação)
 
+### (Maurilio)
 4 Funcionalidades de Administração
  RF11: Geração de relatórios de empréstimos (ex: livros mais emprestados)
  RF12: Aprovação/gestão de cadastro de usuários
