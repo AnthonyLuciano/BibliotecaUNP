@@ -13,7 +13,7 @@ public class Usuario {
 
     private String username;
     private String password;
-    private boolean funcionario; // true = funcionário, false = cliente
+    private boolean admin; // true = funcionário, false = cliente
 
     // Getters e setters
     public Long getId() { return id; }
@@ -25,6 +25,6 @@ public class Usuario {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public boolean isFuncionario() { return funcionario; }
-    public void setFuncionario(boolean funcionario) { this.funcionario = funcionario; }
+    public boolean isAdmin() { return admin; }
+    public void setAdmin(boolean admin) { this.admin = admin; }
 }

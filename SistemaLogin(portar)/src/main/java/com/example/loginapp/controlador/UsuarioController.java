@@ -27,8 +27,8 @@ public class UsuarioController {
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
         if (usuarioOpt.isPresent() && password.equals(usuarioOpt.get().getPassword())) {
-            if (usuarioOpt.get().isFuncionario()) {
-                return "funcionario";
+            if (usuarioOpt.get().isAdmin()) {
+                return "redirect:/admin";
             } else {
                 return "cliente";
             }
@@ -43,7 +43,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/cadastro")
-    public String cadastro(@RequestParam String username, @RequestParam String password, @RequestParam(defaultValue = "false") boolean funcionario, Model model) {
+    public String cadastro(@RequestParam String username, @RequestParam String password, @RequestParam(defaultValue = "false") boolean admin, Model model) {
         if (usuarioRepository.findByUsername(username).isPresent()) {
             model.addAttribute("erro", "Usuário já existe");
             return "cadastro";
@@ -51,7 +51,7 @@ public class UsuarioController {
         Usuario usuario = new Usuario();
         usuario.setUsername(username);
         usuario.setPassword(password); // Senha salva como texto simples
-        usuario.setFuncionario(funcionario);
+        usuario.setAdmin(admin); // true = funcionário, false = cliente
         usuarioRepository.save(usuario);
         return "redirect:/login";
     }
