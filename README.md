@@ -9,6 +9,7 @@
  RF2: Cadastro de novos usuários
  RF3: Controle básico de usuários (ex: edição, desativação)
 
+### (Lucas)
 2 Gerenciamento de Livros
  RF4: Cadastro de novos livros/exemplares (apenas administradores)
  RF5: Busca de livros por título, autor, gênero ou ISBN
