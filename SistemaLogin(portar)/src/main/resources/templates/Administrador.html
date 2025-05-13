@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Administrador</title>
+    <link rel="stylesheet" href="/css/admin.css"> <!-- Link para o CSS externo -->
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Painel do Administrador</h2>
+        <a href="/login" class="btn btn-logout">Sair</a>
+    </div>
+
+    <h4>Gerenciamento de Usuários</h4>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Funcionário?</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="usuario : ${usuarios}">
+            <td th:text="${usuario.id}"></td>
+            <td>
+                <form th:action="@{/admin/editar}" method="post" class="form-inline">
+                    <input type="hidden" name="id" th:value="${usuario.id}" />
+                    <input type="text" name="username" th:value="${usuario.username}" required />
+                    <label>
+                        <input type="checkbox" name="admin" th:checked="${usuario.admin}" />
+                        Funcionário
+                    </label>
+                    <button type="submit" class="btn btn-save">Salvar</button>
+                </form>
+            </td>
+            <td th:text="${usuario.admin ? 'Sim' : 'Não'}"></td>
+            <td>
+                <form th:action="@{/admin/excluir/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
+                    <button type="submit" class="btn btn-delete">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="form-section">
+        <h4>Cadastrar Novo Usuário</h4>
+        <form th:action="@{/admin/cadastrar}" method="post" class="form-grid">
+            <input type="text" name="username" placeholder="Usuário" required />
+            <input type="password" name="password" placeholder="Senha" required />
+            <label>
+                <input type="checkbox" name="admin" />
+                Funcionário
+            </label>
+            <button type="submit" class="btn btn-create">Cadastrar</button>
+        </form>
+
+        <div th:if="${erro}" th:text="${erro}" class="alert-error"></div>
+    </div>
+</div>
+</body>
+</html>
