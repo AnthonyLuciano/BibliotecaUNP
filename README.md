@@ -27,6 +27,6 @@
  RF11: Geração de relatórios de empréstimos (ex: livros mais emprestados)
  RF12: Aprovação/gestão de cadastro de usuários
 
-###(Ygor)
+### (Ygor)
 5 Personalização
  RF13: Sistema de recomendações baseado em histórico de leitura e avaliações
