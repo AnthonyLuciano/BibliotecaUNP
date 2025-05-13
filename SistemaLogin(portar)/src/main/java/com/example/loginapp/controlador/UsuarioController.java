@@ -3,7 +3,6 @@ package com.example.loginapp.controlador;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +17,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-    
-    @Autowired
-    private PasswordEncoder passwordencoder;
 
     @GetMapping("/login")
     public String loginForm() {
@@ -30,7 +26,7 @@ public class UsuarioController {
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
-        if (usuarioOpt.isPresent() && passwordencoder.matches(password, usuarioOpt.get().getPassword())) {
+        if (usuarioOpt.isPresent() && password.equals(usuarioOpt.get().getPassword())) {
             if (usuarioOpt.get().isFuncionario()) {
                 return "funcionario";
             } else {
@@ -54,7 +50,7 @@ public class UsuarioController {
         }
         Usuario usuario = new Usuario();
         usuario.setUsername(username);
-        usuario.setPassword(passwordencoder.encode(password));
+        usuario.setPassword(password); // Senha salva como texto simples
         usuario.setFuncionario(funcionario);
         usuarioRepository.save(usuario);
         return "redirect:/login";
