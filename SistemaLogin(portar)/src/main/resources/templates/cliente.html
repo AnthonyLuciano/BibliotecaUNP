@@ -1,12 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Página do Cliente</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <meta charset="UTF-8">
+    <title>Biblioteca Virtual - Livros Disponíveis</title>
+    <link rel="stylesheet" href="css/cliente.css">
 </head>
 <body>
-<h2>Bem-vindo, Cliente!</h2>
-<p>Conteúdo exclusivo para clientes.</p>
-<a href="/login">Sair</a>
+
+    <header>
+        <h2>📚 Biblioteca Virtual</h2>
+        <p>Explore os livros disponíveis em nosso acervo</p>
+    </header>
+
+    <div class="search-bar">
+        <form method="get" action="/livros">
+            <input type="text" name="busca" placeholder="🔍 Pesquisar por título..." />
+            <button type="submit">Pesquisar</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Gênero</th>
+                <th>Data de Lançamento</th>
+                <th>Disponível</th>
+                <th>ISBN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="livro : ${livros}">
+                <td th:text="${livro.titulo}"></td>
+                <td th:text="${livro.autor}"></td>
+                <td th:text="${livro.genero}"></td>
+                <td th:text="${livro.dataLancamento}"></td>
+                <td th:text="${livro.disponivel ? '✅ Sim' : '❌ Não'}"></td>
+                <td th:text="${livro.ISBN}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <a href="/login">⬅ Sair</a>
+    </div>
+    <div th:if="${isAdmin}">
+        <a href="/admin" class="btn btn-admin">Voltar para o administrador</a>
+    </div>
 </body>
 </html>

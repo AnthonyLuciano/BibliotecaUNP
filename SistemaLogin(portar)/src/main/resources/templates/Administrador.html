@@ -2,15 +2,18 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel do Administrador</title>
-    <link rel="stylesheet" href="/css/admin.css"> <!-- Link para o CSS externo -->
+    <title>BibliotecaUNP - Painel do Administrador</title>
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <h2>Painel do Administrador</h2>
+    <!-- Marca e título -->
+    <div class="branding">
+        <div class="logo">📚 Biblioteca<span>UNP</span></div>
         <a href="/login" class="btn btn-logout">Sair</a>
     </div>
+
+    <h2>Painel do Administrador</h2>
 
     <h4>Gerenciamento de Usuários</h4>
     <table class="table">
@@ -60,6 +63,9 @@
 
         <div th:if="${erro}" th:text="${erro}" class="alert-error"></div>
     </div>
+</div>
+<div>
+    <a href="/cliente" class="btn btn-view-user">Ver como usuário</a>
 </div>
 </body>
 </html>
