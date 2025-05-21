@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.loginapp.model.Usuario;
 import com.example.loginapp.modelo.Usuario;
 import com.example.loginapp.repositorio.UsuarioRepository;
 
+import java.util.List;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -65,5 +67,20 @@ public String clienteView(Model model, HttpSession session) {
         model.addAttribute("isAdmin", usuario.isAdmin());
     }
     return "cliente";
+}
+    public class GestaoUsuarios {
+    public static void aprovarUsuario(Usuario usuario) {
+        usuario.setAprovado(true);
+        System.out.println("Usuário aprovado: " + usuario.getNome());
+    }
+
+    public static void listarUsuariosPendentes(List<Usuario> usuarios) {
+        System.out.println("=== Usuários Pendentes de Aprovação ===");
+        for (Usuario u : usuarios) {
+            if (!u.isAprovado()) {
+                System.out.println("ID: " + u.getId() + " | Nome: " + u.getNome());
+            }
+        }
+    }
 }
 }
