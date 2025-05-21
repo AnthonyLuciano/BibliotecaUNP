@@ -28,3 +28,37 @@ public class Usuario {
     public boolean isAdmin() { return admin; }
     public void setAdmin(boolean admin) { this.admin = admin; }
 }
+
+public class Usuario {
+    private int id;
+    private String nome;
+    private String email;
+    private String endereco;
+    private String telefone;
+    private String cpf;
+    private String login;
+    private String senha;
+    private boolean aprovado;
+
+    public Usuario(int id, String nome, String email, String endereco, String telefone, String cpf, String login, String senha) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.login = login;
+        this.senha = senha;
+        this.aprovado = false; // Por padrão, não aprovado
+    }
+
+    // Getters e setters
+    public boolean isAprovado() {
+        return aprovado;
+    }
+
+    public void setAprovado(boolean aprovado) {
+        this.aprovado = aprovado;
+    }
+
+}
