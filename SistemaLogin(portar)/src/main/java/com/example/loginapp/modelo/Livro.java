@@ -42,3 +42,46 @@ public class Livro {
     public boolean isDisponivel() { return disponivel; }
     public void setDisponivel(boolean disponivel) { this.disponivel = disponivel; }
 }
+
+public class Livro {
+    private int id;
+    private String titulo;
+    private String autor;
+    private String categoria;
+    private int anoPublicacao;
+    private String editora;
+    private String isbn;
+    private String sinopse;
+    private int estoque;
+    private boolean disponibilidade;
+    private int vezesEmprestado; // usado para o relatório
+
+    public Livro(int id, String titulo, String autor, String categoria, int anoPublicacao,
+                 String editora, String isbn, String sinopse, int estoque) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.categoria = categoria;
+        this.anoPublicacao = anoPublicacao;
+        this.editora = editora;
+        this.isbn = isbn;
+        this.sinopse = sinopse;
+        this.estoque = estoque;
+        this.disponibilidade = estoque > 0;
+        this.vezesEmprestado = 0;
+    }
+
+    public void registrarEmprestimo() {
+        this.vezesEmprestado++;
+    }
+
+    public int getVezesEmprestado() {
+        return vezesEmprestado;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+
+}
