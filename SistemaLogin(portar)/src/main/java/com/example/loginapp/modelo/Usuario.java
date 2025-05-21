@@ -52,7 +52,7 @@ public class Usuario {
         this.aprovado = false; // Por padrão, não aprovado
     }
 
-    // Getters e setters
+    
     public boolean isAprovado() {
         return aprovado;
     }
