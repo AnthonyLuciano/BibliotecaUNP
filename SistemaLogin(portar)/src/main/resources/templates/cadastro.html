@@ -1,18 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
     <title>Cadastro</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-<h2>Cadastro</h2>
-<form method="post" action="/cadastro">
-    <label>Usuário: <input type="text" name="username" required></label><br>
-    <label>Senha: <input type="password" name="password" required></label><br>
-<br>
-    <button type="submit">Cadastrar</button>
-</form>
-<p th:if="${erro}" th:text="${erro}"></p>
-<a href="/login">Voltar ao login</a>
+    <div class="login-container">
+        <img src="/logo/logo.png" alt="Logo Biblioteca UnP" class="logo">
+        <h2>Cadastro</h2>
+        <form method="post" action="/cadastro">
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirmPassword">Confirmar senha:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+        <p class="erro" th:if="${erro}" th:text="${erro}"></p>
+        <div class="footer">
+            <a href="/login">Já tem conta? Entrar</a>
+        </div>
+    </div>
 </body>
 </html>

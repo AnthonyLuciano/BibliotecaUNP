@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Biblioteca Virtual - Livros Disponíveis</title>
+    <title>📚 Biblioteca Virtual - Livros Disponíveis</title>
     <link rel="stylesheet" href="css/cliente.css">
 </head>
 <body>
@@ -35,7 +35,7 @@
                 <td th:text="${livro.titulo}"></td>
                 <td th:text="${livro.autor}"></td>
                 <td th:text="${livro.genero}"></td>
-                <td th:text="${livro.dataLancamento}"></td>
+                <td th:text="${livro.datalancamento}"></td>
                 <td th:text="${livro.disponivel ? '✅ Sim' : '❌ Não'}"></td>
                 <td th:text="${livro.ISBN}"></td>
             </tr>
@@ -45,8 +45,12 @@
     <div class="footer">
         <a href="/login">⬅ Sair</a>
     </div>
+    <div class="footer">
+        <a href="/home" class="btn">⬅Voltar a Home</a>
+    </div>
+    
     <div th:if="${isAdmin}">
-        <a href="/admin" class="btn btn-admin">Voltar para o administrador</a>
+        <a href="/admin" class="btn-admin">🔒 Área Administrativa</a>
     </div>
 </body>
 </html>

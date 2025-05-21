@@ -16,7 +16,7 @@ public class Livro {
     private String titulo;
     private String autor;
     private String genero;
-    private String dataLancamento;
+    private String datalancamento;
     private String ISBN;
     private boolean disponivel;
 
@@ -33,8 +33,8 @@ public class Livro {
     public String getGenero() { return genero; }
     public void setGenero(String genero) { this.genero = genero; }
 
-    public String getDataLancamento() { return dataLancamento; }
-    public void setDataLancamento(String dataLancamento) { this.dataLancamento = dataLancamento; }
+    public String getDatalancamento() { return datalancamento; }
+    public void setDatalancamento(String datalancamento) { this.datalancamento = datalancamento; }
 
     public String getISBN() { return ISBN; }
     public void setISBN(String ISBN) { this.ISBN = ISBN; }

@@ -3,53 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>BibliotecaUNP - Painel do Administrador</title>
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/admin.css"> <!-- Use o CSS criado anteriormente -->
 </head>
 <body>
 <div class="container">
-    <!-- Marca e título -->
-    <div class="branding">
-        <div class="logo">📚 Biblioteca<span>UNP</span></div>
+
+    <header class="branding">
+        <h2>📚 <span>Biblioteca</span>UNP</h2>
         <a href="/login" class="btn btn-logout">Sair</a>
-    </div>
+    </header>
 
     <h2>Painel do Administrador</h2>
 
-    <h4>Gerenciamento de Usuários</h4>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Usuário</th>
-            <th>Funcionário?</th>
-            <th>Ações</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="usuario : ${usuarios}">
-            <td th:text="${usuario.id}"></td>
-            <td>
-                <form th:action="@{/admin/editar}" method="post" class="form-inline">
-                    <input type="hidden" name="id" th:value="${usuario.id}" />
-                    <input type="text" name="username" th:value="${usuario.username}" required />
-                    <label>
-                        <input type="checkbox" name="admin" th:checked="${usuario.admin}" />
-                        Funcionário
-                    </label>
-                    <button type="submit" class="btn btn-save">Salvar</button>
-                </form>
-            </td>
-            <td th:text="${usuario.admin ? 'Sim' : 'Não'}"></td>
-            <td>
-                <form th:action="@{/admin/excluir/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
-                    <button type="submit" class="btn btn-delete">Excluir</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <section>
+        <h4>Gerenciamento de Usuários</h4>
+        <form method="get" action="/admin/pesquisar" class="search-bar">
+            <input type="text" name="busca" placeholder="🔍 Pesquisar usuário..." />
+            <button type="submit" class="btn">Pesquisar</button>
+        </form>
 
-    <div class="form-section">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuário</th>
+                <th>Funcionário?</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.id}"></td>
+                <td>
+                    <form th:action="@{/admin/editar}" method="post" class="form-inline">
+                        <input type="hidden" name="id" th:value="${usuario.id}" />
+                        <input type="text" name="username" th:value="${usuario.username}" required />
+                        <label>
+                            <input type="checkbox" name="admin" th:checked="${usuario.admin}" />
+                            Funcionário
+                        </label>
+                        <button type="submit" class="btn btn-save">Salvar</button>
+                    </form>
+                </td>
+                <td th:text="${usuario.admin ? 'Sim' : 'Não'}"></td>
+                <td>
+                    <form th:action="@{/admin/excluir/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
+                        <button type="submit" class="btn btn-delete">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="form-section">
         <h4>Cadastrar Novo Usuário</h4>
         <form th:action="@{/admin/cadastrar}" method="post" class="form-grid">
             <input type="text" name="username" placeholder="Usuário" required />
@@ -62,10 +69,11 @@
         </form>
 
         <div th:if="${erro}" th:text="${erro}" class="alert-error"></div>
+    </section>
+
+    <div style="margin-top: 20px;">
+        <a href="/livros" class="btn btn-view-user">👤 Ver como usuário</a>
     </div>
-</div>
-<div>
-    <a href="/cliente" class="btn btn-view-user">Ver como usuário</a>
 </div>
 </body>
 </html>

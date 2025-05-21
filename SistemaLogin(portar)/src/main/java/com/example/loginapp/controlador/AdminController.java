@@ -53,4 +53,11 @@ public class AdminController {
         usuarioRepository.deleteById(id);
         return "redirect:/admin";
     }
+
+    @GetMapping("/pesquisar")
+    public String pesquisarUsuarios(@RequestParam String busca, Model model) {
+        var usuarios = usuarioRepository.findByUsernameContainingIgnoreCase(busca);
+        model.addAttribute("usuarios", usuarios);
+        return "Administrador";
+    }
 }

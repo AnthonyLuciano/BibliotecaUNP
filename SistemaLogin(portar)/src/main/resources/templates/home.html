@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Bem-vindo à Biblioteca Virtual</title>
+    <link rel="stylesheet" href="css/cliente.css">
+</head>
+<body>
+    <header>
+        <h2>Bem-vindo, <span th:text="${usuario.username}"></span>!</h2>
+        <p>Veja recomendações baseadas nos seus interesses:</p>
+    </header>
+    <section>
+        <h3>Livros Recomendados</h3>
+        <ul>
+            <li th:each="livro : ${recomendados}">
+                <strong th:text="${livro.titulo}"></strong> — 
+                <span th:text="${livro.autor}"></span> 
+                (<span th:text="${livro.genero}"></span>)
+            </li>
+        </ul>
+    </section>
+    <div class="footer">
+        <a href="/livros">Ver todos os livros</a>
+    </div>
+</body>
+</html>

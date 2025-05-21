@@ -13,10 +13,33 @@ public class Usuario {
 
     private String username;
     private String password;
+    private String email;
+    boolean emailVerificado;
+    private String codigoVerificacao;
     private boolean admin; // true = funcionário, false = cliente
 
     // Getters e setters
+
+    
     public Long getId() { return id; }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public boolean isEmailVerificado() {
+        return emailVerificado;
+    }
+    public void setEmailVerificado(boolean emailVerificado) {
+        this.emailVerificado = emailVerificado;
+    }
+    public String getCodigoVerificacao() {
+        return codigoVerificacao;
+    }
+    public void setCodigoVerificacao(String codigoVerificacao) {
+        this.codigoVerificacao = codigoVerificacao;
+    }
     public void setId(Long id) { this.id = id; }
 
     public String getUsername() { return username; }
