@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDate;
 /*
  * @author anthony
  */
@@ -82,6 +83,22 @@ public class Livro {
     public String getTitulo() {
         return titulo;
     }
+
+    public class Emprestimo {
+    private Usuario usuario;
+    private Livro livro;
+    private LocalDate dataEmprestimo;
+    private LocalDate dataDevolucao;
+
+    public Emprestimo(Usuario usuario, Livro livro, LocalDate dataEmprestimo, LocalDate dataDevolucao) {
+        this.usuario = usuario;
+        this.livro = livro;
+        this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucao = dataDevolucao;
+        livro.registrarEmprestimo();
+    }
+
+}
 
 
 }
