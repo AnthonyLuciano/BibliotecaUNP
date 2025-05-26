@@ -40,6 +40,12 @@ public class LivroController {
         return "livros";
     }
 
+    /**
+     * Mostra os detalhes de um livro específico pelo ID.
+     * Busca o livro no banco e envia para o template detalhes.html.
+     * Redireciona para /livros se não encontrar.
+     * -Anthony
+     */
     @GetMapping("/livros/{id}")
     public String detalhesLivro(@PathVariable Long id, Model model, HttpSession session) {
         Livro livro = livroRepository.findById(id).orElse(null);
