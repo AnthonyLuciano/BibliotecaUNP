@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Erro - Biblioteca UNP</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="error-container">
+        <h2>Ocorreu um erro 😥</h2>
+        <p th:text="'Status: ' + ${status}"></p>
+        <p th:text="'Mensagem: ' + ${error}"></p>
+        <p th:text="'Descrição: ' + ${message}"></p>
+        <a href="/home" class="btn">Voltar para a Home</a>
+    </div>
+</body>
+</html>

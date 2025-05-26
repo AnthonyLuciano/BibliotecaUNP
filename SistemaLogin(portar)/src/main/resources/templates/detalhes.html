@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Livro - BibliotecaUNP</title>
+    <link rel="stylesheet" href="/css/cliente.css">
+</head>
+<body>
+    <header>
+        <h1>Biblioteca UNP</h1>
+    </header>
+
+    <div class="livro-detalhes-container">
+        <!-- Capa do Livro -->
+        <div class="capa-livro">
+            <img th:src="${livro.capaUrl != null ? livro.capaUrl : 'https://via.placeholder.com/200x300'}" alt="Capa do Livro" class="book-cover">
+            <p><strong>ISBN:</strong> <span th:text="${livro.ISBN}"></span></p>
+            <p><strong>Disponível:</strong> <span class="availability" th:text="${livro.disponivel ? 'Sim' : 'Não'}"></span></p>
+            <button>Emprestar</button>
+        </div>
+
+        <!-- Informações do Livro -->
+        <div class="info-livro">
+            <h2 th:text="${livro.titulo}"></h2>
+            <p><strong>Autor:</strong> <span th:text="${livro.autor}"></span></p>
+            <p><strong>Gênero:</strong> <span th:text="${livro.genero}"></span></p>
+            <p><strong>Data de Lançamento:</strong> <span th:text="${livro.datalancamento}"></span></p>
+
+            <hr>
+
+            <h3>Sinopse</h3>
+            <p th:text="${livro.sinopse}"></p>
+
+            <hr>
+
+            <h3>Informações Adicionais</h3>
+            <ul>
+                <li><strong>Status:</strong> <span th:text="${livro.disponivel ? '✅ Disponível' : '❌ Indisponível'}"></span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><a href="/livros">Voltar para a Biblioteca</a></p>
+    </div>
+</body>
+</html>

@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>📚 Biblioteca Virtual - Livros Disponíveis</title>
-    <link rel="stylesheet" href="css/cliente.css">
+    <link rel="stylesheet" href="/css/cliente.css">
 </head>
 <body>
 
     <header>
-        <h2>📚 Biblioteca Virtual</h2>
+        <h2>Biblioteca UNP</h2>
         <p>Explore os livros disponíveis em nosso acervo</p>
     </header>
 
@@ -32,7 +32,9 @@
         </thead>
         <tbody>
             <tr th:each="livro : ${livros}">
-                <td th:text="${livro.titulo}"></td>
+                <td>
+                    <a th:href="@{'/livros/' + ${livro.id}}" th:text="${livro.titulo}"></a>
+                </td>
                 <td th:text="${livro.autor}"></td>
                 <td th:text="${livro.genero}"></td>
                 <td th:text="${livro.datalancamento}"></td>

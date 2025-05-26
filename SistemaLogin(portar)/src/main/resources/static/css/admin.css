@@ -1,110 +1,161 @@
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f7f9;
+/* Reset e tipografia */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  color: #2c3e50;
   padding: 20px;
+  line-height: 1.6;
 }
 
+/* Container principal */
 .container {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: auto;
-  background-color: white;
+  background: #fff;
   padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease-in-out;
 }
 
+/* Cabeçalho e marca */
 .branding {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #2c3e50;
+  padding: 18px 24px;
+  border-radius: 12px;
   margin-bottom: 30px;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #2c3e50;
+.branding h2 {
+  color: #ecf0f1;
+  font-size: 26px;
 }
 
-.logo span {
+.branding h2 span {
   color: #3498db;
 }
 
-h2,
-h4 {
-  color: #2c3e50;
-  margin-bottom: 15px;
-}
-
-input[type="text"],
-input[type="password"] {
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  margin-right: 10px;
-  width: 200px;
-}
-
-input[type="checkbox"] {
-  margin-left: 10px;
-}
-
-button {
-  padding: 8px 16px;
-  background-color: #3498db;
+.btn-logout {
+  background-color: #e74c3c;
   color: white;
+  padding: 10px 18px;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #2980b9;
+.btn-logout:hover {
+  background-color: #c0392b;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-}
-
-th,
-td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
-}
-
-th {
-  background-color: #ecf0f1;
-  color: #2c3e50;
-}
-
-tr:hover {
-  background-color: #f1f1f1;
-}
-
-.form-section {
-  margin-top: 30px;
-}
-
-.form-grid {
+/* Navegação por abas */
+.tab-menu {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
+.tab-button {
+  background-color: #ecf0f1;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #2c3e50;
+  transition: all 0.25s;
+}
+
+.tab-button:hover {
+  background-color: #d0d7de;
+}
+
+.tab-button.active {
+  background-color: #3498db;
+  color: #fff;
+}
+
+/* Conteúdo de abas */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tabela moderna */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.table th, .table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #e1e4e8;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f0f3f5;
+  font-weight: bold;
+}
+
+.table tr:hover {
+  background-color: #f9fbfd;
+}
+
+/* Formulários */
+.form-inline, .form-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+input[type="text"], input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 220px;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+/* Botões */
 .btn {
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  display: inline-block;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  color: white;
 }
 
 .btn-save {
@@ -131,28 +182,25 @@ tr:hover {
   background-color: #8e44ad;
 }
 
-.btn-logout {
-  background-color: #e67e22;
-  color: white;
-}
-
-.btn-logout:hover {
-  background-color: #d35400;
-}
-
 .btn-view-user {
-  margin-top: 20px;
-  display: inline-block;
-  background-color: #3498db;
-  color: white;
+  background-color: #34495e;
 }
 
 .btn-view-user:hover {
-  background-color: #2980b9;
+  background-color: #2c3e50;
 }
 
 .alert-error {
-  margin-top: 10px;
+  margin-top: 15px;
   color: #e74c3c;
   font-weight: bold;
+}
+
+/* Sessões */
+.form-section {
+  margin-top: 40px;
+}
+
+.form-section h4 {
+  margin-bottom: 10px;
 }

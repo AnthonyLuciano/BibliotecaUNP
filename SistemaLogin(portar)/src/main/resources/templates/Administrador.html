@@ -1,79 +1,152 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>BibliotecaUNP - Painel do Administrador</title>
-    <link rel="stylesheet" href="/css/admin.css"> <!-- Use o CSS criado anteriormente -->
+  <meta charset="UTF-8">
+  <title>BibliotecaUNP - Painel do Administrador</title>
+  <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
 <div class="container">
 
-    <header class="branding">
-        <h2>📚 <span>Biblioteca</span>UNP</h2>
-        <a href="/login" class="btn btn-logout">Sair</a>
-    </header>
+  <header class="branding">
+    <h2><span>Biblioteca</span>UNP</h2>
+    <a href="/login" class="btn btn-logout">Sair</a>
+  </header>
 
-    <h2>Painel do Administrador</h2>
+  <h2>Painel do Administrador</h2>
 
+  <!-- Menu de Abas -->
+  <div class="tab-menu">
+    <button class="tab-button active" onclick="openTab('usuarios')">👥 Usuários</button>
+    <button class="tab-button" onclick="openTab('livros')">📚 Livros</button>
+    <button class="tab-button" onclick="openTab('relatorios')">📊 Relatórios</button>
+  </div>
+
+  <!-- Aba: Usuários -->
+  <div id="usuarios" class="tab-content" style="display: block;">
     <section>
-        <h4>Gerenciamento de Usuários</h4>
-        <form method="get" action="/admin/pesquisar" class="search-bar">
-            <input type="text" name="busca" placeholder="🔍 Pesquisar usuário..." />
-            <button type="submit" class="btn">Pesquisar</button>
-        </form>
+      <h4>Gerenciamento de Usuários</h4>
+      <form method="get" action="/admin/pesquisar" class="search-bar">
+        <input type="text" name="busca" placeholder="🔍 Pesquisar usuário..." />
+        <button type="submit" class="btn">Pesquisar</button>
+      </form>
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Usuário</th>
-                <th>Funcionário?</th>
-                <th>Ações</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="usuario : ${usuarios}">
-                <td th:text="${usuario.id}"></td>
-                <td>
-                    <form th:action="@{/admin/editar}" method="post" class="form-inline">
-                        <input type="hidden" name="id" th:value="${usuario.id}" />
-                        <input type="text" name="username" th:value="${usuario.username}" required />
-                        <label>
-                            <input type="checkbox" name="admin" th:checked="${usuario.admin}" />
-                            Funcionário
-                        </label>
-                        <button type="submit" class="btn btn-save">Salvar</button>
-                    </form>
-                </td>
-                <td th:text="${usuario.admin ? 'Sim' : 'Não'}"></td>
-                <td>
-                    <form th:action="@{/admin/excluir/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
-                        <button type="submit" class="btn btn-delete">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuário</th>
+          <th>Funcionário?</th>
+          <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="usuario : ${usuarios}">
+          <td th:text="${usuario.id}"></td>
+          <td>
+            <form th:action="@{/admin/editar}" method="post" class="form-inline">
+              <input type="hidden" name="id" th:value="${usuario.id}" />
+              <input type="text" name="username" th:value="${usuario.username}" required />
+              <label>
+                <input type="checkbox" name="admin" th:checked="${usuario.admin}" />
+                Funcionário
+              </label>
+              <button type="submit" class="btn btn-save">Salvar</button>
+            </form>
+          </td>
+          <td th:text="${usuario.admin ? 'Sim' : 'Não'}"></td>
+          <td>
+            <form th:action="@{/admin/excluir/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
+              <button type="submit" class="btn btn-delete">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </section>
 
     <section class="form-section">
-        <h4>Cadastrar Novo Usuário</h4>
-        <form th:action="@{/admin/cadastrar}" method="post" class="form-grid">
-            <input type="text" name="username" placeholder="Usuário" required />
-            <input type="password" name="password" placeholder="Senha" required />
-            <label>
-                <input type="checkbox" name="admin" />
-                Funcionário
-            </label>
-            <button type="submit" class="btn btn-create">Cadastrar</button>
-        </form>
+      <h4>Cadastrar Novo Usuário</h4>
+      <form th:action="@{/admin/cadastrar}" method="post" class="form-grid">
+        <input type="text" name="username" placeholder="Usuário" required />
+        <input type="password" name="password" placeholder="Senha" required />
+        <label>
+          <input type="checkbox" name="admin" />
+          Funcionário
+        </label>
+        <button type="submit" class="btn btn-create">Cadastrar</button>
+      </form>
 
-        <div th:if="${erro}" th:text="${erro}" class="alert-error"></div>
+      <div th:if="${erro}" th:text="${erro}" class="alert-error"></div>
     </section>
 
     <div style="margin-top: 20px;">
-        <a href="/livros" class="btn btn-view-user">👤 Ver como usuário</a>
+      <a href="/livros" class="btn btn-view-user">👤 Ver como usuário</a>
     </div>
+  </div>
+
+  <!-- Aba: Livros -->
+  <div id="livros" class="tab-content" style="display: none;">
+    <h4>📚 Cadastro e Aprovação de Livros</h4>
+    <h1>EM DESENVOLVIMENTO, ISSO É UM MOCKUP</h1>
+    <section class="form-section">
+      <h4>Cadastrar Novo Livro</h4>
+      <form th:action="@{/admin/livros/cadastrar}" method="post" class="form-grid">
+        <input type="text" name="titulo" placeholder="Título" required />
+        <input type="text" name="autor" placeholder="Autor" required />
+        <input type="text" name="isbn" placeholder="ISBN" required />
+        <button type="submit" class="btn btn-create">Cadastrar Livro</button>
+      </form>
+    </section>
+
+    <section style="margin-top: 30px;">
+      <h4>Solicitações Pendentes de Autores</h4>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Autor</th>
+          <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="livro : ${livrosPendentes}">
+          <td th:text="${livro.id}"></td>
+          <td th:text="${livro.titulo}"></td>
+          <td th:text="${livro.autor}"></td>
+          <td>
+            <form th:action="@{/admin/livros/aprovar}" method="post" style="display: inline;">
+              <input type="hidden" name="id" th:value="${livro.id}" />
+              <button type="submit" class="btn btn-save">Aprovar</button>
+            </form>
+            <form th:action="@{/admin/livros/rejeitar}" method="post" style="display: inline;" onsubmit="return confirm('Rejeitar este livro?')">
+              <input type="hidden" name="id" th:value="${livro.id}" />
+              <button type="submit" class="btn btn-delete">Rejeitar</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- Aba: Relatórios -->
+  <div id="relatorios" class="tab-content" style="display: none;">
+    <h4>📊 Relatórios</h4>
+    <h1>EM DESENVOLVIMENTO, ISSO É UM MOCKUP</h1>
+    <p>Relatórios administrativos e estatísticas de uso serão exibidos aqui.</p>
+    <ul>
+      <li>Total de usuários cadastrados</li>
+      <li>Livros mais requisitados</li>
+      <li>Acessos por período</li>
+    </ul>
+    <p><em>(Implementação futura com gráficos interativos e filtros)</em></p>
+  </div>
+
 </div>
+
+<!-- Script de controle das abas -->
+<script src="/js/admin-tabs.js"></script>
 </body>
 </html>

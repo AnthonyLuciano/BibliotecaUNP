@@ -15,7 +15,10 @@ public class AdminController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
+/*
+ * literalmente um painel de administração, nao tem muito o que explicar
+ * a nao ser CRUD basico
+ */
     @GetMapping
     public String painel(Model model) {
         model.addAttribute("usuarios", usuarioRepository.findAll());

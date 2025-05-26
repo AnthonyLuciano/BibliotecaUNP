@@ -19,6 +19,8 @@ public class Livro {
     private String datalancamento;
     private String ISBN;
     private boolean disponivel;
+    private String capaUrl;
+    private String sinopse;
 
     // Getters e setters
     public Long getId() { return id; }
@@ -41,4 +43,10 @@ public class Livro {
 
     public boolean isDisponivel() { return disponivel; }
     public void setDisponivel(boolean disponivel) { this.disponivel = disponivel; }
+
+    public String getCapaUrl() {return capaUrl;}
+    public void setCapaUrl(String capaUrl) {this.capaUrl = capaUrl;}
+
+    public String getSinopse() {return sinopse;}
+    public void setSinopse(String sinopse) {this.sinopse = sinopse;}
 }
