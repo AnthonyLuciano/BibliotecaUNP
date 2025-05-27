@@ -1,20 +1,20 @@
-package com.example.loginapp.controlador;
+package unpestudantes.Sistema.biblioteca.controlador;
 
 //bibliotecas do java/spring;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpSession;
-//pastas do projeto
-import com.example.loginapp.service.EmailService;
-import com.example.loginapp.modelo.Usuario;
-import com.example.loginapp.modelo.Livro;
-import com.example.loginapp.repositorio.UsuarioRepository;
-import com.example.loginapp.repositorio.LivroRepository;
+import unpestudantes.Sistema.biblioteca.modelo.Livro;
+import unpestudantes.Sistema.biblioteca.modelo.Usuario;
+import unpestudantes.Sistema.biblioteca.repositorio.LivroRepository;
+import unpestudantes.Sistema.biblioteca.repositorio.UsuarioRepository;
+import unpestudantes.Sistema.biblioteca.servico.EmailService;
 
 
 @SuppressWarnings("unused")
@@ -29,6 +29,9 @@ public class UsuarioController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Redireciona a raiz ("/") para a página de login.
@@ -59,9 +62,15 @@ public class UsuarioController {
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
-        if (usuarioOpt.isPresent() && password.equals(usuarioOpt.get().getPassword())) {
-            session.setAttribute("usuarioLogado", usuarioOpt.get());
-            if (usuarioOpt.get().isAdmin()) {
+        if (usuarioOpt.isPresent() && passwordEncoder.matches(password, usuarioOpt.get().getPassword())) {
+            Usuario usuario = usuarioOpt.get();
+            if (!usuario.isEmailVerificado()) {
+                model.addAttribute("username", usuario.getUsername());
+                model.addAttribute("erro", "Você precisa confirmar seu e-mail para acessar o sistema.");
+                return "confirmar-email";
+            }
+            session.setAttribute("usuarioLogado", usuario);
+            if (usuario.isAdmin()) {
                 return "redirect:/admin";
             } else {
                 return "redirect:/home";
@@ -121,7 +130,7 @@ public class UsuarioController {
         Usuario usuario = new Usuario();
         usuario.setUsername(username);
         usuario.setEmail(email);
-        usuario.setPassword(password);
+        usuario.setPassword(passwordEncoder.encode(password));
         usuario.setEmailVerificado(false);
         usuario.setCodigoVerificacao(codigo);
         usuarioRepository.save(usuario);

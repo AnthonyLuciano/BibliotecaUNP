@@ -1,11 +1,13 @@
-package com.example.loginapp.controlador;
+package unpestudantes.sistema.biblioteca.controlador;
 
-import com.example.loginapp.modelo.Usuario;
-import com.example.loginapp.repositorio.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.ui.Model;
+
+import unpestudantes.Sistema.biblioteca.controlador.AdminController;
+import unpestudantes.Sistema.biblioteca.modelo.Usuario;
+import unpestudantes.Sistema.biblioteca.repositorio.UsuarioRepository;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -37,6 +39,7 @@ class AdminControllerTest {
 
         verify(model).addAttribute(eq("usuarios"), any());
         assertEquals("Administrador", view);
+        System.out.println("✅ [AdminController] Painel carregado e usuários adicionados ao model!");
     }
 
     @Test
@@ -47,6 +50,7 @@ class AdminControllerTest {
 
         verify(usuarioRepository).save(any(Usuario.class));
         assertEquals("redirect:/admin", view);
+        System.out.println("✅ [AdminController] Novo usuário cadastrado e redirecionado!");
     }
 
     @Test
@@ -58,6 +62,7 @@ class AdminControllerTest {
         verify(usuarioRepository, never()).save(any(Usuario.class));
         verify(model).addAttribute(eq("erro"), anyString());
         assertEquals("Administrador", view);
+        System.out.println("✅ [AdminController] Cadastro bloqueado para usuário já existente!");
     }
 
     @Test
@@ -70,6 +75,7 @@ class AdminControllerTest {
 
         verify(usuarioRepository).save(usuario);
         assertEquals("redirect:/admin", view);
+        System.out.println("✅ [AdminController] Usuário editado com sucesso!");
     }
 
     @Test
@@ -78,6 +84,7 @@ class AdminControllerTest {
 
         verify(usuarioRepository).deleteById(2L);
         assertEquals("redirect:/admin", view);
+        System.out.println("✅ [AdminController] Usuário excluído com sucesso!");
     }
 
     @Test
@@ -88,5 +95,29 @@ class AdminControllerTest {
 
         verify(model).addAttribute(eq("usuarios"), any());
         assertEquals("Administrador", view);
+        System.out.println("✅ [AdminController] Pesquisa de usuários realizada com sucesso!");
+    }
+
+    @Test
+    void cadastrar_DeveCadastrarAdminComSucesso() {
+        when(usuarioRepository.findByUsername("func1")).thenReturn(Optional.empty());
+
+        String view = adminController.cadastrar("func1", "senha123", true, model);
+
+        verify(usuarioRepository).save(any(Usuario.class));
+        System.out.println("✅ [AdminController] Cadastro de admin realizado com sucesso!");
+        assertEquals("redirect:/admin", view);
+    }
+
+    @Test
+    void cadastrar_DeveTratarSqlInjectionComoTexto() {
+        String injecao = "admin' OR '1'='1";
+        when(usuarioRepository.findByUsername(injecao)).thenReturn(Optional.empty());
+
+        String view = adminController.cadastrar(injecao, "senha", false, model);
+
+        verify(usuarioRepository).save(any(Usuario.class));
+        System.out.println("✅ [AdminController] SQL Injection tratado como texto.");
+        assertEquals("redirect:/admin", view);
     }
 }

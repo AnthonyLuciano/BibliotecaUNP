@@ -1,11 +1,12 @@
-package com.example.loginapp.controlador;
+package unpestudantes.Sistema.biblioteca.controlador;
 
-import com.example.loginapp.modelo.Usuario;
-import com.example.loginapp.repositorio.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import unpestudantes.Sistema.biblioteca.modelo.Usuario;
+import unpestudantes.Sistema.biblioteca.repositorio.UsuarioRepository;
 /*
  * @author anthony
  */

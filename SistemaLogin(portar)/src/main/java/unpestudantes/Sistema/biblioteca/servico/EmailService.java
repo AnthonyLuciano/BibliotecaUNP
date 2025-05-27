@@ -1,4 +1,4 @@
-package com.example.loginapp.service;
+package unpestudantes.Sistema.biblioteca.servico;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

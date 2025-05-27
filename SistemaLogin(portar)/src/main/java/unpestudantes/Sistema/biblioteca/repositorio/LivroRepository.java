@@ -1,9 +1,10 @@
-package com.example.loginapp.repositorio;
+package unpestudantes.Sistema.biblioteca.repositorio;
 
-import com.example.loginapp.modelo.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import unpestudantes.Sistema.biblioteca.modelo.Livro;
 
 import java.util.List;
 //repositorio para pesquisa de livros

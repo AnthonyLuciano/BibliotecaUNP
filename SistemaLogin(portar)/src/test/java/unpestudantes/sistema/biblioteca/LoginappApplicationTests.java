@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package unpestudantes.sistema.biblioteca;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

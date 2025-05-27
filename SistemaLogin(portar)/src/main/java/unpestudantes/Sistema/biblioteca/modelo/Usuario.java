@@ -1,4 +1,4 @@
-package com.example.loginapp.modelo;
+package unpestudantes.Sistema.biblioteca.modelo;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

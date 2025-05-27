@@ -1,9 +1,10 @@
-package com.example.loginapp.repositorio;
+package unpestudantes.Sistema.biblioteca.repositorio;
 
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.loginapp.modelo.Usuario;
+
+import unpestudantes.Sistema.biblioteca.modelo.Usuario;
 
 // Interface de repositório para acessar dados dos usuários no banco
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {

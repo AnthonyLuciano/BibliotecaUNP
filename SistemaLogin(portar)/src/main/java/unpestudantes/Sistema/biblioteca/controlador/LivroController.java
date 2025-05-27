@@ -1,8 +1,5 @@
-package com.example.loginapp.controlador;
+package unpestudantes.Sistema.biblioteca.controlador;
 
-import com.example.loginapp.modelo.Livro;
-import com.example.loginapp.modelo.Usuario;
-import com.example.loginapp.repositorio.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
+import unpestudantes.Sistema.biblioteca.modelo.Livro;
+import unpestudantes.Sistema.biblioteca.modelo.Usuario;
+import unpestudantes.Sistema.biblioteca.repositorio.LivroRepository;
 
 @Controller
 public class LivroController {

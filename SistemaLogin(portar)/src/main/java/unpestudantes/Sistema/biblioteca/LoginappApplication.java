@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package unpestudantes.Sistema.biblioteca;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
