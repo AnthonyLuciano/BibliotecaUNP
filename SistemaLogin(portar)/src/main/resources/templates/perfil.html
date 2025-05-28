@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil do Usuário - BibliotecaUNP</title>
+  <link rel="stylesheet" href="/css/unificado.css">
+</head>
+<body>
+  <div class="container">
+    <div class="branding">
+      <h2>Biblioteca<span>UNP</span></h2>
+      <div>
+        <a href="/home" class="btn btn-view-user" style="margin-right: 10px;">Voltar para Home</a>
+        <a href="/login" class="btn-logout">Sair</a>
+      </div>
+    </div>
+
+    <div class="tab-menu">
+      <button class="tab-button active" onclick="openTab(event, 'perfil')">Perfil</button>
+      <button class="tab-button" onclick="openTab(event, 'historico')">Histórico</button>
+      <button class="tab-button" onclick="openTab(event, 'emprestimos')">Meus Empréstimos</button>
+      <button class="tab-button" onclick="openTab(event, 'lista')">Lista de Leitura</button>
+    </div>
+
+    <div id="perfil" class="tab-content" style="display: block;">
+      <h2>Informações do Usuário</h2>
+      <img th:src="${usuario.fotoUrl != null && !#strings.isEmpty(usuario.fotoUrl) ? usuario.fotoUrl : '/img/placeholder-user.png'}"
+           alt="Foto de perfil" class="profile-picture"/>
+      <p><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
+      <p><strong>Usuário:</strong> <span th:text="${usuario.username}"></span></p>
+      <p><strong>Senha:</strong> ******** <button class="btn btn-save">Alterar</button></p>
+
+      <form th:action="@{/perfil/foto}" method="post" enctype="multipart/form-data">
+        <input type="file" name="foto" accept="image/*" required>
+        <button type="submit" class="btn btn-save">Alterar Foto</button>
+      </form>
+    </div>
+
+    <div id="historico" class="tab-content" style="display:none;">
+      <h2>Histórico de Leitura</h2>
+      <table class="table">
+        <thead>
+          <tr><th>Título</th><th>Data</th><th>Ação</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="item : ${historico}">
+            <td th:text="${item.titulo}"></td>
+            <td th:text="${#temporals.format(item.dataAcesso, 'dd/MM/yyyy HH:mm')}"></td>
+            <td>
+              <a th:href="@{'/livros/' + ${item.isbn}}" class="btn btn-view-user">Ver</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="emprestimos" class="tab-content" style="display:none;">
+      <h2>Meus Empréstimos</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>ISBN</th>
+            <th>Data Empréstimo</th>
+            <th>Devolução Prevista</th>
+            <th>Devolução Real</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="emp : ${emprestimos}">
+            <td th:text="${emp.titulo}"></td>
+            <td th:text="${emp.isbn}"></td>
+            <td th:text="${#temporals.format(emp.dataEmprestimo, 'dd/MM/yyyy')}"></td>
+            <td th:text="${#temporals.format(emp.dataDevolucaoPrevista, 'dd/MM/yyyy')}"></td>
+            <td th:text="${emp.dataDevolucaoReal != null ? #temporals.format(emp.dataDevolucaoReal, 'dd/MM/yyyy') : '-'}"></td>
+            <td>
+              <form th:if="${emp.dataDevolucaoReal == null}" th:action="@{'/emprestimos/devolver/' + ${emp.id}}" method="post">
+                <button type="submit" class="btn btn-save">Devolver</button>
+              </form>
+              <span th:if="${emp.dataDevolucaoReal != null}">Devolvido</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lista" class="tab-content" style="display:none;">
+      <h2>Minha Lista de Leitura</h2>
+      <table class="table">
+        <thead>
+          <tr><th>Título</th><th>Autor</th><th>Ação</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="livro : ${listaLeitura}">
+            <td th:text="${livro.titulo}"></td>
+            <td th:text="${#lists.isEmpty(livro.autores) ? '-' : #strings.arrayJoin(livro.autores, ', ')}"></td>
+            <td>
+              <form th:action="@{'/lista/marcar-lido/' + ${livro.isbn}}" method="post" style="display:inline;">
+                <button class="btn btn-save" type="submit">Marcar como lido</button>
+              </form>
+              <form th:action="@{'/lista/remover/' + ${livro.isbn}}" method="post" style="display:inline;">
+                <button class="btn btn-delete" type="submit">Remover</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/js/perfil-tabs.js"></script>
+</body>
+</html>

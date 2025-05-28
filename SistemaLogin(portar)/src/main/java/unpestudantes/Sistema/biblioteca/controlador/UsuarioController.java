@@ -9,15 +9,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
-import unpestudantes.Sistema.biblioteca.modelo.Livro;
 import unpestudantes.Sistema.biblioteca.modelo.Usuario;
-import unpestudantes.Sistema.biblioteca.repositorio.LivroRepository;
 import unpestudantes.Sistema.biblioteca.repositorio.UsuarioRepository;
 import unpestudantes.Sistema.biblioteca.servico.EmailService;
+import unpestudantes.Sistema.biblioteca.repositorio.EmprestimoRepository;
+import unpestudantes.Sistema.biblioteca.servico.RecomendacaoService;
+import unpestudantes.Sistema.biblioteca.repositorio.HistoricoLeituraRepository;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
-@SuppressWarnings("unused")
+
 @Controller
 public class UsuarioController {
 
@@ -25,13 +30,19 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private LivroRepository livroRepository;
-
-    @Autowired
     private EmailService emailService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RecomendacaoService recomendacaoService;
+
+    @Autowired
+    private HistoricoLeituraRepository historicoLeituraRepository;
+
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
     /**
      * Redireciona a raiz ("/") para a página de login.
@@ -102,14 +113,7 @@ public class UsuarioController {
             return "redirect:/login";
         }
         model.addAttribute("usuario", usuario);
-
-        /*
-        tentei desenvolver um sistema de recomendação de livros baseado em gênero e autor, mas não consegui terminar - anthony
-        List<String> generos = livroRepository.generosLidosRecentementePorUsuario(usuario.getId());
-        List<String> autores = livroRepository.autoresLidosRecentementePorUsuario(usuario.getId());
-        List<Livro> recomendados = livroRepository.recomendarPorGeneroOuAutor(generos, autores, usuario.getId());
-        model.addAttribute("recomendados", recomendados);
-        */
+        model.addAttribute("recomendados", recomendacaoService.recomendarPorGenero(usuario));
         return "home";
     }  
 
@@ -194,5 +198,49 @@ public class UsuarioController {
         model.addAttribute("erro", "Código inválido");
         model.addAttribute("username", username);
         return "confirmar-email";
+    }
+
+    /**
+     * Exibe o perfil do usuário.
+     * Carrega informações do usuário e seus empréstimos.
+     * -Anthony
+     */
+    @GetMapping("/perfil")
+    public String perfil(Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("emprestimos", emprestimoRepository.findByUsuario(usuario));
+        model.addAttribute("historico", historicoLeituraRepository.findByUsuarioOrderByDataAcessoDesc(usuario));
+        model.addAttribute("recomendados", recomendacaoService.recomendarPorGenero(usuario));
+        // ... outros atributos
+        return "perfil";
+    }
+
+    /**
+     * Atualiza a foto de perfil do usuário.
+     * Recebe o arquivo da foto, salva em disco e atualiza o usuário.
+     * -Anthony
+     */
+    @PostMapping("/perfil/foto")
+    public String uploadFoto(@RequestParam("foto") MultipartFile file, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null || file.isEmpty()) return "redirect:/perfil";
+
+        try {
+            String pasta = "src/main/resources/static/img/fotos/";
+            Files.createDirectories(Paths.get(pasta));
+            String nomeArquivo = "user_" + usuario.getId() + "_" + file.getOriginalFilename();
+            Path caminho = Paths.get(pasta + nomeArquivo);
+            file.transferTo(caminho);
+
+            usuario.setFotoUrl("/img/fotos/" + nomeArquivo);
+            // Salve o usuário no banco (adicione o repository se necessário)
+            usuarioRepository.save(usuario);
+            session.setAttribute("usuarioLogado", usuario);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/perfil";
     }
 }

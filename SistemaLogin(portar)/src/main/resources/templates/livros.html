@@ -14,7 +14,7 @@
 
     <div class="search-bar">
         <form method="get" action="/livros">
-            <input type="text" name="busca" placeholder="🔍 Pesquisar por título..." />
+            <input type="text" name="busca" placeholder="🔍 Pesquisar por titulos..." />
             <button type="submit">Pesquisar</button>
         </form>
     </div>
@@ -22,26 +22,29 @@
     <table>
         <thead>
             <tr>
+                <th>Capa</th>
                 <th>Título</th>
-                <th>Autor</th>
-                <th>Gênero</th>
-                <th>Data de Lançamento</th>
-                <th>Disponível</th>
-                <th>ISBN</th>
+                <th>Autor(es)</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="livro : ${livros}">
-                <td>
-                    <a th:href="@{'/livros/' + ${livro.id}}" th:text="${livro.titulo}"></a>
-                </td>
-                <td th:text="${livro.autor}"></td>
-                <td th:text="${livro.genero}"></td>
-                <td th:text="${livro.datalancamento}"></td>
-                <td th:text="${livro.disponivel ? '✅ Sim' : '❌ Não'}"></td>
-                <td th:text="${livro.ISBN}"></td>
-            </tr>
-        </tbody>
+    <tr th:if="${#lists.isEmpty(livros)}">
+        <td colspan="4">Nenhum livro encontrado para o termo pesquisado.</td>
+    </tr>
+    <tr th:each="livro : ${livros}">
+        <td>
+            <img th:if="${livro.capaUrl != null}" th:src="${livro.capaUrl}" alt="Capa" style="height:80px"/>
+        </td>
+        <td>
+            <a th:href="@{'/livros/' + ${livro.editionKey}}" th:text="${livro.titulo}"></a>
+        </td>
+        <td th:text="${#lists.isEmpty(livro.autores) ? '-' : #strings.arrayJoin(livro.autores, ', ')}"></td>
+        <td>
+            <!-- ações -->
+        </td>
+    </tr>
+</tbody>
     </table>
 
     <div class="footer">

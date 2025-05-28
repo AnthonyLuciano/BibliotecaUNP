@@ -13,32 +13,25 @@
     <div class="livro-detalhes-container">
         <!-- Capa do Livro -->
         <div class="capa-livro">
-            <img th:src="${livro.capaUrl != null ? livro.capaUrl : 'https://via.placeholder.com/200x300'}" alt="Capa do Livro" class="book-cover">
-            <p><strong>ISBN:</strong> <span th:text="${livro.ISBN}"></span></p>
-            <p><strong>Disponível:</strong> <span class="availability" th:text="${livro.disponivel ? 'Sim' : 'Não'}"></span></p>
-            <button>Emprestar</button>
+            <img th:if="${detalhes.capaUrl != null}" th:src="${detalhes.capaUrl}" alt="Capa" class="book-cover"/>
+            <img th:if="${detalhes.capaUrl == null}" src="https://via.placeholder.com/200x300" alt="Capa não disponível" class="book-cover"/>
+            <p><strong>Edition Key:</strong> <span th:text="${detalhes.editionKey != null ? detalhes.editionKey : '-'}"></span></p>
         </div>
 
         <!-- Informações do Livro -->
         <div class="info-livro">
-            <h2 th:text="${livro.titulo}"></h2>
-            <p><strong>Autor:</strong> <span th:text="${livro.autor}"></span></p>
-            <p><strong>Gênero:</strong> <span th:text="${livro.genero}"></span></p>
-            <p><strong>Data de Lançamento:</strong> <span th:text="${livro.datalancamento}"></span></p>
-
-            <hr>
-
-            <h3>Sinopse</h3>
-            <p th:text="${livro.sinopse}"></p>
-
-            <hr>
-
-            <h3>Informações Adicionais</h3>
-            <ul>
-                <li><strong>Status:</strong> <span th:text="${livro.disponivel ? '✅ Disponível' : '❌ Indisponível'}"></span></li>
-            </ul>
+            <h2 th:text="${detalhes.titulo}"></h2>
+            <p th:if="${detalhes.subtitulo != null && !#strings.isEmpty(detalhes.subtitulo)}"><strong>Subtítulo:</strong> <span th:text="${detalhes.subtitulo}"></span></p>
+            <p><strong>Editora:</strong> <span th:text="${detalhes.editora != null ? detalhes.editora : '-'}"></span></p>
+            <p><strong>Data de Publicação:</strong> <span th:text="${detalhes.dataPublicacao != null ? detalhes.dataPublicacao : '-'}"></span></p>
+            <p><strong>Número de Páginas:</strong> <span th:text="${detalhes.numeroPaginas != null ? detalhes.numeroPaginas : '-'}"></span></p>
+            <p><strong>Sinopse:</strong> <span th:text="${detalhes.sinopse != null ? detalhes.sinopse : '-'}"></span></p>
         </div>
     </div>
+
+    <form th:action="@{'/emprestimos/emprestar/' + ${detalhes.editionKey}}" method="post"></form>
+        <button type="submit" class="btn btn-save">Emprestar</button>
+    </form>
 
     <div class="footer">
         <p><a href="/livros">Voltar para a Biblioteca</a></p>

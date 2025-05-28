@@ -17,6 +17,7 @@ public class Usuario {
     boolean emailVerificado;
     private String codigoVerificacao;
     private boolean admin; // true = funcionário, false = cliente
+    private String fotoUrl;
 
     // Getters e setters
 
@@ -50,4 +51,7 @@ public class Usuario {
 
     public boolean isAdmin() { return admin; }
     public void setAdmin(boolean admin) { this.admin = admin; }
+
+    public String getFotoUrl() { return fotoUrl; }
+    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
 }

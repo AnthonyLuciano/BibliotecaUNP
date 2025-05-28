@@ -7,19 +7,38 @@
 </head>
 <body>
     <header>
-        <h2>Bem-vindo, <span th:text="${usuario.username}"></span>!</h2>
-        <p>Veja recomendações baseadas nos seus interesses:</p>
+        <div class="profile-container">
+            <div>
+                <h2>Bem-vindo, <span th:text="${usuario.username}"></span>!</h2>
+                <p>Veja recomendações baseadas nos seus interesses:</p>
+            </div>
+            <a href="/perfil" class="profile-container">
+                <img th:src="${usuario.fotoUrl != null && !#strings.isEmpty(usuario.fotoUrl) ? usuario.fotoUrl : '/img/placeholder-user.png'}"
+                     alt="Foto de perfil" class="profile-picture"/>
+            </a>
+        </div>
     </header>
+
+    <div class="search-bar" style="margin: 30px 0;">
+        <form method="get" action="/livros">
+            <input type="text" name="busca" placeholder="🔍 Pesquisar por título, autor ou ISBN..." required />
+            <button type="submit">Pesquisar</button>
+        </form>
+    </div>
+
     <section>
         <h3>Livros Recomendados</h3>
-        <ul>
-            <li th:each="livro : ${recomendados}">
-                <strong th:text="${livro.titulo}"></strong> — 
-                <span th:text="${livro.autor}"></span> 
-                (<span th:text="${livro.genero}"></span>)
-            </li>
-        </ul>
+        <div class="recomendados">
+            <div th:each="livro : ${recomendados}" class="livro-recomendado">
+                <img th:if="${livro.capaUrl != null}" th:src="${livro.capaUrl}" alt="Capa" style="height:100px"/>
+                <div>
+                    <a th:href="@{'/livros/' + (${#lists.isEmpty(livro.isbns) ? '' : livro.isbns[0]})}" th:text="${livro.titulo}"></a>
+                    <p th:text="${#lists.isEmpty(livro.autores) ? '-' : #strings.arrayJoin(livro.autores, ', ')}"></p>
+                </div>
+            </div>
+        </div>
     </section>
+
     <div class="footer">
         <a href="/livros">Ver todos os livros</a>
     </div>

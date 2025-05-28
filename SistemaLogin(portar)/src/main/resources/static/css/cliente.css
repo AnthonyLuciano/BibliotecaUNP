@@ -94,6 +94,29 @@ tr:hover {
     flex-wrap: wrap;
 }
 
+.profile-container {
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.profile-picture {
+width: 60px;
+height: 60px;
+border-radius: 50%;
+object-fit: cover;
+border: 2px solid #3498db;
+cursor: pointer;
+}
+
 .capa-livro {
     flex: 1 1 260px;
     text-align: center;
