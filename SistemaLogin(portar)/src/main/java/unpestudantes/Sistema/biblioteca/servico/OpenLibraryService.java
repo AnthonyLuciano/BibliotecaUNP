@@ -19,6 +19,11 @@ public class OpenLibraryService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Busca livros na OpenLibrary por termo de pesquisa.
+     * Retorna uma lista de LivroOpenLibrary para exibição.
+     * Conversa com a API da OpenLibrary.
+     */
     public List<LivroOpenLibrary> buscarLivros(String termo) {
         System.out.println("Método buscarLivros chamado com termo: " + termo);
         List<LivroOpenLibrary> livros = new ArrayList<>();
@@ -75,6 +80,11 @@ public class OpenLibraryService {
         return livros;
     }
 
+    /**
+     * Busca detalhes de um livro na OpenLibrary usando o ISBN.
+     * Retorna um objeto DetalhesLivroOpenLibrary.
+     * Conversa com a API da OpenLibrary.
+     */
     public DetalhesLivroOpenLibrary buscarDetalhesPorIsbn(String isbn) {
         String url = "https://openlibrary.org/isbn/" + isbn + ".json";
         try {
@@ -117,12 +127,31 @@ public class OpenLibraryService {
                 detalhes.setCapaUrl(null);
             }
 
-            // Gênero
-            if (node.has("subjects") && node.get("subjects").size() > 0) {
-                detalhes.setGenero(node.get("subjects").get(0).asText());
-            } else {
-                detalhes.setGenero("");
+            // Autores (authors é uma lista de objetos com chave "key")
+            List<String> autores = new ArrayList<>();
+            if (node.has("authors")) {
+                for (JsonNode autorNode : node.get("authors")) {
+                    String authorKey = autorNode.path("key").asText();
+                    try {
+                        String autorUrl = "https://openlibrary.org" + authorKey + ".json";
+                        String autorJson = restTemplate.getForObject(autorUrl, String.class);
+                        JsonNode autorRoot = objectMapper.readTree(autorJson);
+                        autores.add(autorRoot.path("name").asText());
+                    } catch (Exception e) {
+                        // Se falhar, ignora este autor
+                    }
+                }
             }
+            detalhes.setAutores(autores);
+
+            // Gêneros (subjects)
+            List<String> generos = new ArrayList<>();
+            if (node.has("subjects")) {
+                for (JsonNode generoNode : node.get("subjects")) {
+                    generos.add(generoNode.asText());
+                }
+            }
+            detalhes.setGeneros(generos);
 
             return detalhes;
         } catch (Exception e) {
@@ -130,6 +159,11 @@ public class OpenLibraryService {
         }
     }
 
+    /**
+     * Busca detalhes de um livro na OpenLibrary usando a editionKey.
+     * Retorna um objeto DetalhesLivroOpenLibrary.
+     * Conversa com a API da OpenLibrary.
+     */
     public DetalhesLivroOpenLibrary buscarDetalhesPorEditionKey(String editionKey) {
         try {
             String url = "https://openlibrary.org/books/" + editionKey + ".json";
@@ -138,7 +172,57 @@ public class OpenLibraryService {
 
             DetalhesLivroOpenLibrary detalhes = new DetalhesLivroOpenLibrary();
             detalhes.setTitulo(root.path("title").asText());
-            // Preencha outros campos conforme necessário
+            detalhes.setSubtitulo(root.path("subtitle").asText(""));
+            detalhes.setDataPublicacao(root.path("publish_date").asText(""));
+            detalhes.setEditora(root.has("publishers") && root.get("publishers").size() > 0 ? root.get("publishers").get(0).asText() : "");
+            detalhes.setNumeroPaginas(root.has("number_of_pages") ? root.get("number_of_pages").asText() : "");
+            detalhes.setEditionKey(editionKey);
+
+            // Sinopse/descrição
+            if (root.has("description")) {
+                if (root.get("description").isTextual()) {
+                    detalhes.setSinopse(root.get("description").asText());
+                } else if (root.get("description").has("value")) {
+                    detalhes.setSinopse(root.get("description").get("value").asText());
+                }
+            } else {
+                detalhes.setSinopse("Sinopse não disponível.");
+            }
+
+            // Capa
+            if (root.has("covers") && root.get("covers").size() > 0) {
+                String coverId = root.get("covers").get(0).asText();
+                detalhes.setCapaUrl("https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg");
+            } else {
+                detalhes.setCapaUrl(null);
+            }
+
+            // Autores (authors é uma lista de objetos com chave "key")
+            List<String> autores = new ArrayList<>();
+            if (root.has("authors")) {
+                for (JsonNode autorNode : root.get("authors")) {
+                    String authorKey = autorNode.path("key").asText();
+                    // Busca nome do autor em outra requisição
+                    try {
+                        String autorUrl = "https://openlibrary.org" + authorKey + ".json";
+                        String autorJson = restTemplate.getForObject(autorUrl, String.class);
+                        JsonNode autorRoot = objectMapper.readTree(autorJson);
+                        autores.add(autorRoot.path("name").asText());
+                    } catch (Exception e) {
+                        // Se falhar, ignora este autor
+                    }
+                }
+            }
+            detalhes.setAutores(autores);
+
+            // Gêneros (subjects)
+            List<String> generos = new ArrayList<>();
+            if (root.has("subjects")) {
+                for (JsonNode generoNode : root.get("subjects")) {
+                    generos.add(generoNode.asText());
+                }
+            }
+            detalhes.setGeneros(generos);
 
             return detalhes;
         } catch (Exception e) {

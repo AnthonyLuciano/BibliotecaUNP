@@ -1,5 +1,7 @@
 package unpestudantes.Sistema.biblioteca.modelo;
 
+import java.util.List;
+
 public class DetalhesLivroOpenLibrary {
     private String titulo;
     private String subtitulo;
@@ -9,7 +11,8 @@ public class DetalhesLivroOpenLibrary {
     private String sinopse;
     private String capaUrl; // se ainda não tiver
     private String editionKey;    // se ainda não tiver
-    private String genero;
+    private List<String> autores;
+    private List<String> generos;
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
@@ -35,6 +38,9 @@ public class DetalhesLivroOpenLibrary {
     public String getEditionKey() { return editionKey; }
     public void setEditionKey(String editionKey) { this.editionKey = editionKey; }
 
-    public String getGenero() { return genero; }
-    public void setGenero(String genero) { this.genero = genero; }
+    public List<String> getAutores() { return autores; }
+    public void setAutores(List<String> autores) { this.autores = autores; }
+
+    public List<String> getGeneros() { return generos; }
+    public void setGeneros(List<String> generos) { this.generos = generos; }
 }

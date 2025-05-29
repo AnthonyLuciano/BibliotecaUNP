@@ -22,9 +22,21 @@
         <div class="info-livro">
             <h2 th:text="${detalhes.titulo}"></h2>
             <p th:if="${detalhes.subtitulo != null && !#strings.isEmpty(detalhes.subtitulo)}"><strong>Subtítulo:</strong> <span th:text="${detalhes.subtitulo}"></span></p>
+            <p th:if="${detalhes.autores != null && #lists.size(detalhes.autores) > 0}">
+                <strong>Autor(es):</strong>
+                <span th:each="autor, iterStat : ${detalhes.autores}">
+                    <span th:text="${autor}"></span><span th:if="${!iterStat.last}">, </span>
+                </span>
+            </p>
             <p><strong>Editora:</strong> <span th:text="${detalhes.editora != null ? detalhes.editora : '-'}"></span></p>
             <p><strong>Data de Publicação:</strong> <span th:text="${detalhes.dataPublicacao != null ? detalhes.dataPublicacao : '-'}"></span></p>
             <p><strong>Número de Páginas:</strong> <span th:text="${detalhes.numeroPaginas != null ? detalhes.numeroPaginas : '-'}"></span></p>
+            <p th:if="${detalhes.generos != null && #lists.size(detalhes.generos) > 0}">
+                <strong>Gênero(s):</strong>
+                <span th:each="genero, iterStat : ${detalhes.generos}">
+                    <span th:text="${genero}"></span><span th:if="${!iterStat.last}">, </span>
+                </span>
+            </p>
             <p><strong>Sinopse:</strong> <span th:text="${detalhes.sinopse != null ? detalhes.sinopse : '-'}"></span></p>
         </div>
     </div>
