@@ -1,4 +1,4 @@
-package unpestudantes.sistema.biblioteca.modelo;
+package unpestudantes.sistema.biblioteca.modelo.usuario;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

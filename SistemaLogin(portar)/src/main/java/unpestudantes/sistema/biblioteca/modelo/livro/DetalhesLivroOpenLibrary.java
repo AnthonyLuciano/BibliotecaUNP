@@ -1,4 +1,4 @@
-package unpestudantes.sistema.biblioteca.modelo;
+package unpestudantes.sistema.biblioteca.modelo.livro;
 
 import java.util.List;
 
@@ -13,6 +13,8 @@ public class DetalhesLivroOpenLibrary {
     private String editionKey;    // se ainda não tiver
     private List<String> autores;
     private List<String> generos;
+    private List<String> isbn10;
+    private List<String> isbn13;
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
@@ -43,4 +45,10 @@ public class DetalhesLivroOpenLibrary {
 
     public List<String> getGeneros() { return generos; }
     public void setGeneros(List<String> generos) { this.generos = generos; }
+
+    public List<String> getIsbn10() { return isbn10; }
+    public void setIsbn10(List<String> isbn10) { this.isbn10 = isbn10; }
+
+    public List<String> getIsbn13() { return isbn13; }
+    public void setIsbn13(List<String> isbn13) { this.isbn13 = isbn13; }
 }

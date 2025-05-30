@@ -6,8 +6,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 
-import unpestudantes.sistema.biblioteca.controlador.UsuarioController;
-import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.controlador.usuario.UsuarioController;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 import unpestudantes.sistema.biblioteca.servico.EmailService;
 

@@ -2,8 +2,8 @@ package unpestudantes.sistema.biblioteca.repositorio;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import unpestudantes.sistema.biblioteca.modelo.Emprestimo;
-import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
-package unpestudantes.sistema.biblioteca.modelo;
+package unpestudantes.sistema.biblioteca.modelo.livro;
 
 import jakarta.persistence.*;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 
 @Entity
 public class ListaLivro {

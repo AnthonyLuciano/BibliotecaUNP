@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 
 // Interface de repositório para acessar dados dos usuários no banco
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {

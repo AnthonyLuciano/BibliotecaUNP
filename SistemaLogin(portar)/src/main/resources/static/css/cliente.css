@@ -43,29 +43,6 @@ button:hover {
     background-color: #2980b9;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #ecf0f1;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
 .footer {
     margin-top: 20px;
     text-align: center;
@@ -95,9 +72,9 @@ tr:hover {
 }
 
 .profile-container {
-display: flex;
-align-items: center;
-justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .fade-in {
@@ -109,12 +86,12 @@ justify-content: space-between;
 }
 
 .profile-picture {
-width: 60px;
-height: 60px;
-border-radius: 50%;
-object-fit: cover;
-border: 2px solid #3498db;
-cursor: pointer;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3498db;
+    cursor: pointer;
 }
 
 .capa-livro {
@@ -153,5 +130,42 @@ hr {
 
     .info-livro h2 {
         text-align: center;
+    }
+}
+
+/* ====== NOVO: Estilo para GÊNEROS ====== */
+.generos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.genero {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1 1 calc(20% - 15px); /* 5 por linha com gap */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.genero:hover {
+    background-color: #ecf0f1;
+}
+
+@media (max-width: 900px) {
+    .genero {
+        flex: 1 1 calc(33.33% - 10px); /* 3 por linha */
+    }
+}
+
+@media (max-width: 600px) {
+    .genero {
+        flex: 1 1 calc(50% - 10px); /* 2 por linha */
     }
 }

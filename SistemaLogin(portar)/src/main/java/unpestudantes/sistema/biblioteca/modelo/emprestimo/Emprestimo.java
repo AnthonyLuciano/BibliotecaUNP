@@ -1,6 +1,8 @@
-package unpestudantes.sistema.biblioteca.modelo;
+package unpestudantes.sistema.biblioteca.modelo.emprestimo;
 
 import jakarta.persistence.*;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,6 +19,7 @@ public class Emprestimo {
     private LocalDateTime dataEmprestimo;
     private LocalDateTime dataDevolucaoPrevista;
     private LocalDateTime dataDevolucaoReal;
+    private String editionKey; // Chave única da edição do livro, usada para identificar a edição específica no Open Library
 
     // Getters e setters
     public Long getId() { return id; }
@@ -39,4 +42,7 @@ public class Emprestimo {
 
     public LocalDateTime getDataDevolucaoReal() { return dataDevolucaoReal; }
     public void setDataDevolucaoReal(LocalDateTime dataDevolucaoReal) { this.dataDevolucaoReal = dataDevolucaoReal; }
+
+    public String getEditionKey() {return editionKey;}
+    public void setEditionKey(String editionKey) {this.editionKey = editionKey;}
 }

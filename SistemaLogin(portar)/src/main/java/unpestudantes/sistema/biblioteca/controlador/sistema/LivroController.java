@@ -1,20 +1,19 @@
-package unpestudantes.sistema.biblioteca.controlador;
+package unpestudantes.sistema.biblioteca.controlador.sistema;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
-import unpestudantes.sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
-import unpestudantes.sistema.biblioteca.modelo.HistoricoLeitura;
-import unpestudantes.sistema.biblioteca.modelo.LivroOpenLibrary;
-import unpestudantes.sistema.biblioteca.modelo.Usuario;
-import unpestudantes.sistema.biblioteca.repositorio.HistoricoLeituraRepository;
+import unpestudantes.sistema.biblioteca.modelo.livro.DetalhesLivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.livro.LivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
 
 import java.time.LocalDateTime;
@@ -26,8 +25,6 @@ public class LivroController {
     @Autowired
     private OpenLibraryService openLibraryService;
 
-    @Autowired
-    private HistoricoLeituraRepository historicoLeituraRepository;
 
     /**
      * Lista todos os livros ou faz busca por palavra-chave.
@@ -59,9 +56,13 @@ public class LivroController {
      * -Anthony
      */
     @GetMapping("/livros/{editionKey}")
-    public String detalhesLivro(@PathVariable String editionKey, Model model) {
-        DetalhesLivroOpenLibrary detalhes = openLibraryService.buscarDetalhesPorEditionKey(editionKey);
+    public String detalhesLivro(@PathVariable String editionKey, Model model, @ModelAttribute("mensagem") String mensagem) {
+        DetalhesLivroOpenLibrary detalhes = openLibraryService.buscarDetalhesLivro(editionKey);
         model.addAttribute("detalhes", detalhes);
+        if (mensagem != null && !mensagem.isEmpty()) {
+            model.addAttribute("mensagem", mensagem);
+        }
+        // Adicione outros atributos se necessário (ex: listas do usuário)
         return "detalhes";
     }
 }

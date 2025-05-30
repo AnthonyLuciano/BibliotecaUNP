@@ -1,17 +1,19 @@
 package unpestudantes.sistema.biblioteca.controlador;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
-import unpestudantes.sistema.biblioteca.controlador.LivroController;
-import unpestudantes.sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
-import unpestudantes.sistema.biblioteca.modelo.LivroOpenLibrary;
-import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.modelo.livro.DetalhesLivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.livro.LivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
+import unpestudantes.sistema.biblioteca.controlador.sistema.LivroController;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,10 +46,9 @@ class LivroControllerTest {
 
         String view = livroController.listarLivros(null, model, session);
 
-        verify(model).addAttribute("livros", null);
+        verify(model).addAttribute("livros", Collections.emptyList());
         verify(model).addAttribute("isAdmin", false);
         assertEquals("livros", view);
-        System.out.println("✅ [LivroController] Todos os livros buscados com sucesso!");
     }
 
     @Test
@@ -64,7 +65,6 @@ class LivroControllerTest {
         verify(model).addAttribute("livros", livros);
         verify(model).addAttribute("isAdmin", true);
         assertEquals("livros", view);
-        System.out.println("✅ [LivroController] Livros buscados por palavra-chave com sucesso!");
     }
 
     @Test
@@ -75,9 +75,8 @@ class LivroControllerTest {
 
         String view = livroController.listarLivros(null, model, session);
 
-        verify(model).addAttribute("livros", null);
+        verify(model).addAttribute("livros", Collections.emptyList());
         verify(model).addAttribute("isAdmin", false);
-        System.out.println("✅ [LivroController] Listagem de livros realizada com sucesso!");
         assertEquals("livros", view);
     }
 
@@ -95,37 +94,53 @@ class LivroControllerTest {
         verify(openLibraryService).buscarLivros(injecao);
         verify(model).addAttribute("livros", livros);
         verify(model).addAttribute("isAdmin", false);
-        System.out.println("✅ [LivroController] SQL Injection tratado como texto na busca.");
+        assertEquals("livros", view);
+    }
+
+    @Test
+    void listarLivros_DeveRetornarListaVaziaQuandoUsuarioNaoLogado() {
+        when(session.getAttribute("usuarioLogado")).thenReturn(null);
+
+        String view = livroController.listarLivros(null, model, session);
+
+        verify(model).addAttribute("livros", Collections.emptyList());
+        verify(model).addAttribute("isAdmin", false);
+        assertEquals("livros", view);
+    }
+
+    @Test
+    void listarLivros_DeveRetornarListaVaziaQuandoBuscaVazia() {
+        Usuario usuario = new Usuario();
+        usuario.setAdmin(false);
+        when(session.getAttribute("usuarioLogado")).thenReturn(usuario);
+
+        String view = livroController.listarLivros("", model, session);
+
+        verify(model).addAttribute("livros", Collections.emptyList());
+        verify(model).addAttribute("isAdmin", false);
         assertEquals("livros", view);
     }
 
     @Test
     void detalhesLivro_DeveRetornarDetalhesQuandoEncontrado() {
         DetalhesLivroOpenLibrary detalhes = new DetalhesLivroOpenLibrary();
-        when(openLibraryService.buscarDetalhesPorIsbn("123")).thenReturn(detalhes);
-        Usuario usuario = new Usuario();
-        usuario.setAdmin(true);
-        when(session.getAttribute("usuarioLogado")).thenReturn(usuario);
+        when(openLibraryService.buscarDetalhesPorEditionKey("123")).thenReturn(detalhes);
 
-        String view = livroController.detalhesLivro("123", model);
+        String view = livroController.detalhesLivro("123", model, null);
 
-        verify(openLibraryService, times(1)).buscarDetalhesPorIsbn("123");
-        verify(model).addAttribute("livro", detalhes);
-        verify(model).addAttribute("isAdmin", true);
+        verify(openLibraryService, times(1)).buscarDetalhesPorEditionKey("123");
+        verify(model).addAttribute("detalhes", detalhes);
         assertEquals("detalhes", view);
-        System.out.println("✅ [LivroController] Detalhes do livro exibidos com sucesso!");
     }
 
     @Test
-    void detalhesLivro_DeveRedirecionarQuandoNaoEncontrado() {
-        when(openLibraryService.buscarDetalhesPorIsbn("999")).thenReturn(null);
-        Usuario usuario = new Usuario();
-        usuario.setAdmin(false);
-        when(session.getAttribute("usuarioLogado")).thenReturn(usuario);
+    void detalhesLivro_DeveRetornarDetalhesNuloQuandoNaoEncontrado() {
+        when(openLibraryService.buscarDetalhesPorEditionKey("999")).thenReturn(null);
 
-        String view = livroController.detalhesLivro("999", model);
+        String view = livroController.detalhesLivro("999", model, null);
 
-        assertEquals("redirect:/livros", view);
-        System.out.println("✅ [LivroController] Redirecionamento realizado quando livro não encontrado!");
+        verify(openLibraryService, times(1)).buscarDetalhesPorEditionKey("999");
+        verify(model).addAttribute("detalhes", (Object) null);
+        assertEquals("detalhes", view);
     }
 }

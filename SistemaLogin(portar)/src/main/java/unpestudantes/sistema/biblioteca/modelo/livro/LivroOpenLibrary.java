@@ -1,4 +1,4 @@
-package unpestudantes.sistema.biblioteca.modelo;
+package unpestudantes.sistema.biblioteca.modelo.livro;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ public class LivroOpenLibrary {
     private Integer anoPublicacao;
     private String capaUrl;
     private String editionKey; // Usando editionKey do OpenLibrary
+    private List<String> isbns;
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
@@ -23,4 +24,12 @@ public class LivroOpenLibrary {
 
     public String getEditionKey() { return editionKey; }
     public void setEditionKey(String editionKey) { this.editionKey = editionKey; }
+
+    public List<String> getIsbns() {
+        return isbns;
+    }
+
+    public void setIsbns(List<String> isbns) {
+        this.isbns = isbns;
+    }
 }

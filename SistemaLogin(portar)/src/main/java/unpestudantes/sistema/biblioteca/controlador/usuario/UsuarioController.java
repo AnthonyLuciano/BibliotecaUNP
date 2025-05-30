@@ -1,7 +1,11 @@
-package unpestudantes.sistema.biblioteca.controlador;
+package unpestudantes.sistema.biblioteca.controlador.usuario;
 
 //bibliotecas do java/spring;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,11 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
-import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
+import unpestudantes.sistema.biblioteca.modelo.livro.ListaLivro;
+import unpestudantes.sistema.biblioteca.modelo.livro.LivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
-import unpestudantes.sistema.biblioteca.repositorio.HistoricoLeituraRepository;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
+import unpestudantes.sistema.biblioteca.repositorio.ListaLivroRepository;
 import unpestudantes.sistema.biblioteca.servico.EmailService;
+import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
 import unpestudantes.sistema.biblioteca.servico.RecomendacaoService;
 
 import java.nio.file.Files;
@@ -39,11 +47,15 @@ public class UsuarioController {
     @Autowired
     private RecomendacaoService recomendacaoService;
 
-    @Autowired
-    private HistoricoLeituraRepository historicoLeituraRepository;
 
     @Autowired
     private EmprestimoRepository emprestimoRepository;
+
+    @Autowired
+    private ListaLivroRepository listaLivroRepository;
+
+    @Autowired
+    private OpenLibraryService openLibraryService;
 
     /**
      * Redireciona a raiz ("/") para a página de login.
@@ -114,7 +126,26 @@ public class UsuarioController {
             return "redirect:/login";
         }
         model.addAttribute("usuario", usuario);
-        model.addAttribute("recomendados", recomendacaoService.recomendarPorGenero(usuario));
+        model.addAttribute("recomendados", recomendacaoService.recomendarPorGeneroEAutor(usuario));
+        
+        List<String> generosPopulares = Arrays.asList(
+            "science_fiction", "romance", "biography", "history", "self_help",
+            "fantasy", "technology", "psychology", "thriller", "education"
+        );
+
+        List<LivroOpenLibrary> livrosPorGenero = new ArrayList<>();
+        for (String genero : generosPopulares) {
+            List<LivroOpenLibrary> livros = openLibraryService.buscarLivrosPorGenero(genero);
+            if (livros != null && !livros.isEmpty()) {
+                LivroOpenLibrary escolhido = livros.get(new Random().nextInt(livros.size()));
+                livrosPorGenero.add(escolhido);
+            } else {
+                livrosPorGenero.add(new LivroOpenLibrary()); // vazio, para manter o índice
+            }
+        }
+        model.addAttribute("generosPopulares", generosPopulares);
+        model.addAttribute("livrosPorGenero", livrosPorGenero);
+        
         return "home";
     }  
 
@@ -210,11 +241,14 @@ public class UsuarioController {
     public String perfil(Model model, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
         if (usuario == null) return "redirect:/login";
+        List<ListaLivro> listas = listaLivroRepository.findByUsuario(usuario);
         model.addAttribute("usuario", usuario);
-        model.addAttribute("emprestimos", emprestimoRepository.findByUsuario(usuario));
-        model.addAttribute("historico", historicoLeituraRepository.findByUsuarioOrderByDataAcessoDesc(usuario));
-        model.addAttribute("recomendados", recomendacaoService.recomendarPorGenero(usuario));
-        // ... outros atributos
+        List<Emprestimo> emprestimos = emprestimoRepository.findByUsuario(usuario);
+        model.addAttribute("emprestimos", emprestimos);
+        model.addAttribute("recomendados", recomendacaoService.recomendarPorGeneroEAutor(usuario));
+        model.addAttribute("listas", listas);
+        System.out.println("Entrou no método /perfil");
+        System.out.println("Quantidade de empréstimos: " + emprestimos.size());
         return "perfil";
     }
 
@@ -244,4 +278,5 @@ public class UsuarioController {
         }
         return "redirect:/perfil";
     }
+
 }

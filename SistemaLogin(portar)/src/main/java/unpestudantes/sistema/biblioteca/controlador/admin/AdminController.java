@@ -1,11 +1,11 @@
-package unpestudantes.sistema.biblioteca.controlador;
+package unpestudantes.sistema.biblioteca.controlador.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 /*
  * @author anthony

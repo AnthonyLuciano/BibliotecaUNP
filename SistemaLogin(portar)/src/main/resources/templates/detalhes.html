@@ -15,7 +15,6 @@
         <div class="capa-livro">
             <img th:if="${detalhes.capaUrl != null}" th:src="${detalhes.capaUrl}" alt="Capa" class="book-cover"/>
             <img th:if="${detalhes.capaUrl == null}" src="https://via.placeholder.com/200x300" alt="Capa não disponível" class="book-cover"/>
-            <p><strong>Edition Key:</strong> <span th:text="${detalhes.editionKey != null ? detalhes.editionKey : '-'}"></span></p>
         </div>
 
         <!-- Informações do Livro -->
@@ -38,12 +37,34 @@
                 </span>
             </p>
             <p><strong>Sinopse:</strong> <span th:text="${detalhes.sinopse != null ? detalhes.sinopse : '-'}"></span></p>
+            <div class="identificadores">
+        <p>
+            <strong>Edition Key:</strong>
+            <span th:text="${detalhes.editionKey != null ? detalhes.editionKey : '-'}"></span>
+        </p>
+        <p th:if="${detalhes.isbn10 != null && #lists.size(detalhes.isbn10) > 0}">
+            <strong>ISBN-10:</strong>
+            <span th:each="isbn, iterStat : ${detalhes.isbn10}">
+                <span th:text="${isbn}"></span><span th:if="${!iterStat.last}">, </span>
+            </span>
+        </p>
+        <p th:if="${detalhes.isbn13 != null && #lists.size(detalhes.isbn13) > 0}">
+            <strong>ISBN-13:</strong>
+            <span th:each="isbn, iterStat : ${detalhes.isbn13}">
+                <span th:text="${isbn}"></span><span th:if="${!iterStat.last}">, </span>
+            </span>
+        </p>
+    </div>
         </div>
     </div>
 
-    <form th:action="@{'/emprestimos/emprestar/' + ${detalhes.editionKey}}" method="post"></form>
+    <form th:action="@{'/emprestimos/emprestar/edition/' + ${detalhes.editionKey}}" method="post">
         <button type="submit" class="btn btn-save">Emprestar</button>
     </form>
+
+    <div th:if="${mensagem}" class="notificacao">
+        <p th:text="${mensagem}"></p>
+    </div>
 
     <div class="footer">
         <p><a href="/livros">Voltar para a Biblioteca</a></p>

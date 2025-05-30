@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.ui.Model;
 
-import unpestudantes.sistema.biblioteca.controlador.AdminController;
-import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.controlador.admin.AdminController;
+import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 
 import java.util.Arrays;
