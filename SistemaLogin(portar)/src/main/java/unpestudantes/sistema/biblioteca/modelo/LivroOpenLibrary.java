@@ -1,4 +1,4 @@
-package unpestudantes.Sistema.biblioteca.modelo;
+package unpestudantes.sistema.biblioteca.modelo;
 
 import java.util.List;
 

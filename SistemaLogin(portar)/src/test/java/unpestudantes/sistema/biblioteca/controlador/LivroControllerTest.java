@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
-import unpestudantes.Sistema.biblioteca.controlador.LivroController;
-import unpestudantes.Sistema.biblioteca.modelo.LivroOpenLibrary;
-import unpestudantes.Sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
-import unpestudantes.Sistema.biblioteca.modelo.Usuario;
-import unpestudantes.Sistema.biblioteca.servico.OpenLibraryService;
+import unpestudantes.sistema.biblioteca.controlador.LivroController;
+import unpestudantes.sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.LivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
 
 import java.util.Arrays;
 import java.util.List;

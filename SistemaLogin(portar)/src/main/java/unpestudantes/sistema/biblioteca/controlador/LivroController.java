@@ -1,4 +1,4 @@
-package unpestudantes.Sistema.biblioteca.controlador;
+package unpestudantes.sistema.biblioteca.controlador;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
-import unpestudantes.Sistema.biblioteca.modelo.Usuario;
-import unpestudantes.Sistema.biblioteca.modelo.LivroOpenLibrary;
-import unpestudantes.Sistema.biblioteca.servico.OpenLibraryService;
-import unpestudantes.Sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
-import unpestudantes.Sistema.biblioteca.modelo.HistoricoLeitura;
-import unpestudantes.Sistema.biblioteca.repositorio.HistoricoLeituraRepository;
+import unpestudantes.sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.HistoricoLeitura;
+import unpestudantes.sistema.biblioteca.modelo.LivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.repositorio.HistoricoLeituraRepository;
+import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
+
 import java.time.LocalDateTime;
 
 @SuppressWarnings("unused")

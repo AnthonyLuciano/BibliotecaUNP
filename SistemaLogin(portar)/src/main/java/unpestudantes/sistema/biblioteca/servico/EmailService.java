@@ -1,4 +1,4 @@
-package unpestudantes.Sistema.biblioteca.servico;
+package unpestudantes.sistema.biblioteca.servico;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

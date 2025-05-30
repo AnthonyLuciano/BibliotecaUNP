@@ -1,4 +1,4 @@
-package unpestudantes.Sistema.biblioteca.controlador;
+package unpestudantes.sistema.biblioteca.controlador;
 
 //bibliotecas do java/spring;
 import java.util.Optional;
@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
-import unpestudantes.Sistema.biblioteca.modelo.Usuario;
-import unpestudantes.Sistema.biblioteca.repositorio.UsuarioRepository;
-import unpestudantes.Sistema.biblioteca.servico.EmailService;
-import unpestudantes.Sistema.biblioteca.repositorio.EmprestimoRepository;
-import unpestudantes.Sistema.biblioteca.servico.RecomendacaoService;
-import unpestudantes.Sistema.biblioteca.repositorio.HistoricoLeituraRepository;
+import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
+import unpestudantes.sistema.biblioteca.repositorio.HistoricoLeituraRepository;
+import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
+import unpestudantes.sistema.biblioteca.servico.EmailService;
+import unpestudantes.sistema.biblioteca.servico.RecomendacaoService;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

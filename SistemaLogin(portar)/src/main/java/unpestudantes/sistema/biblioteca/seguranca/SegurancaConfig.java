@@ -1,4 +1,4 @@
-package unpestudantes.Sistema.biblioteca.seguranca;
+package unpestudantes.sistema.biblioteca.seguranca;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

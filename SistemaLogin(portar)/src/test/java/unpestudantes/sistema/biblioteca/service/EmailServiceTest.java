@@ -6,7 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import unpestudantes.Sistema.biblioteca.servico.EmailService;
+import unpestudantes.sistema.biblioteca.servico.EmailService;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;

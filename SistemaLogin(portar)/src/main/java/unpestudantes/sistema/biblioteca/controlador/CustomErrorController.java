@@ -1,4 +1,4 @@
-package unpestudantes.Sistema.biblioteca.controlador;
+package unpestudantes.sistema.biblioteca.controlador;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;

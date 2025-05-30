@@ -1,10 +1,9 @@
-package unpestudantes.Sistema.biblioteca.modelo;
+package unpestudantes.sistema.biblioteca.modelo;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-public class HistoricoLeitura {
+public class ListaLivro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,10 +11,9 @@ public class HistoricoLeitura {
     @ManyToOne
     private Usuario usuario;
 
+    private String nomeLista; // Ex: "Favoritos", "Para Ler"
     private String isbn;
     private String titulo;
-    private String genero;
-    private LocalDateTime dataAcesso;
 
     // Getters e setters
     public Long getId() { return id; }
@@ -24,15 +22,12 @@ public class HistoricoLeitura {
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
+    public String getNomeLista() { return nomeLista; }
+    public void setNomeLista(String nomeLista) { this.nomeLista = nomeLista; }
+
     public String getIsbn() { return isbn; }
     public void setIsbn(String isbn) { this.isbn = isbn; }
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
-
-    public String getGenero() { return genero; }
-    public void setGenero(String genero) { this.genero = genero; }
-
-    public LocalDateTime getDataAcesso() { return dataAcesso; }
-    public void setDataAcesso(LocalDateTime dataAcesso) { this.dataAcesso = dataAcesso; }
 }

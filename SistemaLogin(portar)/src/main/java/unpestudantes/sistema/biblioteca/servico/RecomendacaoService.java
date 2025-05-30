@@ -1,11 +1,12 @@
-package unpestudantes.Sistema.biblioteca.servico;
+package unpestudantes.sistema.biblioteca.servico;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import unpestudantes.Sistema.biblioteca.modelo.HistoricoLeitura;
-import unpestudantes.Sistema.biblioteca.modelo.Usuario;
-import unpestudantes.Sistema.biblioteca.modelo.LivroOpenLibrary;
-import unpestudantes.Sistema.biblioteca.repositorio.HistoricoLeituraRepository;
+
+import unpestudantes.sistema.biblioteca.modelo.HistoricoLeitura;
+import unpestudantes.sistema.biblioteca.modelo.LivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.repositorio.HistoricoLeituraRepository;
 
 import java.util.*;
 

@@ -1,8 +1,10 @@
-package unpestudantes.Sistema.biblioteca.repositorio;
+package unpestudantes.sistema.biblioteca.repositorio;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import unpestudantes.Sistema.biblioteca.modelo.HistoricoLeitura;
-import unpestudantes.Sistema.biblioteca.modelo.Usuario;
+
+import unpestudantes.sistema.biblioteca.modelo.HistoricoLeitura;
+import unpestudantes.sistema.biblioteca.modelo.Usuario;
+
 import java.util.List;
 
 public interface HistoricoLeituraRepository extends JpaRepository<HistoricoLeitura, Long> {

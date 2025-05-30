@@ -1,17 +1,18 @@
-package unpestudantes.Sistema.biblioteca.controlador;
+package unpestudantes.sistema.biblioteca.controlador;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
+import unpestudantes.sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.Emprestimo;
+import unpestudantes.sistema.biblioteca.modelo.Usuario;
+import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
+import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import unpestudantes.Sistema.biblioteca.modelo.Emprestimo;
-import unpestudantes.Sistema.biblioteca.modelo.Usuario;
-import unpestudantes.Sistema.biblioteca.repositorio.EmprestimoRepository;
-import unpestudantes.Sistema.biblioteca.servico.OpenLibraryService;
-import unpestudantes.Sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
 
 @Controller
 @RequestMapping("/emprestimos")

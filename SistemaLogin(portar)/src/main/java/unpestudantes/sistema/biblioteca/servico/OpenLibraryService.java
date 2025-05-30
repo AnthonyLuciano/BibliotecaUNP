@@ -1,11 +1,13 @@
-package unpestudantes.Sistema.biblioteca.servico;
+package unpestudantes.sistema.biblioteca.servico;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import unpestudantes.sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.LivroOpenLibrary;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import unpestudantes.Sistema.biblioteca.modelo.DetalhesLivroOpenLibrary;
-import unpestudantes.Sistema.biblioteca.modelo.LivroOpenLibrary;
 
 import java.net.URL;
 import java.net.URLEncoder;
