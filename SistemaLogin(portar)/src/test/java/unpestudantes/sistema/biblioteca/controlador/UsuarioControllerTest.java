@@ -10,10 +10,16 @@ import unpestudantes.sistema.biblioteca.controlador.usuario.UsuarioController;
 import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 import unpestudantes.sistema.biblioteca.servico.EmailService;
+import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
+import unpestudantes.sistema.biblioteca.modelo.livro.LivroOpenLibrary;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class UsuarioControllerTest {
@@ -22,10 +28,13 @@ class UsuarioControllerTest {
     private UsuarioRepository usuarioRepository;
 
     @Mock
-    private EmailService emailService;
+    private Model model;
 
     @Mock
-    private Model model;
+    private OpenLibraryService openLibraryService;
+
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     private UsuarioController usuarioController;
@@ -93,5 +102,27 @@ class UsuarioControllerTest {
 
         System.out.println("✅ [UsuarioController] Login falhou como esperado com senha incorreta.");
         assertEquals("login", view);
+    }
+
+    @Test
+    void homeDeveAdicionarLivrosPorGeneroEAtributosDeGenero() {
+        Usuario usuario = new Usuario();
+        jakarta.servlet.http.HttpSession session = mock(jakarta.servlet.http.HttpSession.class);
+        when(session.getAttribute("usuarioLogado")).thenReturn(usuario);
+
+        List<String> generosEN = Arrays.asList("science_fiction", "romance");
+        List<String> generosPT = Arrays.asList("Ficção Científica", "Romance");
+
+        // Simula retorno do serviço para cada gênero
+        when(openLibraryService.buscarLivrosPorGenero(anyString()))
+            .thenReturn(List.of(new LivroOpenLibrary()));
+
+        // Chama o método
+        String view = usuarioController.home(model, session);
+
+        // Verifica se adicionou os atributos certos
+        verify(model).addAttribute(eq("generosPopulares"), anyList());
+        verify(model).addAttribute(eq("livrosPorGenero"), anyList());
+        assertEquals("home", view);
     }
 }

@@ -1,4 +1,4 @@
-package unpestudantes.sistema.biblioteca.service;
+package unpestudantes.sistema.biblioteca.servico;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
