@@ -44,7 +44,7 @@ Projeto de turma da faculdade **UNP** para desenvolvimento de um sistema de bibl
 
 ### 🎯 Ygor – Personalização & Documentação
 - ✅ **RF13:** Sistema de recomendações baseado em histórico de leitura  
-- 📝 Colaboração na documentação técnica e no manual do usuário  
+- 📝 Colaboração na documentação técnica e no fluxo do usuário  
 
 ---
 
