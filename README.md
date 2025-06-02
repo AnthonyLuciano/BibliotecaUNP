@@ -61,7 +61,7 @@ Projeto de turma da faculdade **UNP** para desenvolvimento de um sistema de bibl
 | RF7       | Empréstimos virtuais com prazo                               | Tyago       | ✅            |
 | RF8       | Controle de disponibilidade de exemplares                    | Tyago       | ⚠️ Parcial    |
 | RF9       | Multas por atraso                                            | Tyago       | ⬜️            |
-| RF10      | Lembretes por e-mail/notificação                             | Tyago       | ⬜️            |
+| RF10      | Lembretes por e-mail/notificação                             | Tyago       | ✅            |
 | RF11      | Relatórios administrativos                                   | Maurilio    | ⬜️            |
 | RF12      | Aprovação/gestão de cadastro de usuários                     | Maurilio    | ✅* (parcial) |
 | RF13      | Recomendação baseada em histórico                            | Ygor        | ✅            |
