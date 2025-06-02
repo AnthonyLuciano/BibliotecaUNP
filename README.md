@@ -88,12 +88,6 @@ Este projeto tem como objetivo o desenvolvimento de um sistema de gerenciamento 
 
 ---
 
-## 📥 Contribuindo
-
-Contribuições são bem-vindas! Caso deseje colaborar com o projeto, abra uma _issue_ ou envie um _pull request_.
-
----
-
 ## 🧑‍🏫 Desenvolvido por
 
 - Anthony  
