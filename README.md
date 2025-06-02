@@ -24,7 +24,7 @@ Projeto de turma da faculdade **UNP** para desenvolvimento de um sistema de bibl
 
 ---
 
-### 📦 Patrick – Empréstimos e Devoluções
+### 📦 Tyago – Empréstimos e Devoluções
 - ✅ **RF7:** Realização de empréstimos virtuais com prazos definidos  
 - ⚠️ **RF8:** Controle de disponibilidade de exemplares *(parcial/incompleto)*  
 - ⬜️ **RF9:** Cálculo e gerenciamento de multas por atraso  
@@ -50,18 +50,18 @@ Projeto de turma da faculdade **UNP** para desenvolvimento de um sistema de bibl
 
 ## ✅ Requisitos Funcionais (RF) - Status Geral
 
-| Requisito | Descrição                                                    | Responsável | Status       |
-|-----------|--------------------------------------------------------------|-------------|--------------|
+| Requisito | Descrição                                                    | Responsável | Status        |
+|-----------|--------------------------------------------------------------|-------------|---------------|
 | RF1       | Login para usuários e administradores                        | Anthony     | ✅            |
 | RF2       | Cadastro de novos usuários                                   | Anthony     | ✅            |
 | RF3       | Edição/desativação de usuários                               | Anthony     | ✅            |
 | RF4       | Cadastro de livros/exemplares                                | Lucas       | ⬜️            |
 | RF5       | Busca de livros por título, autor, gênero ou ISBN            | Lucas       | ✅            |
 | RF6       | Visualização de detalhes dos livros                          | Lucas       | ✅            |
-| RF7       | Empréstimos virtuais com prazo                               | Patrick     | ✅            |
-| RF8       | Controle de disponibilidade de exemplares                    | Patrick     | ⚠️ Parcial    |
-| RF9       | Multas por atraso                                            | Patrick     | ⬜️            |
-| RF10      | Lembretes por e-mail/notificação                             | Patrick     | ⬜️            |
+| RF7       | Empréstimos virtuais com prazo                               | Tyago       | ✅            |
+| RF8       | Controle de disponibilidade de exemplares                    | Tyago       | ⚠️ Parcial    |
+| RF9       | Multas por atraso                                            | Tyago       | ⬜️            |
+| RF10      | Lembretes por e-mail/notificação                             | Tyago       | ⬜️            |
 | RF11      | Relatórios administrativos                                   | Maurilio    | ⬜️            |
 | RF12      | Aprovação/gestão de cadastro de usuários                     | Maurilio    | ✅* (parcial) |
 | RF13      | Recomendação baseada em histórico                            | Ygor        | ✅            |
@@ -74,7 +74,7 @@ Projeto de turma da faculdade **UNP** para desenvolvimento de um sistema de bibl
 |-------------|----------------------------------|
 | **Anthony** | 🔧 Auxílio técnico + documentação |
 | **Lucas**   | RF4                              |
-| **Patrick** | RF8, RF9, RF10                   |
+| **Tyago**   | RF8, RF9, RF10                   |
 | **Maurilio**| RF11, RF12*                      |
 | **Ygor**    | 📝 Documentação técnica/manual    |
 
@@ -92,7 +92,7 @@ Este projeto tem como objetivo o desenvolvimento de um sistema de gerenciamento 
 
 - Anthony  
 - Lucas  
-- Patrick  
+- Tyago  
 - Maurilio  
 - Ygor  
 
@@ -100,4 +100,4 @@ Este projeto tem como objetivo o desenvolvimento de um sistema de gerenciamento 
 
 ## 📅 Última atualização
 
-Maio de 2025
+Junho de 2025
