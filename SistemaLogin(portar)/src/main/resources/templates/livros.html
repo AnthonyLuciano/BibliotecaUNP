@@ -29,20 +29,28 @@
             </tr>
         </thead>
         <tbody>
-    <tr th:if="${#lists.isEmpty(livros)}">
-        <td colspan="4">Nenhum livro encontrado para o termo pesquisado.</td>
+    <tr th:if="${#lists.isEmpty(livrosLocais)} and ${#lists.isEmpty(livrosExternos)}">
+        <td colspan="5">Nenhum livro encontrado para o termo pesquisado.</td>
     </tr>
-    <tr th:each="livro : ${livros}">
+    <tr th:each="livro : ${livrosLocais}">
         <td>
-            <img th:if="${livro.capaUrl != null}" th:src="${livro.capaUrl}" alt="Capa" style="height:80px"/>
+            <img th:src="${livro.capaUrl != null ? livro.capaUrl : '/img/placeholder-book.png'}" alt="Capa" style="height:80px"/>
         </td>
+        <td th:text="${livro.titulo}"></td>
+        <td th:text="${livro.autor}"></td>
         <td>
-            <a th:href="@{'/livros/' + ${livro.editionKey}}" th:text="${livro.titulo}"></a>
+            <span th:if="${livro.isbn10 != null}" th:text="'ISBN-10: ' + ${livro.isbn10}"></span>
+            <span th:if="${livro.isbn13 != null}" th:text="' ISBN-13: ' + ${livro.isbn13}"></span>
         </td>
+        <td><!-- ações --></td>
+    </tr>
+    <tr th:each="livro : ${livrosExternos}">
+        <td>
+            <img th:src="${livro.capaUrl != null ? livro.capaUrl : '/img/placeholder-book.png'}" alt="Capa" style="height:80px"/>
+        </td>
+        <td th:text="${livro.titulo}"></td>
         <td th:text="${#lists.isEmpty(livro.autores) ? '-' : #strings.arrayJoin(livro.autores, ', ')}"></td>
-        <td>
-            <!-- ações -->
-        </td>
+        <td><!-- ações --></td>
     </tr>
 </tbody>
     </table>
@@ -51,7 +59,7 @@
         <a href="/login">⬅ Sair</a>
     </div>
     <div class="footer">
-        <a href="/home" class="btn">⬅Voltar a Home</a>
+        <a href="/home" class="button">⬅Voltar a Home</a>
     </div>
     
     <div th:if="${isAdmin}">

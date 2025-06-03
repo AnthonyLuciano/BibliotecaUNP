@@ -17,4 +17,12 @@ public class EmailService {
         message.setText("Seu código de verificação é: " + codigo);
         mailSender.send(message);
     }
+
+    public void enviarLembreteDevolucao(String to, String nomeLivro, String dataDevolucao) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Lembrete de devolução - Biblioteca UnP");
+        message.setText("Lembrete: o livro \"" + nomeLivro + "\" deve ser devolvido até " + dataDevolucao + ".");
+        mailSender.send(message);
+    }
 }

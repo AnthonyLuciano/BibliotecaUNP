@@ -3,6 +3,7 @@ package unpestudantes.sistema.biblioteca.modelo.emprestimo;
 import jakarta.persistence.*;
 import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,6 +21,7 @@ public class Emprestimo {
     private LocalDateTime dataDevolucaoPrevista;
     private LocalDateTime dataDevolucaoReal;
     private String editionKey; // Chave única da edição do livro, usada para identificar a edição específica no Open Library
+    private BigDecimal multa = BigDecimal.ZERO;
 
     // Getters e setters
     public Long getId() { return id; }
@@ -45,4 +47,7 @@ public class Emprestimo {
 
     public String getEditionKey() {return editionKey;}
     public void setEditionKey(String editionKey) {this.editionKey = editionKey;}
+
+    public BigDecimal getMulta() { return multa; }
+    public void setMulta(BigDecimal multa) { this.multa = multa; }
 }

@@ -52,7 +52,7 @@ class UsuarioControllerTest {
         verify(usuarioRepository, times(1)).save(any(Usuario.class));
         verify(emailService, times(1)).enviarCodigoVerificacao(eq("novo@email.com"), anyString());
         assertEquals("confirmar-email", view);
-        System.out.println("✅ [UsuarioController] Cadastro de novo usuário realizado e confirmação de e-mail enviada!");
+        System.out.println("✅ [UsuarioControllerTest] Cadastro de novo usuário realizado e confirmação de e-mail enviada!");
     }
 
     @Test

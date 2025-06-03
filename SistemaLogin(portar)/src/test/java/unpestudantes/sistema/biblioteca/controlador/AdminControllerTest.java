@@ -4,11 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.ui.Model;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import unpestudantes.sistema.biblioteca.controlador.admin.AdminController;
 import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
+import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
+import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -19,6 +22,9 @@ class AdminControllerTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
+
+    @Mock
+    private EmprestimoRepository emprestimoRepository;
 
     @Mock
     private Model model;
@@ -39,7 +45,7 @@ class AdminControllerTest {
 
         verify(model).addAttribute(eq("usuarios"), any());
         assertEquals("Administrador", view);
-        System.out.println("✅ [AdminController] Painel carregado e usuários adicionados ao model!");
+        System.out.println("✅ [AdminControllerTest] Painel carregado e usuários adicionados ao model!");
     }
 
     @Test
@@ -119,5 +125,32 @@ class AdminControllerTest {
         verify(usuarioRepository).save(any(Usuario.class));
         System.out.println("✅ [AdminController] SQL Injection tratado como texto.");
         assertEquals("redirect:/admin", view);
+    }
+
+    @Test
+    void zerarMulta_DeveZerarMultaQuandoEmprestimoExiste() {
+        Emprestimo emp = new Emprestimo();
+        emp.setId(10L);
+        emp.setMulta(BigDecimal.valueOf(8.0));
+        when(emprestimoRepository.findById(10L)).thenReturn(Optional.of(emp));
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+
+        String view = adminController.zerarMulta(10L, redirectAttributes);
+
+        assertEquals(BigDecimal.ZERO, emp.getMulta());
+        verify(emprestimoRepository).save(emp);
+        verify(redirectAttributes).addFlashAttribute(eq("mensagem"), contains("Multa zerada"));
+        assertEquals("redirect:/admin/emprestimos", view);
+    }
+
+    @Test
+    void zerarMulta_DeveRetornarMensagemQuandoEmprestimoNaoExiste() {
+        when(emprestimoRepository.findById(99L)).thenReturn(Optional.empty());
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+
+        String view = adminController.zerarMulta(99L, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute(eq("mensagem"), contains("Empréstimo não encontrado"));
+        assertEquals("redirect:/admin/emprestimos", view);
     }
 }

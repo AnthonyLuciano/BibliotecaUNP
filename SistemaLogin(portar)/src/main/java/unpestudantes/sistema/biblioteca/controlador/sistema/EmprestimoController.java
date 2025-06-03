@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/emprestimos")
@@ -64,10 +65,18 @@ public class EmprestimoController {
     }
 
     // Empréstimo por editionKey
-    @PostMapping("/emprestar/edition/{editionKey:[A-Za-z0-9]+}")
-    public String emprestarPorEditionKey(@PathVariable String editionKey, HttpSession session, RedirectAttributes redirectAttributes) {
+    @PostMapping("/emprestar/edition/{editionKey}")
+    public String emprestarLivro(@PathVariable String editionKey, HttpSession session, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
-        if (usuario == null) return "redirect:/login";
+        List<Emprestimo> emprestimos = emprestimoRepository.findByUsuarioAndDataDevolucaoRealIsNull(usuario);
+
+        boolean temMulta = emprestimos.stream()
+            .anyMatch(e -> e.getMulta() != null && e.getMulta().compareTo(BigDecimal.ZERO) > 0);
+
+        if (temMulta) {
+            redirectAttributes.addFlashAttribute("mensagem", "Você possui multas em aberto. Regularize antes de novos empréstimos.");
+            return "redirect:/livros";
+        }
 
         boolean jaEmprestado = emprestimoRepository.findByUsuarioAndDataDevolucaoRealIsNull(usuario)
             .stream().anyMatch(e -> editionKey.equals(e.getEditionKey()));
@@ -84,8 +93,11 @@ public class EmprestimoController {
         emp.setTitulo(detalhes != null ? detalhes.getTitulo() : "Livro");
         emp.setIsbn(detalhes != null && detalhes.getIsbn10() != null && !detalhes.getIsbn10().isEmpty() ? detalhes.getIsbn10().get(0) : "-");
         emp.setDataEmprestimo(LocalDateTime.now());
-        emp.setDataDevolucaoPrevista(LocalDateTime.now().plusWeeks(2));
+        emp.setDataDevolucaoPrevista(LocalDateTime.now().plusDays(7));
         emprestimoRepository.save(emp);
+        /*logando o empréstimo no console e no log
+        *para depuração 
+        */
         System.out.println("EMPRESTIMO SALVO: " + emp);
         logger.info("EMPRESTIMO SALVO: {}", emp);
 
@@ -94,7 +106,7 @@ public class EmprestimoController {
             emp.getDataEmprestimo().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " até " +
             emp.getDataDevolucaoPrevista().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ".");
 
-        return "redirect:/livros/" + editionKey;
+        return "redirect:/detalhes/" + editionKey; // <-- altere para o caminho correto da página de detalhes
     }
 
     // Devolução de livro

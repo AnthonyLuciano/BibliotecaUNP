@@ -24,7 +24,7 @@ public class ListaLivroController {
         if (usuario == null) return "redirect:/login";
         List<ListaLivro> listas = listaLivroRepository.findByUsuario(usuario);
         model.addAttribute("listas", listas);
-        return "listas";
+        return "perfil"; // Corrija aqui
     }
 
     @PostMapping("/criar")
@@ -38,7 +38,7 @@ public class ListaLivroController {
             lista.setNomeLista(nomeLista);
             listaLivroRepository.save(lista);
         }
-        return "redirect:/lista";
+        return "redirect:/perfil";
     }
 
     @PostMapping("/adicionar")
@@ -54,14 +54,28 @@ public class ListaLivroController {
             lista.setTitulo(titulo);
             listaLivroRepository.save(lista);
         }
-        return "redirect:/lista";
+        return "redirect:/perfil";
     }
-
+    //remove livros da lista
     @PostMapping("/remover")
     public String removerLivro(@RequestParam Long id, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
         if (usuario == null) return "redirect:/login";
         listaLivroRepository.deleteById(id);
-        return "redirect:/lista";
+        return "redirect:/perfil";
+    }
+    //apaga a lista inteira
+    @PostMapping("/deletar")
+    public String deletarLista(@RequestParam Long id, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+        // Busca a lista pelo id
+        ListaLivro lista = listaLivroRepository.findById(id).orElse(null);
+        if (lista != null && lista.getUsuario().equals(usuario)) {
+            // Deleta todos os livros com o mesmo nomeLista e usuário
+            List<ListaLivro> livrosDaLista = listaLivroRepository.findByUsuarioAndNomeLista(usuario, lista.getNomeLista());
+            listaLivroRepository.deleteAll(livrosDaLista);
+        }
+        return "redirect:/perfil";
     }
 }

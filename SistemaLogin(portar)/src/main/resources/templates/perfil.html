@@ -33,28 +33,26 @@
     <!-- Seção Meus Empréstimos -->
     <div id="emprestimos">
       <h2>Meus Empréstimos</h2>
+      <!-- Exemplo de tabela de empréstimos -->
       <table>
-        <thead>
-          <tr>
-            <th>Título</th>
-            <th>ISBN</th>
-            <th>Data Empréstimo</th>
-            <th>Data Devolução Prevista</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="emp : ${emprestimos}">
-            <td th:text="${emp.titulo}">Título</td>
-            <td th:text="${emp.isbn}">ISBN</td>
-            <td th:text="${#temporals.format(emp.dataEmprestimo, 'dd/MM/yyyy HH:mm')}">Data Empréstimo</td>
-            <td th:text="${#temporals.format(emp.dataDevolucaoPrevista, 'dd/MM/yyyy HH:mm')}">Data Devolução</td>
-            <td>
-              <span th:if="${emp.dataDevolucaoReal == null}">Ativo</span>
-              <span th:if="${emp.dataDevolucaoReal != null}">Devolvido</span>
-            </td>
-          </tr>
-        </tbody>
+          <thead>
+              <tr>
+                  <th>Título</th>
+                  <th>Data de Empréstimo</th>
+                  <th>Data de Devolução Prevista</th>
+                  <th>Data de Devolução Real</th>
+                  <th>Multa</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr th:each="emprestimo : ${emprestimos}">
+                  <td th:text="${emprestimo.titulo}"></td>
+                  <td th:text="${#temporals.format(emprestimo.dataEmprestimo, 'dd/MM/yyyy')}"></td>
+                  <td th:text="${#temporals.format(emprestimo.dataDevolucaoPrevista, 'dd/MM/yyyy')}"></td>
+                  <td th:text="${emprestimo.dataDevolucaoReal != null ? #temporals.format(emprestimo.dataDevolucaoReal, 'dd/MM/yyyy') : '-'}"></td>
+                  <td th:text="'R$ ' + #numbers.formatDecimal(emprestimo.multa, 1, 'COMMA', 2, 'POINT')"></td>
+              </tr>
+          </tbody>
       </table>
     </div>
 
@@ -68,17 +66,22 @@
       </form>
       <!-- Exibe todas as listas do usuário -->
       <div th:each="lista : ${listas}">
-        <h3 th:text="${lista.nomeLista}"></h3>
+        <h3 th:text="${lista.nomeLista}" style="display:inline;"></h3>
+        <form th:action="@{/lista/deletar}" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta lista?');">
+          <input type="hidden" name="id" th:value="${lista.id}" />
+          <button class="btn btn-delete" type="submit">Deletar Lista</button>
+        </form>
         <table class="table">
           <thead>
-            <tr><th>Título</th><th>Ação</th></tr>
+            <tr><th>Título</th><th>ISBN</th><th>Ação</th></tr>
           </thead>
           <tbody>
-            <tr th:each="livro : ${lista.livros}">
-              <td th:text="${livro.titulo}"></td>
+            <tr>
+              <td th:text="${lista.titulo}"></td>
+              <td th:text="${lista.isbn}"></td>
               <td>
                 <form th:action="@{/lista/remover}" method="post" style="display:inline;">
-                  <input type="hidden" name="id" th:value="${livro.id}" />
+                  <input type="hidden" name="id" th:value="${lista.id}" />
                   <button class="btn btn-delete" type="submit">Remover</button>
                 </form>
               </td>

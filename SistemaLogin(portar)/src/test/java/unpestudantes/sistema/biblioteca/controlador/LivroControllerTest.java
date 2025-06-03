@@ -49,6 +49,7 @@ class LivroControllerTest {
         verify(model).addAttribute("livros", Collections.emptyList());
         verify(model).addAttribute("isAdmin", false);
         assertEquals("livros", view);
+        System.out.println("✅ [LivroControllerTest] Listagem de livros sem busca realizada com sucesso.");
     }
 
     @Test

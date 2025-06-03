@@ -80,8 +80,10 @@
       <div th:if="${erro}" th:text="${erro}" class="alert-error"></div>
     </section>
 
-    <div style="margin-top: 20px;">
-      <a href="/livros" class="btn btn-view-user">👤 Ver como usuário</a>
+    <!-- Coloque este bloco onde deseja exibir os botões -->
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+      <a href="/usuario" class="btn btn-usuario" style="background: #2196f3; color: #fff;">👤 Ver como Usuário</a>
+      <a href="/admin/testes" class="btn btn-testes" style="background: #4caf50; color: #fff;">🔧 Painel de Testes</a>
     </div>
   </div>
 
@@ -91,10 +93,11 @@
     <h1>EM DESENVOLVIMENTO, ISSO É UM MOCKUP</h1>
     <section class="form-section">
       <h4>Cadastrar Novo Livro</h4>
-      <form th:action="@{/admin/livros/cadastrar}" method="post" class="form-grid">
+      <form th:action="@{/admin/livros/cadastrar}" method="post" enctype="multipart/form-data" class="form-grid">
         <input type="text" name="titulo" placeholder="Título" required />
         <input type="text" name="autor" placeholder="Autor" required />
-        <input type="text" name="isbn" placeholder="ISBN" required />
+        <input type="text" name="isbn" placeholder="ISBN (10 ou 13)" required />
+        <input type="file" name="capa" accept="image/*" />
         <button type="submit" class="btn btn-create">Cadastrar Livro</button>
       </form>
     </section>
@@ -107,6 +110,7 @@
           <th>ID</th>
           <th>Título</th>
           <th>Autor</th>
+          <th>Capa</th>
           <th>Ações</th>
         </tr>
         </thead>
@@ -115,6 +119,9 @@
           <td th:text="${livro.id}"></td>
           <td th:text="${livro.titulo}"></td>
           <td th:text="${livro.autor}"></td>
+          <td>
+            <img th:src="${livro.capaUrl != null ? livro.capaUrl : '/img/placeholder-book.png'}" alt="Capa" style="height:80px"/>
+          </td>
           <td>
             <form th:action="@{/admin/livros/aprovar}" method="post" style="display: inline;">
               <input type="hidden" name="id" th:value="${livro.id}" />

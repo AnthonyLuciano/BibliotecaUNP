@@ -41,5 +41,6 @@ class OpenLibraryServiceTest {
         assertFalse(livros.isEmpty());
         assertEquals("Livro Teste", livros.get(0).getTitulo());
         assertEquals("1234567890", livros.get(0).getIsbns().get(0));
+        System.out.println("✅ [OpenLibraryServiceTest] Busca por gênero retornou livros corretamente.");
     }
 }

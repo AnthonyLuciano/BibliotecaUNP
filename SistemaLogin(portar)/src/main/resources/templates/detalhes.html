@@ -42,28 +42,28 @@
             <strong>Edition Key:</strong>
             <span th:text="${detalhes.editionKey != null ? detalhes.editionKey : '-'}"></span>
         </p>
-        <p th:if="${detalhes.isbn10 != null && #lists.size(detalhes.isbn10) > 0}">
+        <p th:if="${detalhes.isbn10 != null && !#strings.isEmpty(detalhes.isbn10)}">
             <strong>ISBN-10:</strong>
-            <span th:each="isbn, iterStat : ${detalhes.isbn10}">
-                <span th:text="${isbn}"></span><span th:if="${!iterStat.last}">, </span>
-            </span>
+            <span th:text="${detalhes.isbn10}"></span>
         </p>
-        <p th:if="${detalhes.isbn13 != null && #lists.size(detalhes.isbn13) > 0}">
+        <p th:if="${detalhes.isbn13 != null && !#strings.isEmpty(detalhes.isbn13)}">
             <strong>ISBN-13:</strong>
-            <span th:each="isbn, iterStat : ${detalhes.isbn13}">
-                <span th:text="${isbn}"></span><span th:if="${!iterStat.last}">, </span>
-            </span>
+            <span th:text="${detalhes.isbn13}"></span>
         </p>
     </div>
         </div>
     </div>
 
     <form th:action="@{'/emprestimos/emprestar/edition/' + ${detalhes.editionKey}}" method="post">
-        <button type="submit" class="btn btn-save">Emprestar</button>
+        <div class="btn-emprestar"><button type="submit" class="btn btn-save">Emprestar</button></div>
     </form>
 
-    <div th:if="${mensagem}" class="notificacao">
-        <p th:text="${mensagem}"></p>
+    <!-- Popup de mensagem centralizado -->
+    <div th:if="${mensagem != null and !#strings.isEmpty(mensagem)}" class="popup-mensagem">
+        <div class="popup-conteudo">
+            <p th:text="${mensagem}"></p>
+            <a href="#" class="btn" onclick="this.parentElement.parentElement.style.display='none';return false;">OK</a>
+        </div>
     </div>
 
     <div class="footer">

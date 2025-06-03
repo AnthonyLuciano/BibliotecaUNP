@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-
 import unpestudantes.sistema.biblioteca.servico.EmailService;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("unused")
 class EmailServiceTest {
 
     private JavaMailSender mailSender;
@@ -53,7 +53,7 @@ class EmailServiceTest {
         String textoEmail = mensagemEnviada.getText();
         assertNotNull(textoEmail, "Texto do e-mail não pode ser nulo");
         assertTrue(textoEmail.contains(codigo));
-        System.out.println("✅ [EmailService] E-mail enviado com código correto!");
+        System.out.println("✅ [EmailServiceTest] E-mail enviado com código correto!");
     }
 
     @Test

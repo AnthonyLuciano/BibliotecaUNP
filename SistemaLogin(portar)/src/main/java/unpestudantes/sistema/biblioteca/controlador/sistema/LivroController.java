@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
 import unpestudantes.sistema.biblioteca.modelo.livro.DetalhesLivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.livro.LivroLocal;
 import unpestudantes.sistema.biblioteca.modelo.livro.LivroOpenLibrary;
 import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
+import unpestudantes.sistema.biblioteca.repositorio.LivroLocalRepository;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +27,9 @@ public class LivroController {
     @Autowired
     private OpenLibraryService openLibraryService;
 
+    @Autowired
+    private LivroLocalRepository livroLocalRepository;
+
 
     /**
      * Lista todos os livros ou faz busca por palavra-chave.
@@ -33,20 +38,20 @@ public class LivroController {
      */
     @GetMapping("/livros")
     public String listarLivros(@RequestParam(required = false) String busca, Model model, HttpSession session) {
-    List<LivroOpenLibrary> livros = new ArrayList<>();
-    if (busca != null && !busca.isEmpty()) {
-        livros = openLibraryService.buscarLivros(busca);
-    } else {
-        livros = new ArrayList<>(); // Inicializa a lista vazia
+        List<LivroOpenLibrary> livrosExternos = new ArrayList<>();
+        List<LivroLocal> livrosLocais = new ArrayList<>();
+        if (busca != null && !busca.isEmpty()) {
+            livrosLocais = livroLocalRepository.findByTituloContainingIgnoreCaseOrAutorContainingIgnoreCaseOrIsbn10ContainingIgnoreCaseOrIsbn13ContainingIgnoreCase(busca, busca, busca, busca);
+            livrosExternos = openLibraryService.buscarLivros(busca);
+        }
+        model.addAttribute("livrosLocais", livrosLocais);
+        model.addAttribute("livrosExternos", livrosExternos);
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        model.addAttribute("isAdmin", usuario != null && usuario.isAdmin());
+
+        return "livros";
     }
-    model.addAttribute("livros", livros);
-
-    // Adiciona isAdmin ao model para mostrar o botão admin apenas para administradores
-    Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
-    model.addAttribute("isAdmin", usuario != null && usuario.isAdmin());
-
-    return "livros";
-}
 
 
     /**
@@ -59,10 +64,10 @@ public class LivroController {
     public String detalhesLivro(@PathVariable String editionKey, Model model, @ModelAttribute("mensagem") String mensagem) {
         DetalhesLivroOpenLibrary detalhes = openLibraryService.buscarDetalhesLivro(editionKey);
         model.addAttribute("detalhes", detalhes);
-        if (mensagem != null && !mensagem.isEmpty()) {
+        if (mensagem != null && !mensagem.trim().isEmpty()) {
             model.addAttribute("mensagem", mensagem);
         }
-        // Adicione outros atributos se necessário (ex: listas do usuário)
         return "detalhes";
     }
+
 }

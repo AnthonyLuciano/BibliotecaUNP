@@ -47,5 +47,6 @@ class RecomendacaoServiceTest {
         List<LivroOpenLibrary> resultado = recomendacaoService.recomendarPorGeneroEAutor(usuario);
 
         assertEquals(livrosRecomendados, resultado);
+        System.out.println("✅ [RecomendacaoServiceTest] Recomendações retornadas corretamente para o usuário.");
     }
 }
