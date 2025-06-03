@@ -109,4 +109,32 @@ public class AdminController {
         return "redirect:/admin/emprestimos";
     }
 
+    @PostMapping("/emprestimos/marcar-devolvido/{id}")
+    public String marcarDevolvido(@PathVariable Long id, @RequestParam String busca, RedirectAttributes redirectAttributes) {
+        Optional<Emprestimo> optEmp = emprestimoRepository.findById(id);
+        if (optEmp.isPresent()) {
+            Emprestimo emp = optEmp.get();
+            emp.setDataDevolucaoReal(java.time.LocalDateTime.now());
+            emprestimoRepository.save(emp);
+            redirectAttributes.addFlashAttribute("mensagem", "Devolução marcada com sucesso!");
+        } else {
+            redirectAttributes.addFlashAttribute("mensagem", "Empréstimo não encontrado.");
+        }
+        return "redirect:/admin/pesquisar?busca=" + busca + "&aba=relatorios";
+    }
+
+    @PostMapping("/emprestimos/remover-devolucao/{id}")
+    public String removerDevolucao(@PathVariable Long id, @RequestParam String busca, RedirectAttributes redirectAttributes) {
+        Optional<Emprestimo> optEmp = emprestimoRepository.findById(id);
+        if (optEmp.isPresent()) {
+            Emprestimo emp = optEmp.get();
+            emp.setDataDevolucaoReal(null);
+            emprestimoRepository.save(emp);
+            redirectAttributes.addFlashAttribute("mensagem", "Devolução removida com sucesso!");
+        } else {
+            redirectAttributes.addFlashAttribute("mensagem", "Empréstimo não encontrado.");
+        }
+        return "redirect:/admin/pesquisar?busca=" + busca + "&aba=relatorios";
+    }
+
 }

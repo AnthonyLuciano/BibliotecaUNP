@@ -109,7 +109,7 @@ public class EmprestimoController {
         return "redirect:/detalhes/" + editionKey; // <-- altere para o caminho correto da página de detalhes
     }
 
-    // Devolução de livro
+    /* Devolução de livro
     @PostMapping("/devolver/{id}")
     public String devolverLivro(@PathVariable Long id, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
@@ -122,7 +122,9 @@ public class EmprestimoController {
         }
         return "redirect:/perfil";
     }
-
+        comentando o método de devolução para evitar conflitos com o método de listar empréstimos
+        TODO: tirar duvidas com o professor sobre a necessidade de manter esse método ou não
+    */
     // Listar empréstimos do usuário
     @GetMapping("/meus-emprestimos")
     public String listarEmprestimos(Model model, HttpSession session) {

@@ -169,6 +169,16 @@
           <td th:text="${#temporals.format(emp.dataDevolucaoPrevista, 'dd/MM/yyyy')}"></td>
           <td th:text="${emp.dataDevolucaoReal != null ? #temporals.format(emp.dataDevolucaoReal, 'dd/MM/yyyy') : '-'}"></td>
           <td th:text="${emp.multa}"></td>
+          <td>
+            <form th:action="@{/admin/emprestimos/marcar-devolvido/{id}(id=${emp.id})}" method="post" th:if="${emp.dataDevolucaoReal == null}" style="display:inline;">
+              <input type="hidden" name="busca" th:value="${usuarioRelatorio.username}" />
+              <button type="submit" class="btn btn-save">Marcar Devolvido</button>
+            </form>
+            <form th:action="@{/admin/emprestimos/remover-devolucao/{id}(id=${emp.id})}" method="post" th:if="${emp.dataDevolucaoReal != null}" style="display:inline;">
+              <input type="hidden" name="busca" th:value="${usuarioRelatorio.username}" />
+              <button type="submit" class="btn btn-delete">Remover Devolução</button>
+            </form>
+          </td>
         </tr>
         <tr th:if="${#lists.isEmpty(emprestimosRelatorio)}">
           <td colspan="7"><em>Nenhum empréstimo para este usuário.</em></td>
