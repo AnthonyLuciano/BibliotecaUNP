@@ -52,7 +52,7 @@ O **BibliotecaUNP** tem como foco facilitar a gestão de acervos físicos e virt
 
 ### 🧾 Maurilio – Funcionalidades Administrativas
 
-* ⬜️ RF11: Relatórios de empréstimos
+* ✅ RF11: Relatórios de empréstimos
 * ✅\* RF12: Aprovação/gestão de usuários *(parcial – falta aprovação explícita)*
 
 ---
