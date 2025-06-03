@@ -35,7 +35,7 @@ O **BibliotecaUNP** tem como foco facilitar a gestão de acervos físicos e virt
 
 ### 📚 Lucas – Gerenciamento de Livros
 
-* ⬜️ RF4: Cadastro de novos livros/exemplares (apenas administradores)
+* ⚠️ RF4: Cadastro de novos livros/exemplares (apenas administradores) *(parcial)*
 * ✅ RF5: Busca de livros por título, autor, gênero ou ISBN
 * ✅ RF6: Visualização de detalhes dos livros
 
@@ -45,7 +45,7 @@ O **BibliotecaUNP** tem como foco facilitar a gestão de acervos físicos e virt
 
 * ✅ RF7: Empréstimos virtuais com prazos definidos
 * ⚠️ RF8: Controle de disponibilidade de exemplares *(parcial/incompleto)*
-* ⬜️ RF9: Multas por atraso
+* ✅ RF9: Multas por atraso
 * ✅ RF10: Lembretes por e-mail sobre devolução (via agendamento)
 
 ---

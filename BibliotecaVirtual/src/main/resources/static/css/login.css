@@ -1,0 +1,87 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ecf0f1, #d0e6f6); /* Gradiente calmante */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+input:not([type="checkbox"]):not([type="radio"]) {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input#codigo {
+    letter-spacing: 4px;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+button {
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.erro {
+    color: red;
+    margin-top: 10px;
+}
+
+.footer {
+    margin-top: 20px;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    color: #2980b9;
+}

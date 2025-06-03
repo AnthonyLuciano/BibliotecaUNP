@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>📚 Biblioteca Virtual - Livros Disponíveis</title>
+    <link rel="stylesheet" href="/css/cliente.css">
+</head>
+<body>
+
+    <header>
+        <h2>Biblioteca UNP</h2>
+        <p>Explore os livros disponíveis em nosso acervo</p>
+    </header>
+
+    <div class="search-bar">
+        <form method="get" action="/livros">
+            <input type="text" name="busca" placeholder="🔍 Pesquisar por titulos..." />
+            <button type="submit">Pesquisar</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Capa</th>
+                <th>Título</th>
+                <th>Autor(es)</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+    <tr th:if="${#lists.isEmpty(livrosLocais)} and ${#lists.isEmpty(livrosExternos)}">
+        <td colspan="5">Nenhum livro encontrado para o termo pesquisado.</td>
+    </tr>
+    <tr th:each="livro : ${livrosLocais}">
+        <td>
+            <img th:src="${livro.capaUrl != null ? livro.capaUrl : '/img/placeholder-book.png'}" alt="Capa" style="height:80px"/>
+        </td>
+        <td th:text="${livro.titulo}"></td>
+        <td th:text="${livro.autor}"></td>
+        <td>
+            <span th:if="${livro.isbn10 != null}" th:text="'ISBN-10: ' + ${livro.isbn10}"></span>
+            <span th:if="${livro.isbn13 != null}" th:text="' ISBN-13: ' + ${livro.isbn13}"></span>
+        </td>
+        <td><!-- ações --></td>
+    </tr>
+    <tr th:each="livro : ${livrosExternos}">
+        <td>
+            <img th:src="${livro.capaUrl != null ? livro.capaUrl : '/img/placeholder-book.png'}" alt="Capa" style="height:80px"/>
+        </td>
+        <td th:text="${livro.titulo}"></td>
+        <td th:text="${#lists.isEmpty(livro.autores) ? '-' : #strings.arrayJoin(livro.autores, ', ')}"></td>
+        <td><!-- ações --></td>
+    </tr>
+</tbody>
+    </table>
+
+    <div class="footer">
+        <a href="/login">⬅ Sair</a>
+    </div>
+    <div class="footer">
+        <a href="/home" class="button">⬅Voltar a Home</a>
+    </div>
+    
+    <div th:if="${isAdmin}">
+        <a href="/admin" class="btn-admin">🔒 Área Administrativa</a>
+    </div>
+</body>
+</html>

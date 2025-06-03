@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar E-mail</title>
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <img src="/logo/logo.png" alt="Logo Biblioteca UnP" class="logo">
+        <h2>Confirmação de E-mail</h2>
+        <form method="post" action="/confirmar-email">
+            <input type="hidden" name="username" th:value="${username}">
+
+            <label for="codigo">Digite o código de 6 dígitos enviado ao seu e-mail:</label>
+            <input type="text" id="codigo" name="codigo" maxlength="6" pattern="\d{6}" required 
+                   placeholder="Ex: 123456" inputmode="numeric">
+
+            <button type="submit">Confirmar</button>
+        </form>
+        <p class="erro" th:if="${erro}" th:text="${erro}"></p>
+
+        <div class="footer">
+            <a th:href="@{/reenviar-codigo(username=${username})}">Reenviar código</a>
+        </div>
+    </div>
+</body>
+</html>
