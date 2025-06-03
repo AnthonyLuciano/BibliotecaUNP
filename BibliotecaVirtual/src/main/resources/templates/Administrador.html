@@ -79,12 +79,6 @@
 
       <div th:if="${erro}" th:text="${erro}" class="alert-error"></div>
     </section>
-
-    <!-- Coloque este bloco onde deseja exibir os botões -->
-    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-      <a href="/usuario" class="btn btn-usuario" style="background: #2196f3; color: #fff;">👤 Ver como Usuário</a>
-      <a href="/admin/testes" class="btn btn-testes" style="background: #4caf50; color: #fff;">🔧 Painel de Testes</a>
-    </div>
   </div>
 
   <!-- Aba: Livros -->
@@ -141,18 +135,52 @@
   <!-- Aba: Relatórios -->
   <div id="relatorios" class="tab-content" style="display: none;">
     <h4>📊 Relatórios</h4>
-    <h1>EM DESENVOLVIMENTO, ISSO É UM MOCKUP</h1>
-    <p>Relatórios administrativos e estatísticas de uso serão exibidos aqui.</p>
-    <ul>
-      <li>Total de usuários cadastrados</li>
-      <li>Livros mais requisitados</li>
-      <li>Acessos por período</li>
-    </ul>
-    <p><em>(Implementação futura com gráficos interativos e filtros)</em></p>
+    <h5>Relatório de Empréstimos por Usuário</h5>
+    
+    <!-- Formulário de pesquisa para relatórios -->
+    <form method="get" action="/admin/pesquisar" class="search-bar" style="margin-bottom: 20px;">
+      <input type="text" name="busca" placeholder="🔍 Pesquisar usuário para relatório..." required />
+      <button type="submit" class="btn">Pesquisar</button>
+    </form>
+
+    <div th:if="${usuarioRelatorio == null}">
+      <p>Pesquise um usuário para ver o relatório de empréstimos.</p>
+    </div>
+    <div th:if="${usuarioRelatorio != null}">
+      <h6 th:text="'Usuário: ' + ${usuarioRelatorio.username}"></h6>
+      <table class="table" style="margin-bottom: 30px;">
+        <thead>
+        <tr>
+          <th>ID Empréstimo</th>
+          <th>Título</th>
+          <th>ISBN</th>
+          <th>Data Empréstimo</th>
+          <th>Data Devolução Prevista</th>
+          <th>Data Devolução Real</th>
+          <th>Multa</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="emp : ${emprestimosRelatorio}">
+          <td th:text="${emp.id}"></td>
+          <td th:text="${emp.titulo}"></td>
+          <td th:text="${emp.isbn}"></td>
+          <td th:text="${#temporals.format(emp.dataEmprestimo, 'dd/MM/yyyy')}"></td>
+          <td th:text="${#temporals.format(emp.dataDevolucaoPrevista, 'dd/MM/yyyy')}"></td>
+          <td th:text="${emp.dataDevolucaoReal != null ? #temporals.format(emp.dataDevolucaoReal, 'dd/MM/yyyy') : '-'}"></td>
+          <td th:text="${emp.multa}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(emprestimosRelatorio)}">
+          <td colspan="7"><em>Nenhum empréstimo para este usuário.</em></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
 </div>
-
+<div style="display: flex; gap: 10px; margin-bottom: 20px;">
+      <a href="/home" class="btn btn-usuario" style="background: #2196f3; color: #fff;">👤 Ver como Usuário</a>
+    </div>
 <!-- Script de controle das abas -->
 <script src="/js/admin-tabs.js"></script>
 </body>

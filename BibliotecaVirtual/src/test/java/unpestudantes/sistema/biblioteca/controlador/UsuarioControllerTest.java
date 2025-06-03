@@ -110,7 +110,9 @@ class UsuarioControllerTest {
         jakarta.servlet.http.HttpSession session = mock(jakarta.servlet.http.HttpSession.class);
         when(session.getAttribute("usuarioLogado")).thenReturn(usuario);
 
+        @SuppressWarnings("unused")
         List<String> generosEN = Arrays.asList("science_fiction", "romance");
+        @SuppressWarnings("unused")
         List<String> generosPT = Arrays.asList("Ficção Científica", "Romance");
 
         // Simula retorno do serviço para cada gênero

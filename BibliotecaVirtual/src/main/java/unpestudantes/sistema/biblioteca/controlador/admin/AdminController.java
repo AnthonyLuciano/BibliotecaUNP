@@ -10,7 +10,9 @@ import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
 import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
@@ -33,6 +35,13 @@ public class AdminController {
     @GetMapping
     public String painel(Model model) {
         model.addAttribute("usuarios", usuarioRepository.findAll());
+        // Adicione o relatório de empréstimos
+        Map<Usuario, java.util.List<Emprestimo>> emprestimosPorUsuario = usuarioRepository.findAll().stream()
+            .collect(Collectors.toMap(
+                usuario -> usuario,
+                usuario -> emprestimoRepository.findByUsuario(usuario)
+                ));
+        model.addAttribute("emprestimosPorUsuario", emprestimosPorUsuario);
         return "Administrador";
     }
 
@@ -72,6 +81,17 @@ public class AdminController {
     public String pesquisarUsuarios(@RequestParam String busca, Model model) {
         var usuarios = usuarioRepository.findByUsernameContainingIgnoreCase(busca);
         model.addAttribute("usuarios", usuarios);
+
+        // Adicione este bloco:
+        if (usuarios.size() == 1) {
+            Usuario usuario = usuarios.get(0);
+            model.addAttribute("usuarioRelatorio", usuario);
+            model.addAttribute("emprestimosRelatorio", emprestimoRepository.findByUsuario(usuario));
+        } else {
+            model.addAttribute("usuarioRelatorio", null);
+            model.addAttribute("emprestimosRelatorio", null);
+        }
+
         return "Administrador";
     }
 
@@ -89,4 +109,4 @@ public class AdminController {
         return "redirect:/admin/emprestimos";
     }
 
-}    
+}
