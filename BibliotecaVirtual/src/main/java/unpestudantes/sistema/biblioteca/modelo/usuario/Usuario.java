@@ -18,10 +18,17 @@ public class Usuario {
     private String codigoVerificacao;
     private boolean admin; // true = funcionário, false = cliente
     private String fotoUrl;
+    private boolean ativo = true; // Indica se o usuário está ativo ou não
 
     // Getters e setters
 
     
+    public boolean isAtivo() {
+        return ativo;
+    }
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
     public Long getId() { return id; }
     public String getEmail() {
         return email;

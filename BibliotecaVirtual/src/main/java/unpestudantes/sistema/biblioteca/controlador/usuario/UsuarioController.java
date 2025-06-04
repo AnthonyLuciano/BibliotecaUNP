@@ -93,6 +93,10 @@ public class UsuarioController {
                 model.addAttribute("erro", "Você precisa confirmar seu e-mail para acessar o sistema.");
                 return "confirmar-email";
             }
+            if (!usuario.isAtivo()) {
+                model.addAttribute("erro", "Sua conta está inativa. Entre em contato com o suporte.");
+                return "login";
+            }
             session.setAttribute("usuarioLogado", usuario);
             if (usuario.isAdmin()) {
                 return "redirect:/admin";

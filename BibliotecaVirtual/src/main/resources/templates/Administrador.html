@@ -37,6 +37,7 @@
           <th>ID</th>
           <th>Usuário</th>
           <th>Funcionário?</th>
+          <th>Status</th>
           <th>Ações</th>
         </tr>
         </thead>
@@ -55,9 +56,13 @@
             </form>
           </td>
           <td th:text="${usuario.admin ? 'Sim' : 'Não'}"></td>
+          <td th:text="${usuario.ativo ? 'Ativo' : 'Inativo'}"></td>
           <td>
-            <form th:action="@{/admin/excluir/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
-              <button type="submit" class="btn btn-delete">Excluir</button>
+            <form th:action="@{/admin/desativar/{id}(id=${usuario.id})}" method="post" th:if="${usuario.ativo}" onsubmit="return confirm('Desativar este usuário?')">
+              <button type="submit" class="btn btn-delete">Desativar</button>
+            </form>
+            <form th:action="@{/admin/reativar/{id}(id=${usuario.id})}" method="post" th:if="${!usuario.ativo}">
+              <button type="submit" class="btn btn-save">Reativar</button>
             </form>
           </td>
         </tr>

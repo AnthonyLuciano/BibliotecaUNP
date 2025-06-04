@@ -71,9 +71,21 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @PostMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id) {
-        usuarioRepository.deleteById(id);
+    @PostMapping("/desativar/{id}")
+    public String desativar(@PathVariable Long id) {
+        usuarioRepository.findById(id).ifPresent(usuario -> {
+            usuario.setAtivo(false);
+            usuarioRepository.save(usuario);
+        });
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/reativar/{id}")
+    public String reativar(@PathVariable Long id) {
+        usuarioRepository.findById(id).ifPresent(usuario -> {
+            usuario.setAtivo(true);
+            usuarioRepository.save(usuario);
+        });
         return "redirect:/admin";
     }
 
