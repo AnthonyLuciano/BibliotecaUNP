@@ -10,6 +10,8 @@ import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.ListaLivroRepository;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/lista")
@@ -23,6 +25,11 @@ public class ListaLivroController {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
         if (usuario == null) return "redirect:/login";
         List<ListaLivro> listas = listaLivroRepository.findByUsuario(usuario);
+        // Supondo que 'listas' é uma lista de objetos com o campo 'nomeLista'
+        Set<String> nomesListas = listas.stream()
+            .map(ListaLivro::getNomeLista)
+            .collect(Collectors.toSet());
+        model.addAttribute("nomesListas", nomesListas);
         model.addAttribute("listas", listas);
         return "perfil"; // Corrija aqui
     }

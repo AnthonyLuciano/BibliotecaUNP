@@ -18,7 +18,7 @@
     <!-- Seção Perfil -->
     <div id="perfil">
       <h2>Informações do Usuário</h2>
-      <img th:src="${usuario.fotoUrl != null && !#strings.isEmpty(usuario.fotoUrl) ? usuario.fotoUrl : '/img/placeholder-user.png'}"
+      <img th:src="${usuario.fotoUrl != null ? usuario.fotoUrl : '/img/placeholder-user.png'}"
            alt="Foto de perfil" class="profile-picture"/>
       <p><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
       <p><strong>Usuário:</strong> <span th:text="${usuario.username}"></span></p>
@@ -33,7 +33,6 @@
     <!-- Seção Meus Empréstimos -->
     <div id="emprestimos">
       <h2>Meus Empréstimos</h2>
-      <!-- Exemplo de tabela de empréstimos -->
       <table>
           <thead>
               <tr>
@@ -50,7 +49,9 @@
                   <td th:text="${#temporals.format(emprestimo.dataEmprestimo, 'dd/MM/yyyy')}"></td>
                   <td th:text="${#temporals.format(emprestimo.dataDevolucaoPrevista, 'dd/MM/yyyy')}"></td>
                   <td th:text="${emprestimo.dataDevolucaoReal != null ? #temporals.format(emprestimo.dataDevolucaoReal, 'dd/MM/yyyy') : '-'}"></td>
-                  <td th:text="'R$ ' + #numbers.formatDecimal(emprestimo.multa, 1, 'COMMA', 2, 'POINT')"></td>
+                  <td>
+                    <span th:text="|R$ ${#numbers.formatDecimal(emprestimo.multa != null ? emprestimo.multa : 0, 1, 'COMMA', 2, 'POINT')}|"></span>
+                  </td>
               </tr>
           </tbody>
       </table>
@@ -59,16 +60,14 @@
     <!-- Seção Minhas Listas -->
     <div id="lista">
       <h2>Minhas Listas</h2>
-      <!-- Formulário para criar nova lista -->
       <form th:action="@{/lista/criar}" method="post" style="margin-bottom: 20px;">
-          <input type="text" name="nomeLista" placeholder="Nome da nova lista" required>
-          <button type="submit" class="btn btn-save">Criar Lista</button>
+        <input type="text" name="nomeLista" placeholder="Nome da nova lista" required>
+        <button type="submit" class="btn btn-save">Criar Lista</button>
       </form>
-      <!-- Exibe todas as listas do usuário -->
-      <div th:each="lista : ${listas}">
-        <h3 th:text="${lista.nomeLista}" style="display:inline;"></h3>
+      <div th:each="nomeLista : ${nomesListas}">
+        <h3 th:text="${nomeLista}" style="display:inline;"></h3>
         <form th:action="@{/lista/deletar}" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta lista?');">
-          <input type="hidden" name="id" th:value="${lista.id}" />
+          <input type="hidden" name="nomeLista" th:value="${nomeLista}" />
           <button class="btn btn-delete" type="submit">Deletar Lista</button>
         </form>
         <table class="table">
@@ -76,12 +75,12 @@
             <tr><th>Título</th><th>ISBN</th><th>Ação</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <td th:text="${lista.titulo}"></td>
-              <td th:text="${lista.isbn}"></td>
+            <tr th:each="livro : ${#lists.select(listas, l -> l.nomeLista == nomeLista)}">
+              <td th:text="${livro.titulo}"></td>
+              <td th:text="${livro.isbn}"></td>
               <td>
                 <form th:action="@{/lista/remover}" method="post" style="display:inline;">
-                  <input type="hidden" name="id" th:value="${lista.id}" />
+                  <input type="hidden" name="id" th:value="${livro.id}" />
                   <button class="btn btn-delete" type="submit">Remover</button>
                 </form>
               </td>

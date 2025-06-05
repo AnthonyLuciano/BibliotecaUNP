@@ -90,16 +90,28 @@
   <div id="livros" class="tab-content" style="display: none;">
     <h4>📚 Cadastro e Aprovação de Livros</h4>
     <h1>EM DESENVOLVIMENTO, ISSO É UM MOCKUP</h1>
-    <section class="form-section">
-      <h4>Cadastrar Novo Livro</h4>
-      <form th:action="@{/admin/livros/cadastrar}" method="post" enctype="multipart/form-data" class="form-grid">
-        <input type="text" name="titulo" placeholder="Título" required />
-        <input type="text" name="autor" placeholder="Autor" required />
-        <input type="text" name="isbn" placeholder="ISBN (10 ou 13)" required />
-        <input type="file" name="capa" accept="image/*" />
-        <button type="submit" class="btn btn-create">Cadastrar Livro</button>
-      </form>
-    </section>
+    <!-- Botão para abrir o modal -->
+    <button class="btn btn-create" onclick="abrirModalLivro()">Cadastrar Novo Livro</button>
+
+    <!-- Modal de cadastro de livro -->
+    <div id="modalLivro" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close" onclick="fecharModalLivro()">&times;</span>
+        <h4>Cadastrar Novo Livro</h4>
+        <form id="formLivro" th:action="@{/admin/livros/cadastrar}" method="post" enctype="multipart/form-data" class="form-grid">
+          <input type="text" name="titulo" placeholder="Título" required />
+          <input type="text" name="autor" placeholder="Autor" required />
+          <input type="text" name="isbn" placeholder="ISBN (10 ou 13)" required />
+          <input type="number" name="quantidade" placeholder="Quantidade" min="1" value="1" required />
+          <label>
+            <input type="file" name="capa" accept="image/*" onchange="previewCapa(event)" />
+            Capa do Livro
+          </label>
+          <img id="previewCapaImg" src="/img/placeholder-book.png" alt="Preview da capa" style="height:80px; margin-top:10px;" />
+          <button type="submit" class="btn btn-create">Cadastrar Livro</button>
+        </form>
+      </div>
+    </div>
 
     <section style="margin-top: 30px;">
       <h4>Solicitações Pendentes de Autores</h4>
@@ -130,6 +142,40 @@
               <input type="hidden" name="id" th:value="${livro.id}" />
               <button type="submit" class="btn btn-delete">Rejeitar</button>
             </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h4>Livros Locais Cadastrados</h4>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Autor</th>
+          <th>ISBN10</th>
+          <th>ISBN13</th>
+          <th>Quantidade</th>
+          <th>Capa</th>
+          <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="livro : ${livros}">
+          <td th:text="${livro.id}"></td>
+          <td th:text="${livro.titulo}"></td>
+          <td th:text="${livro.autor}"></td>
+          <td th:text="${livro.isbn10}"></td>
+          <td th:text="${livro.isbn13}"></td>
+          <td th:text="${livro.quantidade}"></td>
+          <td>
+            <img th:src="${livro.capaUrl != null ? livro.capaUrl : '/img/placeholder-book.png'}" alt="Capa" style="height:60px"/>
+          </td>
+          <td>
+            <button class="btn btn-save" th:onclick="'abrirModalEditarLivro(' + ${livro.id} + ')'">Editar</button>
           </td>
         </tr>
         </tbody>

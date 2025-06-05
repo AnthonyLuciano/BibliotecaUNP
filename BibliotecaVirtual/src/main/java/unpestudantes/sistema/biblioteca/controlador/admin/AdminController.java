@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
 import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
+import unpestudantes.sistema.biblioteca.repositorio.LivroLocalRepository;
 /*
  * @author anthony
  */
@@ -28,21 +29,20 @@ public class AdminController {
 
     @Autowired
     private EmprestimoRepository emprestimoRepository;
-/*
- * literalmente um painel de administração, nao tem muito o que explicar
- * a nao ser CRUD basico
- */
+
+    @Autowired
+    private LivroLocalRepository livroLocalRepository;
+
+    String uploadDir = "src/main/resources/static/capas/";
+    /*
+     * literalmente um painel de administração, nao tem muito o que explicar
+     * a nao ser CRUD basico
+     */
     @GetMapping
     public String painel(Model model) {
         model.addAttribute("usuarios", usuarioRepository.findAll());
-        // Adicione o relatório de empréstimos
-        Map<Usuario, java.util.List<Emprestimo>> emprestimosPorUsuario = usuarioRepository.findAll().stream()
-            .collect(Collectors.toMap(
-                usuario -> usuario,
-                usuario -> emprestimoRepository.findByUsuario(usuario)
-                ));
-        model.addAttribute("emprestimosPorUsuario", emprestimosPorUsuario);
-        return "Administrador";
+        model.addAttribute("livros", livroLocalRepository.findAll());
+        return "Administrador"; // Corrija aqui!
     }
 
     @PostMapping("/cadastrar")
@@ -50,7 +50,8 @@ public class AdminController {
         if (usuarioRepository.findByUsername(username).isPresent()) {
             model.addAttribute("erro", "Usuário já existe");
             model.addAttribute("usuarios", usuarioRepository.findAll());
-            return "Administrador";
+            model.addAttribute("livros", livroLocalRepository.findAll());
+            return "Administrador"; // <-- Corrija aqui!
         }
         Usuario usuario = new Usuario();
         usuario.setUsername(username);
@@ -94,7 +95,6 @@ public class AdminController {
         var usuarios = usuarioRepository.findByUsernameContainingIgnoreCase(busca);
         model.addAttribute("usuarios", usuarios);
 
-        // Adicione este bloco:
         if (usuarios.size() == 1) {
             Usuario usuario = usuarios.get(0);
             model.addAttribute("usuarioRelatorio", usuario);
@@ -104,7 +104,8 @@ public class AdminController {
             model.addAttribute("emprestimosRelatorio", null);
         }
 
-        return "Administrador";
+        model.addAttribute("livros", livroLocalRepository.findAll());
+        return "Administrador"; // <-- Corrija aqui!
     }
 
     @PostMapping("/admin/emprestimos/zerar-multa/{id}")

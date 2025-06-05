@@ -1,25 +1,24 @@
 package unpestudantes.sistema.biblioteca.controlador;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.ui.Model;
-
 import unpestudantes.sistema.biblioteca.controlador.usuario.UsuarioController;
 import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 import unpestudantes.sistema.biblioteca.servico.EmailService;
 import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
+import unpestudantes.sistema.biblioteca.servico.RecomendacaoService;
 import unpestudantes.sistema.biblioteca.modelo.livro.LivroOpenLibrary;
 
 import java.util.Optional;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class UsuarioControllerTest {
@@ -36,10 +35,17 @@ class UsuarioControllerTest {
     @Mock
     private EmailService emailService;
 
+    @Mock
+    private RecomendacaoService recomendacaoService;
+
+    @Mock
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UsuarioController usuarioController;
 
-    public UsuarioControllerTest() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
@@ -52,7 +58,6 @@ class UsuarioControllerTest {
         verify(usuarioRepository, times(1)).save(any(Usuario.class));
         verify(emailService, times(1)).enviarCodigoVerificacao(eq("novo@email.com"), anyString());
         assertEquals("confirmar-email", view);
-        System.out.println("✅ [UsuarioControllerTest] Cadastro de novo usuário realizado e confirmação de e-mail enviada!");
     }
 
     @Test
@@ -64,7 +69,6 @@ class UsuarioControllerTest {
         verify(usuarioRepository, never()).save(any(Usuario.class));
         verify(emailService, never()).enviarCodigoVerificacao(anyString(), anyString());
         assertEquals("cadastro", view);
-        System.out.println("✅ [UsuarioController] Cadastro bloqueado para usuário já existente!");
     }
 
     @Test
@@ -74,7 +78,6 @@ class UsuarioControllerTest {
         String view = usuarioController.cadastro("joao", "joao@email.com", "senha123", model);
 
         verify(usuarioRepository).save(any(Usuario.class));
-        System.out.println("✅ [UsuarioController] Cadastro de usuário realizado com sucesso!");
         assertEquals("confirmar-email", view);
     }
 
@@ -86,7 +89,6 @@ class UsuarioControllerTest {
         String view = usuarioController.cadastro(injecao, "email@teste.com", "senha123", model);
 
         verify(usuarioRepository).save(any(Usuario.class));
-        System.out.println("✅ [UsuarioController] SQL Injection tratado como texto.");
         assertEquals("confirmar-email", view);
     }
 
@@ -97,32 +99,28 @@ class UsuarioControllerTest {
         usuario.setPassword("senha123");
         when(usuarioRepository.findByUsername("joao")).thenReturn(Optional.of(usuario));
 
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
         jakarta.servlet.http.HttpSession session = mock(jakarta.servlet.http.HttpSession.class);
         String view = usuarioController.login("joao", "senhaErrada", model, session);
 
-        System.out.println("✅ [UsuarioController] Login falhou como esperado com senha incorreta.");
         assertEquals("login", view);
     }
 
     @Test
-    void homeDeveAdicionarLivrosPorGeneroEAtributosDeGenero() {
+    void homeDeveAdicionarTodosAtributosNoModel() {
         Usuario usuario = new Usuario();
         jakarta.servlet.http.HttpSession session = mock(jakarta.servlet.http.HttpSession.class);
         when(session.getAttribute("usuarioLogado")).thenReturn(usuario);
 
-        @SuppressWarnings("unused")
-        List<String> generosEN = Arrays.asList("science_fiction", "romance");
-        @SuppressWarnings("unused")
-        List<String> generosPT = Arrays.asList("Ficção Científica", "Romance");
-
-        // Simula retorno do serviço para cada gênero
+        when(recomendacaoService.recomendarPorGeneroEAutor(usuario)).thenReturn(Collections.emptyList());
         when(openLibraryService.buscarLivrosPorGenero(anyString()))
             .thenReturn(List.of(new LivroOpenLibrary()));
 
-        // Chama o método
         String view = usuarioController.home(model, session);
 
-        // Verifica se adicionou os atributos certos
+        verify(model).addAttribute(eq("usuario"), eq(usuario));
+        verify(model).addAttribute(eq("recomendados"), anyList());
         verify(model).addAttribute(eq("generosPopulares"), anyList());
         verify(model).addAttribute(eq("livrosPorGenero"), anyList());
         assertEquals("home", view);

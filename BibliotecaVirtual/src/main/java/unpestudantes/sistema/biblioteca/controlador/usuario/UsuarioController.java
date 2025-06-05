@@ -6,7 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,7 @@ import unpestudantes.sistema.biblioteca.servico.RecomendacaoService;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.File;
 
 
 
@@ -267,14 +270,19 @@ public class UsuarioController {
         if (usuario == null || file.isEmpty()) return "redirect:/perfil";
 
         try {
-            String pasta = "src/main/resources/static/img/fotos/";
-            Files.createDirectories(Paths.get(pasta));
-            String nomeArquivo = "user_" + usuario.getId() + "_" + file.getOriginalFilename();
-            Path caminho = Paths.get(pasta + nomeArquivo);
-            file.transferTo(caminho);
+            // Caminho absoluto da pasta static/img/fotos
+            String staticDir = new File("uploads/fotos").getAbsolutePath();
+            Files.createDirectories(Paths.get(staticDir));
+            String extensao = "";
+            String original = file.getOriginalFilename();
+            if (original != null && original.contains(".")) {
+                extensao = original.substring(original.lastIndexOf('.'));
+            }
+            String nomeArquivo = "user_" + usuario.getId() + "_" + UUID.randomUUID() + extensao;
+            Path caminho = Paths.get(staticDir, nomeArquivo);
+            file.transferTo(caminho.toFile());
 
-            usuario.setFotoUrl("/img/fotos/" + nomeArquivo);
-            // Salve o usuário no banco (adicione o repository se necessário)
+            usuario.setFotoUrl("/uploads/fotos/" + nomeArquivo);
             usuarioRepository.save(usuario);
             session.setAttribute("usuarioLogado", usuario);
         } catch (Exception e) {

@@ -17,8 +17,12 @@ import java.util.List;
 
 @Service
 public class OpenLibraryService {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public OpenLibraryService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     /**
      * Busca livros na OpenLibrary por termo de pesquisa.

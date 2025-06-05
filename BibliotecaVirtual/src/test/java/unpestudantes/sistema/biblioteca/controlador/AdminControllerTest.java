@@ -10,6 +10,7 @@ import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
 import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
+import unpestudantes.sistema.biblioteca.repositorio.LivroLocalRepository;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -19,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class AdminControllerTest {
+
+    @Mock
+    private LivroLocalRepository livroLocalRepository;
 
     @Mock
     private UsuarioRepository usuarioRepository;

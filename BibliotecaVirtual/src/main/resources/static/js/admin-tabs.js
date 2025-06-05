@@ -34,3 +34,16 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 });
+
+function abrirModalLivro() {
+  document.getElementById('modalLivro').style.display = 'flex';
+}
+function fecharModalLivro() {
+  document.getElementById('modalLivro').style.display = 'none';
+}
+function previewCapa(event) {
+  const [file] = event.target.files;
+  if (file) {
+    document.getElementById('previewCapaImg').src = URL.createObjectURL(file);
+  }
+}
