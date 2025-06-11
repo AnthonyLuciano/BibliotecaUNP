@@ -1,0 +1,23 @@
+@startuml "modeloC4"
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+' Pessoas
+Person(usuario, "Usuário", "Aluno ou funcionário que utiliza a biblioteca virtual")
+Person(admin, "Administrador", "Responsável pela gestão do sistema")
+
+' Sistema
+System_Boundary(s1, "Biblioteca Virtual") {
+    Container(web, "Aplicação Web", "Spring Boot + Thymeleaf", "Interface web para busca, empréstimo e gerenciamento de livros")
+    Container(db, "Banco de Dados", "PostgreSQL", "Armazena usuários, livros, listas, empréstimos, etc.")
+    Container(email, "Serviço de E-mail", "SMTP", "Envia notificações e lembretes")
+    Container(openlib, "OpenLibrary API", "REST API", "Busca informações de livros")
+}
+
+' Relacionamentos
+Rel(usuario, web, "Usa via navegador")
+Rel(admin, web, "Usa via navegador (funções administrativas)")
+Rel(web, db, "Lê/Escreve", "JPA/Hibernate")
+Rel(web, email, "Envia e-mails")
+Rel(web, openlib, "Consulta livros", "HTTP/REST")
+
+@enduml
