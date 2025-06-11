@@ -4,9 +4,12 @@ package unpestudantes.sistema.biblioteca.controlador.usuario;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +35,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
-
 
 
 @Controller
@@ -250,12 +252,20 @@ public class UsuarioController {
         if (usuario == null) return "redirect:/login";
         List<ListaLivro> listas = listaLivroRepository.findByUsuario(usuario);
         model.addAttribute("usuario", usuario);
+        model.addAttribute("listas", listas);
+
+        // Agrupa por nomeLista
+        Map<String, List<ListaLivro>> listasPorNome = listas.stream()
+            .collect(Collectors.groupingBy(ListaLivro::getNomeLista));
+        model.addAttribute("listasPorNome", listasPorNome);
+
+        Set<String> nomesListas = listasPorNome.keySet();
+        model.addAttribute("nomesListas", nomesListas);
+
+        // Histórico de empréstimos
         List<Emprestimo> emprestimos = emprestimoRepository.findByUsuario(usuario);
         model.addAttribute("emprestimos", emprestimos);
-        model.addAttribute("recomendados", recomendacaoService.recomendarPorGeneroEAutor(usuario));
-        model.addAttribute("listas", listas);
-        System.out.println("Entrou no método /perfil");
-        System.out.println("Quantidade de empréstimos: " + emprestimos.size());
+
         return "perfil";
     }
 

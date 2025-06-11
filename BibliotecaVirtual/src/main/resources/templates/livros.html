@@ -8,8 +8,20 @@
 <body>
 
     <header>
-        <h2>Biblioteca UNP</h2>
-        <p>Explore os livros disponíveis em nosso acervo</p>
+        <div class="header-content">
+            <div>
+                <h2>Biblioteca UNP</h2>
+                <p>Explore os livros disponíveis em nosso acervo</p>
+            </div>
+            <a href="/perfil" class="profile-container">
+                <img th:if="${usuario != null and usuario.fotoUrl != null and !#strings.isEmpty(usuario.fotoUrl)}"
+                     th:src="@{${usuario.fotoUrl}}"
+                     alt="Foto de perfil" class="profile-picture"/>
+                <img th:if="${usuario == null or usuario.fotoUrl == null or #strings.isEmpty(usuario.fotoUrl)}"
+                     th:src="@{/img/placeholder-user.png}"
+                     alt="Foto de perfil" class="profile-picture"/>
+            </a>
+        </div>
     </header>
 
     <div class="search-bar">
@@ -42,7 +54,10 @@
             <span th:if="${livro.isbn10 != null}" th:text="'ISBN-10: ' + ${livro.isbn10}"></span>
             <span th:if="${livro.isbn13 != null}" th:text="' ISBN-13: ' + ${livro.isbn13}"></span>
         </td>
-        <td><!-- ações --></td>
+        <td>
+            <a th:href="@{${livro.editionKey != null ? '/livros/' + livro.editionKey : (livro.isbns != null && !#lists.isEmpty(livro.isbns) ? '/livros/' + livro.isbns[0] : '#')}}" 
+               class="btn btn-detalhes">Detalhes</a>
+        </td>
     </tr>
     <tr th:each="livro : ${livrosExternos}">
         <td>
@@ -50,14 +65,13 @@
         </td>
         <td th:text="${livro.titulo}"></td>
         <td th:text="${#lists.isEmpty(livro.autores) ? '-' : #strings.arrayJoin(livro.autores, ', ')}"></td>
-        <td><!-- ações --></td>
+        <td>
+            <a th:href="@{${livro.editionKey != null ? '/livros/' + livro.editionKey : (livro.isbns != null && !#lists.isEmpty(livro.isbns) ? '/livros/' + livro.isbns[0] : '#')}}" 
+               class="btn btn-detalhes">Detalhes</a>
+        </td>
     </tr>
 </tbody>
     </table>
-
-    <div class="footer">
-        <a href="/login">⬅ Sair</a>
-    </div>
     <div class="footer">
         <a href="/home" class="button">⬅Voltar a Home</a>
     </div>

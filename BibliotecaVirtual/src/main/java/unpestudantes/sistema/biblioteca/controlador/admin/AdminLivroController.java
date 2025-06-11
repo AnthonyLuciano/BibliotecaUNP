@@ -16,6 +16,9 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Controller responsável pelo CRUD de livros locais para o painel administrativo.
+ */
 @Controller
 @RequestMapping("/admin/livros")
 public class AdminLivroController {
@@ -23,6 +26,10 @@ public class AdminLivroController {
     @Autowired
     private LivroLocalRepository livroLocalRepository;
 
+    /**
+     * Cadastra um novo livro local, incluindo upload de capa.
+     * Valida o ISBN e salva o livro no banco.
+     */
     @PostMapping("/cadastrar")
     public String cadastrarLivro(@RequestParam String titulo,
                                  @RequestParam String autor,
@@ -70,6 +77,10 @@ public class AdminLivroController {
         return "redirect:/admin/livros/listar";
     }
 
+    /**
+     * Lista todos os livros locais cadastrados.
+     * Exibe no painel do administrador.
+     */
     @GetMapping("/listar")
     public String listarLivros(Model model) {
         List<LivroLocal> livros = livroLocalRepository.findAll();

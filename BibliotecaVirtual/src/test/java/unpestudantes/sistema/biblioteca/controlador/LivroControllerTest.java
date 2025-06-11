@@ -12,6 +12,8 @@ import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
 import unpestudantes.sistema.biblioteca.controlador.sistema.LivroController;
 import unpestudantes.sistema.biblioteca.repositorio.LivroLocalRepository;
+import unpestudantes.sistema.biblioteca.modelo.livro.ListaLivro;
+import unpestudantes.sistema.biblioteca.repositorio.ListaLivroRepository;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,6 +29,9 @@ class LivroControllerTest {
 
     @Mock
     private LivroLocalRepository livroLocalRepository;
+
+    @Mock
+    private ListaLivroRepository listaLivroRepository;
 
     @Mock
     private Model model;
@@ -139,7 +144,7 @@ class LivroControllerTest {
         DetalhesLivroOpenLibrary detalhes = new DetalhesLivroOpenLibrary();
         when(openLibraryService.buscarDetalhesLivro("123")).thenReturn(detalhes);
 
-        String view = livroController.detalhesLivro("123", model, null);
+        String view = livroController.detalhesLivro("123", model, null, session);
 
         verify(openLibraryService, times(1)).buscarDetalhesLivro("123");
         verify(model).addAttribute("detalhes", detalhes);
@@ -150,10 +155,45 @@ class LivroControllerTest {
     void detalhesLivro_DeveRetornarDetalhesNuloQuandoNaoEncontrado() {
         when(openLibraryService.buscarDetalhesLivro("999")).thenReturn(null);
 
-        String view = livroController.detalhesLivro("999", model, null);
+        String view = livroController.detalhesLivro("999", model, null, session);
 
         verify(openLibraryService, times(1)).buscarDetalhesLivro("999");
         verify(model).addAttribute("detalhes", (Object) null);
+        assertEquals("detalhes", view);
+    }
+
+    @Test
+    void detalhesLivro_DeveAdicionarListasUsuarioAoModeloQuandoLogado() {
+        DetalhesLivroOpenLibrary detalhes = new DetalhesLivroOpenLibrary();
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        List<ListaLivro> listas = Arrays.asList(new ListaLivro(), new ListaLivro());
+
+        when(openLibraryService.buscarDetalhesLivro("123")).thenReturn(detalhes);
+        when(session.getAttribute("usuarioLogado")).thenReturn(usuario);
+        when(listaLivroRepository.findByUsuario(usuario)).thenReturn(listas);
+
+        String view = livroController.detalhesLivro("123", model, null, session);
+
+        verify(openLibraryService, times(1)).buscarDetalhesLivro("123");
+        verify(model).addAttribute("detalhes", detalhes);
+        verify(model).addAttribute("listasUsuario", listas);
+        assertEquals("detalhes", view);
+    }
+
+    @Test
+    void detalhesLivro_DeveRetornarDetalhesQuandoEncontradoMesmoSemUsuario() {
+        DetalhesLivroOpenLibrary detalhes = new DetalhesLivroOpenLibrary();
+        when(openLibraryService.buscarDetalhesLivro("123")).thenReturn(detalhes);
+        when(session.getAttribute("usuarioLogado")).thenReturn(null);
+
+        String view = livroController.detalhesLivro("123", model, null, session);
+
+        verify(openLibraryService, times(1)).buscarDetalhesLivro("123");
+        verify(model).addAttribute("detalhes", detalhes);
+        // Não adiciona listasUsuario ao modelo
+        verify(model, never()).addAttribute(eq("listasUsuario"), any());
         assertEquals("detalhes", view);
     }
 }

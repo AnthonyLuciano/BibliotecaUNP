@@ -75,7 +75,7 @@
             <tr><th>Título</th><th>ISBN</th><th>Ação</th></tr>
           </thead>
           <tbody>
-            <tr th:each="livro : ${#lists.select(listas, l -> l.nomeLista == nomeLista)}">
+            <tr th:each="livro : ${listasPorNome[nomeLista]}">
               <td th:text="${livro.titulo}"></td>
               <td th:text="${livro.isbn}"></td>
               <td>

@@ -7,7 +7,17 @@
 </head>
 <body>
     <header>
-        <h1>Biblioteca UNP</h1>
+        <div class="header-content">
+            <h1>Biblioteca UNP</h1>
+            <a href="/perfil" class="profile-container">
+                <img th:if="${usuario != null and usuario.fotoUrl != null and !#strings.isEmpty(usuario.fotoUrl)}"
+                     th:src="@{${usuario.fotoUrl}}"
+                     alt="Foto de perfil" class="profile-picture"/>
+                <img th:if="${usuario == null or usuario.fotoUrl == null or #strings.isEmpty(usuario.fotoUrl)}"
+                     th:src="@{/img/placeholder-user.png}"
+                     alt="Foto de perfil" class="profile-picture"/>
+            </a>
+        </div>
     </header>
 
     <div class="livro-detalhes-container">
@@ -21,11 +31,11 @@
         <div class="info-livro">
             <h2 th:text="${detalhes.titulo}"></h2>
             <p th:if="${detalhes.subtitulo != null && !#strings.isEmpty(detalhes.subtitulo)}"><strong>Subtítulo:</strong> <span th:text="${detalhes.subtitulo}"></span></p>
-            <p th:if="${detalhes.autores != null && #lists.size(detalhes.autores) > 0}">
+            <p>
                 <strong>Autor(es):</strong>
-                <span th:each="autor, iterStat : ${detalhes.autores}">
-                    <span th:text="${autor}"></span><span th:if="${!iterStat.last}">, </span>
-                </span>
+                <span th:if="${#lists.isEmpty(detalhes.autores)}">-</span>
+                <span th:if="${!#lists.isEmpty(detalhes.autores)}"
+                      th:text="${#strings.arrayJoin(detalhes.autores, ', ')}"></span>
             </p>
             <p><strong>Editora:</strong> <span th:text="${detalhes.editora != null ? detalhes.editora : '-'}"></span></p>
             <p><strong>Data de Publicação:</strong> <span th:text="${detalhes.dataPublicacao != null ? detalhes.dataPublicacao : '-'}"></span></p>
@@ -56,6 +66,16 @@
 
     <form th:action="@{'/emprestimos/emprestar/edition/' + ${detalhes.editionKey}}" method="post">
         <div class="btn-emprestar"><button type="submit" class="btn btn-save">Emprestar</button></div>
+    </form>
+
+    <form th:action="@{/lista/adicionar-livro}" method="post" class="form-adicionar-lista">
+        <input type="hidden" name="editionKey" th:value="${detalhes.editionKey}" />
+        <input type="hidden" name="titulo" th:value="${detalhes.titulo}" />
+        <label for="listaId"><strong>Adicionar à lista:</strong></label>
+        <select name="listaId" id="listaId" class="custom-select" required>
+            <option th:each="lista : ${listasUsuario}" th:value="${lista.id}" th:text="${lista.nomeLista}"></option>
+        </select>
+        <button type="submit" class="btn btn-save">Adicionar</button>
     </form>
 
     <!-- Popup de mensagem centralizado -->

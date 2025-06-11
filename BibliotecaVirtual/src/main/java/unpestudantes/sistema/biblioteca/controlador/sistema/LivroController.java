@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
 import unpestudantes.sistema.biblioteca.modelo.livro.DetalhesLivroOpenLibrary;
+import unpestudantes.sistema.biblioteca.modelo.livro.ListaLivro;
 import unpestudantes.sistema.biblioteca.modelo.livro.LivroLocal;
 import unpestudantes.sistema.biblioteca.modelo.livro.LivroOpenLibrary;
 import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.servico.OpenLibraryService;
+import unpestudantes.sistema.biblioteca.repositorio.ListaLivroRepository;
 import unpestudantes.sistema.biblioteca.repositorio.LivroLocalRepository;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,9 @@ import java.time.LocalDateTime;
 @SuppressWarnings("unused")
 @Controller
 public class LivroController {
+
+    @Autowired
+    private ListaLivroRepository listaLivroRepository;
 
     @Autowired
     private OpenLibraryService openLibraryService;
@@ -61,13 +66,28 @@ public class LivroController {
      * -Anthony
      */
     @GetMapping("/livros/{editionKey}")
-    public String detalhesLivro(@PathVariable String editionKey, Model model, @ModelAttribute("mensagem") String mensagem) {
+    public String detalhesLivro(@PathVariable String editionKey, Model model, @ModelAttribute("mensagem") String mensagem, HttpSession session) {
         DetalhesLivroOpenLibrary detalhes = openLibraryService.buscarDetalhesLivro(editionKey);
         model.addAttribute("detalhes", detalhes);
         if (mensagem != null && !mensagem.trim().isEmpty()) {
             model.addAttribute("mensagem", mensagem);
         }
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario != null) {
+            List<ListaLivro> listasUsuario = listaLivroRepository.findByUsuario(usuario);
+            model.addAttribute("listasUsuario", listasUsuario);
+        }
         return "detalhes";
+    }
+
+    @ModelAttribute("usuario")
+    public Usuario getUsuario(HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) {
+            usuario = new Usuario();
+            usuario.setFotoUrl(null);
+        }
+        return usuario;
     }
 
 }

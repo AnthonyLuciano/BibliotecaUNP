@@ -11,6 +11,7 @@ header {
     color: white;
     text-align: center;
     border-radius: 8px 8px 0 0;
+    position: relative;
 }
 
 h2 {
@@ -76,10 +77,23 @@ button:hover {
     flex-wrap: wrap;
 }
 
-.profile-container {
+.header-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 16px 32px;
+}
+
+.welcome-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
 }
 
 .fade-in {
@@ -207,4 +221,138 @@ hr {
 }
 .btn:hover {
     background: #2980b9;
+}
+
+/* ====== NOVO: Estilo para CARROSSEL DE GÊNEROS ====== */
+.generos-carousel {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #3498db #f4f7f9;
+    margin-bottom: 20px;
+}
+
+.genero-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px 20px;
+    min-width: 160px;
+    max-width: 200px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    flex: 0 0 auto;
+    text-align: center;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.genero-card:hover {
+    background: #ecf0f1;
+}
+
+.genero-livro-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+}
+
+.genero-livro-info img {
+    margin-bottom: 6px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+
+.genero-nome {
+    font-weight: bold;
+    color: #3498db;
+    font-size: 1.05em;
+    margin-bottom: 2px;
+}
+
+@media (max-width: 700px) {
+    .genero-card {
+        min-width: 120px;
+        max-width: 140px;
+        padding: 10px 8px;
+    }
+}
+
+/* ====== NOVO: Estilo para RECOMENDAÇÕES ====== */
+.recomendados-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.recomendado-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1 1 calc(20% - 15px); /* 5 por linha com gap */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: background-color 0.3s;
+    cursor: pointer;
+    min-width: 170px;
+    max-width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.recomendado-card:hover {
+    background-color: #ecf0f1;
+}
+
+@media (max-width: 900px) {
+    .recomendado-card {
+        flex: 1 1 calc(33.33% - 10px); /* 3 por linha */
+    }
+}
+
+@media (max-width: 600px) {
+    .recomendado-card {
+        flex: 1 1 calc(50% - 10px); /* 2 por linha */
+    }
+}
+
+/* Estilo para o select e option do formulário de listas */
+select, .custom-select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #3498db;
+    background-color: #f4f7f9;
+    color: #2c3e50;
+    font-size: 1em;
+    margin-right: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+select:focus, .custom-select:focus {
+    border-color: #2980b9;
+    background-color: #eaf3fa;
+}
+
+option {
+    background: #fff;
+    color: #2c3e50;
+    font-size: 1em;
+}
+
+.form-adicionar-lista {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.form-adicionar-lista button {
+    margin-top: -3px;
 }
