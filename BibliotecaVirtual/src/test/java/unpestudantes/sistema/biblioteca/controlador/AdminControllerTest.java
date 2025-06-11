@@ -10,6 +10,7 @@ import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
 import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
+import unpestudantes.sistema.biblioteca.repositorio.LivroLocalRepository;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -19,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class AdminControllerTest {
+
+    @Mock
+    private LivroLocalRepository livroLocalRepository;
 
     @Mock
     private UsuarioRepository usuarioRepository;
@@ -85,12 +89,18 @@ class AdminControllerTest {
     }
 
     @Test
-    void excluir_DeveExcluirUsuarioPorId() {
-        String view = adminController.excluir(2L);
+    void desativar_DeveDesativarUsuarioPorId() {
+        Usuario usuario = new Usuario();
+        usuario.setId(2L);
+        usuario.setAtivo(true);
+        when(usuarioRepository.findById(2L)).thenReturn(Optional.of(usuario));
 
-        verify(usuarioRepository).deleteById(2L);
+        String view = adminController.desativar(2L);
+
+        assertEquals(false, usuario.isAtivo());
+        verify(usuarioRepository).save(usuario);
         assertEquals("redirect:/admin", view);
-        System.out.println("✅ [AdminController] Usuário excluído com sucesso!");
+        System.out.println("✅ [AdminController] Usuário desativado com sucesso!");
     }
 
     @Test
@@ -153,4 +163,5 @@ class AdminControllerTest {
         verify(redirectAttributes).addFlashAttribute(eq("mensagem"), contains("Empréstimo não encontrado"));
         assertEquals("redirect:/admin/emprestimos", view);
     }
+
 }

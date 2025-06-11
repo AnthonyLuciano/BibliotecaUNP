@@ -27,26 +27,35 @@ class RecomendacaoServiceTest {
     private OpenLibraryService openLibraryService;
 
     @Test
-    void recomendarPorGeneroEAutorDeveRetornarLivros() {
+    void recomendarPorGeneroEAutorDeveRetornarLivrosPorAutorApenas() {
         Usuario usuario = new Usuario();
         Emprestimo emp = mock(Emprestimo.class);
-        when(emp.getEditionKey()).thenReturn("OL12345M");
-        when(emp.getIsbn()).thenReturn(null);
+        when(emp.getEditionKey()).thenReturn(null);
+        when(emp.getIsbn()).thenReturn("1234567890");
 
         List<Emprestimo> emprestimos = List.of(emp);
         when(emprestimoRepository.findByUsuario(usuario)).thenReturn(emprestimos);
 
         DetalhesLivroOpenLibrary detalhes = new DetalhesLivroOpenLibrary();
-        detalhes.setGeneros(List.of("science_fiction"));
-        detalhes.setAutores(List.of("Autor Teste"));
-        when(openLibraryService.buscarDetalhesLivro("OL12345M")).thenReturn(detalhes);
+        detalhes.setGeneros(null); // Nenhum gênero
+        detalhes.setAutores(List.of("Autor Único"));
+        when(openLibraryService.buscarDetalhesPorIsbn("1234567890")).thenReturn(detalhes);
 
         List<LivroOpenLibrary> livrosRecomendados = List.of(new LivroOpenLibrary());
-        when(openLibraryService.buscarLivrosPorGeneroEAutor(anyString(), anyString())).thenReturn(livrosRecomendados);
+        when(openLibraryService.buscarLivrosPorAutor("Autor Único")).thenReturn(livrosRecomendados);
 
         List<LivroOpenLibrary> resultado = recomendacaoService.recomendarPorGeneroEAutor(usuario);
 
         assertEquals(livrosRecomendados, resultado);
-        System.out.println("✅ [RecomendacaoServiceTest] Recomendações retornadas corretamente para o usuário.");
+    }
+
+    @Test
+    void recomendarPorGeneroEAutorDeveRetornarListaVaziaSeSemEmprestimos() {
+        Usuario usuario = new Usuario();
+        when(emprestimoRepository.findByUsuario(usuario)).thenReturn(Collections.emptyList());
+
+        List<LivroOpenLibrary> resultado = recomendacaoService.recomendarPorGeneroEAutor(usuario);
+
+        assertTrue(resultado.isEmpty());
     }
 }

@@ -2,14 +2,14 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>BibliotecaUNP - Painel do Administrador</title>
+  <title>BibliotecaVirtual - Painel do Administrador</title>
   <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
 <div class="container">
 
   <header class="branding">
-    <h2><span>Biblioteca</span>UNP</h2>
+    <h2><span>Biblioteca</span>Virtual</h2>
     <a href="/login" class="btn btn-logout">Sair</a>
   </header>
 
@@ -37,6 +37,7 @@
           <th>ID</th>
           <th>Usuário</th>
           <th>Funcionário?</th>
+          <th>Status</th>
           <th>Ações</th>
         </tr>
         </thead>
@@ -55,9 +56,13 @@
             </form>
           </td>
           <td th:text="${usuario.admin ? 'Sim' : 'Não'}"></td>
+          <td th:text="${usuario.ativo ? 'Ativo' : 'Inativo'}"></td>
           <td>
-            <form th:action="@{/admin/excluir/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir?')">
-              <button type="submit" class="btn btn-delete">Excluir</button>
+            <form th:action="@{/admin/desativar/{id}(id=${usuario.id})}" method="post" th:if="${usuario.ativo}" onsubmit="return confirm('Desativar este usuário?')">
+              <button type="submit" class="btn btn-delete">Desativar</button>
+            </form>
+            <form th:action="@{/admin/reativar/{id}(id=${usuario.id})}" method="post" th:if="${!usuario.ativo}">
+              <button type="submit" class="btn btn-save">Reativar</button>
             </form>
           </td>
         </tr>
@@ -79,28 +84,34 @@
 
       <div th:if="${erro}" th:text="${erro}" class="alert-error"></div>
     </section>
-
-    <!-- Coloque este bloco onde deseja exibir os botões -->
-    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-      <a href="/usuario" class="btn btn-usuario" style="background: #2196f3; color: #fff;">👤 Ver como Usuário</a>
-      <a href="/admin/testes" class="btn btn-testes" style="background: #4caf50; color: #fff;">🔧 Painel de Testes</a>
-    </div>
   </div>
 
   <!-- Aba: Livros -->
   <div id="livros" class="tab-content" style="display: none;">
     <h4>📚 Cadastro e Aprovação de Livros</h4>
     <h1>EM DESENVOLVIMENTO, ISSO É UM MOCKUP</h1>
-    <section class="form-section">
-      <h4>Cadastrar Novo Livro</h4>
-      <form th:action="@{/admin/livros/cadastrar}" method="post" enctype="multipart/form-data" class="form-grid">
-        <input type="text" name="titulo" placeholder="Título" required />
-        <input type="text" name="autor" placeholder="Autor" required />
-        <input type="text" name="isbn" placeholder="ISBN (10 ou 13)" required />
-        <input type="file" name="capa" accept="image/*" />
-        <button type="submit" class="btn btn-create">Cadastrar Livro</button>
-      </form>
-    </section>
+    <!-- Botão para abrir o modal -->
+    <button class="btn btn-create" onclick="abrirModalLivro()">Cadastrar Novo Livro</button>
+
+    <!-- Modal de cadastro de livro -->
+    <div id="modalLivro" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close" onclick="fecharModalLivro()">&times;</span>
+        <h4>Cadastrar Novo Livro</h4>
+        <form id="formLivro" th:action="@{/admin/livros/cadastrar}" method="post" enctype="multipart/form-data" class="form-grid">
+          <input type="text" name="titulo" placeholder="Título" required />
+          <input type="text" name="autor" placeholder="Autor" required />
+          <input type="text" name="isbn" placeholder="ISBN (10 ou 13)" required />
+          <input type="number" name="quantidade" placeholder="Quantidade" min="1" value="1" required />
+          <label>
+            <input type="file" name="capa" accept="image/*" onchange="previewCapa(event)" />
+            Capa do Livro
+          </label>
+          <img id="previewCapaImg" src="/img/placeholder-book.png" alt="Preview da capa" style="height:80px; margin-top:10px;" />
+          <button type="submit" class="btn btn-create">Cadastrar Livro</button>
+        </form>
+      </div>
+    </div>
 
     <section style="margin-top: 30px;">
       <h4>Solicitações Pendentes de Autores</h4>
@@ -136,23 +147,101 @@
         </tbody>
       </table>
     </section>
+
+    <section>
+      <h4>Livros Locais Cadastrados</h4>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Autor</th>
+          <th>ISBN10</th>
+          <th>ISBN13</th>
+          <th>Quantidade</th>
+          <th>Capa</th>
+          <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="livro : ${livros}">
+          <td th:text="${livro.id}"></td>
+          <td th:text="${livro.titulo}"></td>
+          <td th:text="${livro.autor}"></td>
+          <td th:text="${livro.isbn10}"></td>
+          <td th:text="${livro.isbn13}"></td>
+          <td th:text="${livro.quantidade}"></td>
+          <td>
+            <img th:src="${livro.capaUrl != null ? livro.capaUrl : '/img/placeholder-book.png'}" alt="Capa" style="height:60px"/>
+          </td>
+          <td>
+            <button class="btn btn-save" th:onclick="'abrirModalEditarLivro(' + ${livro.id} + ')'">Editar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
   </div>
 
   <!-- Aba: Relatórios -->
   <div id="relatorios" class="tab-content" style="display: none;">
     <h4>📊 Relatórios</h4>
-    <h1>EM DESENVOLVIMENTO, ISSO É UM MOCKUP</h1>
-    <p>Relatórios administrativos e estatísticas de uso serão exibidos aqui.</p>
-    <ul>
-      <li>Total de usuários cadastrados</li>
-      <li>Livros mais requisitados</li>
-      <li>Acessos por período</li>
-    </ul>
-    <p><em>(Implementação futura com gráficos interativos e filtros)</em></p>
+    <h5>Relatório de Empréstimos por Usuário</h5>
+    
+    <!-- Formulário de pesquisa para relatórios -->
+    <form method="get" action="/admin/pesquisar" class="search-bar" style="margin-bottom: 20px;">
+      <input type="text" name="busca" placeholder="🔍 Pesquisar usuário para relatório..." required />
+      <button type="submit" class="btn">Pesquisar</button>
+    </form>
+
+    <div th:if="${usuarioRelatorio == null}">
+      <p>Pesquise um usuário para ver o relatório de empréstimos.</p>
+    </div>
+    <div th:if="${usuarioRelatorio != null}">
+      <h6 th:text="'Usuário: ' + ${usuarioRelatorio.username}"></h6>
+      <table class="table" style="margin-bottom: 30px;">
+        <thead>
+        <tr>
+          <th>ID Empréstimo</th>
+          <th>Título</th>
+          <th>ISBN</th>
+          <th>Data Empréstimo</th>
+          <th>Data Devolução Prevista</th>
+          <th>Data Devolução Real</th>
+          <th>Multa</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="emp : ${emprestimosRelatorio}">
+          <td th:text="${emp.id}"></td>
+          <td th:text="${emp.titulo}"></td>
+          <td th:text="${emp.isbn}"></td>
+          <td th:text="${#temporals.format(emp.dataEmprestimo, 'dd/MM/yyyy')}"></td>
+          <td th:text="${#temporals.format(emp.dataDevolucaoPrevista, 'dd/MM/yyyy')}"></td>
+          <td th:text="${emp.dataDevolucaoReal != null ? #temporals.format(emp.dataDevolucaoReal, 'dd/MM/yyyy') : '-'}"></td>
+          <td th:text="${emp.multa}"></td>
+          <td>
+            <form th:action="@{/admin/emprestimos/marcar-devolvido/{id}(id=${emp.id})}" method="post" th:if="${emp.dataDevolucaoReal == null}" style="display:inline;">
+              <input type="hidden" name="busca" th:value="${usuarioRelatorio.username}" />
+              <button type="submit" class="btn btn-save">Marcar Devolvido</button>
+            </form>
+            <form th:action="@{/admin/emprestimos/remover-devolucao/{id}(id=${emp.id})}" method="post" th:if="${emp.dataDevolucaoReal != null}" style="display:inline;">
+              <input type="hidden" name="busca" th:value="${usuarioRelatorio.username}" />
+              <button type="submit" class="btn btn-delete">Remover Devolução</button>
+            </form>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(emprestimosRelatorio)}">
+          <td colspan="7"><em>Nenhum empréstimo para este usuário.</em></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
 </div>
-
+<div style="display: flex; gap: 10px; margin-bottom: 20px;">
+      <a href="/home" class="btn btn-usuario" style="background: #2196f3; color: #fff;">👤 Ver como Usuário</a>
+    </div>
 <!-- Script de controle das abas -->
 <script src="/js/admin-tabs.js"></script>
 </body>

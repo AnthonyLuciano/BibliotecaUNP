@@ -30,17 +30,15 @@ class OpenLibraryServiceTest {
     @Test
     void buscarLivrosPorGeneroDevePreencherIsbns() throws Exception {
         String genero = "science_fiction";
-        String json = "{\"works\":[{\"title\":\"Livro Teste\",\"isbn\":[\"1234567890\"]}]}";
+        String json = "{\"works\":[{\"title\":\"Livro Teste\",\"isbn\":[\"1234567890\",\"9876543210\"]}]}";
         when(restTemplate.getForObject(anyString(), eq(String.class))).thenReturn(json);
-
-        JsonNode rootNode = new ObjectMapper().readTree(json);
-        when(objectMapper.readTree(json)).thenReturn(rootNode);
 
         List<LivroOpenLibrary> livros = openLibraryService.buscarLivrosPorGenero(genero);
 
         assertFalse(livros.isEmpty());
         assertEquals("Livro Teste", livros.get(0).getTitulo());
         assertEquals("1234567890", livros.get(0).getIsbns().get(0));
+        assertEquals("9876543210", livros.get(0).getIsbns().get(1));
         System.out.println("✅ [OpenLibraryServiceTest] Busca por gênero retornou livros corretamente.");
     }
 }

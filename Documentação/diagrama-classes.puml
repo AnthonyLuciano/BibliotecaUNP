@@ -1,94 +1,84 @@
-@startuml diagrama-classes
-skinparam classAttributeIconSize 0
-skinparam classFontSize 14
-skinparam classAttributeFontSize 12
-skinparam classOperationFontSize 12
-skinparam shadowing true
-
-package "Usuários" {
-    class Usuario {
-        + id: int
-        + nome: String
-        + email: String
-        + endereco: String
-        + telefone: String
-        + cpf: String
-        + login: String
-        + senha: String
-        --
-        + cadastrar(): void
-        + editarPerfil(): void
-        + excluirConta(): void
-        + visualizarPerfil(): void
-        + visualizarHistorico(): void
-        + realizarLogin(): boolean
-        + realizarLogout(): void
-    }
-
-    class Cliente {
-        + comentarios: String[]
-        + avaliacoes: String[]
-        + preferencias: String[]
-        + livrosLidos: String[]
-        + livrosDesejados: String[]
-        + status: String
-        --
-        + buscarLivros(): void
-        + visualizarDetalhesLivro(): void
-        + solicitarEmprestimo(): void
-        + renovarEmprestimo(): void
-        + devolverLivro(): void
-        + pagarMulta(): void
-        + visualizarMultas(): void
-    }
-
-    class Admin {
-        + cargo: String
-        --
-        + aprovarCadastroUsuarios(): void
-        + editarDadosUsuarios(): void
-        + desativarUsuarios(): void
-        + cadastrarNovosExemplares(): void
-        + editarDadosExemplares(): void
-        + excluirExemplares(): void
-        + gerarRelatorios(): void
-        + visualizarRelatorios(): void
-        + gerarMultas(): void
-        + visualizarHistoricoEmprestimos(): void
-        + visualizarHistoricoDevolucoes(): void
-        + controlarEstoqueLivros(): void
-    }
-
-    Cliente --|> Usuario
-    Admin --|> Usuario
+@startuml "Diagrama de Classes - Biblioteca Digital"
+' ======= ENTIDADES =======
+class Usuario {
+    +Long id
+    +String username
+    +String password
+    +String email
+    +boolean emailVerificado
+    +String codigoVerificacao
+    +boolean admin
+    +String fotoUrl
+    +boolean ativo
 }
 
-package "Biblioteca" {
-    class Livro {
-        + id: int
-        + titulo: String
-        + autor: String
-        + categoria: String
-        + anoPublicacao: int
-        + editora: String
-        + isbn: String
-        + sinopse: String
-        + estoque: int
-        + disponibilidade: boolean
-        --
-        + cadastrarLivro(): void
-        + editarLivro(): void
-        + excluirLivro(): void
-        + buscarLivro(): void   
-        + visualizarDetalhesLivro(): void
-        + verificarDisponibilidade(): boolean
-        + emprestarLivro(): void
-        + devolverLivro(): void
-        + renovarEmprestimo(): void
-    }
+class LivroLocal {
+    +Long id
+    +String titulo
+    +String autor
+    +String isbn10
+    +String isbn13
+    +String capaUrl
+    +boolean disponivel
+    +int quantidade
 }
 
-Cliente "1" --> "*" Livro : empresta
-Admin "1" --> "*" Livro : gerencia
+class LivroOpenLibrary {
+    +String titulo
+    +List<String> autores
+    +Integer anoPublicacao
+    +String capaUrl
+    +String editionKey
+    +List<String> isbns
+}
+
+class DetalhesLivroOpenLibrary {
+    +String titulo
+    +String subtitulo
+    +String dataPublicacao
+    +String editora
+    +String numeroPaginas
+    +String sinopse
+    +String capaUrl
+    +String editionKey
+    +List<String> autores
+    +List<String> generos
+    +List<String> isbn10
+    +List<String> isbn13
+}
+
+class ResultadoBuscaOpenLibrary {
+    +List<LivroOpenLibrary> livros
+}
+
+class Emprestimo {
+    +Long id
+    +Usuario usuario
+    +String isbn
+    +String titulo
+    +LocalDateTime dataEmprestimo
+    +LocalDateTime dataDevolucaoPrevista
+    +LocalDateTime dataDevolucaoReal
+    +String editionKey
+    +BigDecimal multa
+}
+
+class ListaLivro {
+    +Long id
+    +Usuario usuario
+    +String nomeLista
+    +String isbn
+    +String titulo
+}
+
+' ======= RELACIONAMENTOS =======
+Usuario --  Emprestimo : realiza >
+Usuario --  ListaLivro : possui >
+Emprestimo -- LivroLocal : refere >
+ListaLivro *-- LivroLocal : contém >
+ListaLivro *-- LivroOpenLibrary : contém >
+
+ResultadoBuscaOpenLibrary *-- LivroOpenLibrary
+DetalhesLivroOpenLibrary ..> LivroOpenLibrary : detalha >
 
 @enduml

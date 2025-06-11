@@ -13,7 +13,21 @@ public class LivroLocal {
     private String isbn10;
     private String isbn13;
     private String capaUrl; // Caminho da imagem salva ou URL
-
+    private boolean disponivel = true; // Indica se o livro está ativo ou não
+    private int quantidade = 1; // Quantidade de cópias do livro
+    
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
+    }
+    public int getQuantidade() {
+        return quantidade;
+    }
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
     // Getters e setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

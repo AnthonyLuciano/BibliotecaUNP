@@ -2,18 +2,18 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Bem-vindo à Biblioteca UNP</title>
+    <title>Bem-vindo à Biblioteca Virtual</title>
     <link rel="stylesheet" href="css/cliente.css">
 </head>
 <body>
     <header>
-        <div class="profile-container">
-            <div>
+        <div class="header-content">
+            <div class="welcome-text">
                 <h2>Bem-vindo, <span th:text="${usuario.username}"></span>!</h2>
                 <p>Veja recomendações baseadas nos seus interesses:</p>
             </div>
             <a href="/perfil" class="profile-container">
-                <img th:src="${usuario.fotoUrl != null && !#strings.isEmpty(usuario.fotoUrl) ? usuario.fotoUrl : '/img/placeholder-user.png'}"
+                <img th:src="${usuario != null && usuario.fotoUrl != null && !#strings.isEmpty(usuario.fotoUrl) ? usuario.fotoUrl : '/img/placeholder-user.png'}"
                      alt="Foto de perfil" class="profile-picture"/>
             </a>
         </div>
@@ -43,26 +43,20 @@
 
     <section>
         <h3>Livros Recomendados</h3>
-        <div class="recomendados">
-            <div th:if="${#lists.isEmpty(recomendados)}">
+        <div class="recomendados-container">
+            <div th:if="${#lists.isEmpty(recomendados)}" style="width: 100%;">
                 <p>Nenhuma recomendação disponível ainda. Empreste livros para receber sugestões personalizadas!</p>
             </div>
-            <div th:each="livro : ${recomendados}" class="livro-recomendado" style="display: flex; align-items: center; margin-bottom: 20px;">
-                <img th:if="${livro.capaUrl != null}" th:src="${livro.capaUrl}" alt="Capa" style="height:100px; margin-right: 15px;"/>
-                <div>
-                    <a th:href="@{${livro.editionKey != null ? '/livros/' + livro.editionKey : (livro.isbns != null && !#lists.isEmpty(livro.isbns) ? '/livros/' + livro.isbns[0] : '#')}}" 
-                       th:text="${livro.titulo}">Título</a>
-                    <p th:text="${#lists.isEmpty(livro.autores) ? '-' : #strings.arrayJoin(livro.autores, ', ')}"></p>
-                    <p th:if="${livro.anoPublicacao != null}" style="font-size: 0.9em; color: #888;">
-                        Ano: <span th:text="${livro.anoPublicacao}"></span>
-                    </p>
-                </div>
+            <div th:each="livro : ${recomendados}" class="recomendado-card">
+                <img th:if="${livro.capaUrl != null}" th:src="${livro.capaUrl}" alt="Capa" style="height:100px; margin-bottom: 8px;"/>
+                <a th:href="@{${livro.editionKey != null ? '/livros/' + livro.editionKey : (livro.isbns != null && !#lists.isEmpty(livro.isbns) ? '/livros/' + livro.isbns[0] : '#')}}" 
+                   th:text="${livro.titulo}" style="display:block; margin-bottom: 4px;">Título</a>
+                <p th:text="${#lists.isEmpty(livro.autores) ? '-' : #strings.arrayJoin(livro.autores, ', ')}" style="font-size: 0.95em; color: #555; margin-bottom: 0;"></p>
+                <p th:if="${livro.anoPublicacao != null}" style="font-size: 0.9em; color: #888; margin-bottom: 0;">
+                    Ano: <span th:text="${livro.anoPublicacao}"></span>
+                </p>
             </div>
         </div>
     </section>
-
-    <div class="footer">
-        <a href="/livros">Ver todos os livros</a>
-    </div>
 </body>
 </html>

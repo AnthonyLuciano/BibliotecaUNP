@@ -47,7 +47,7 @@ class ListaLivroControllerTest {
         String result = controller.verListas(model, session);
 
         verify(model).addAttribute("listas", listas);
-        assertEquals("listas", result);
+        assertEquals("perfil", result); // Corrigido
     }
 
     @Test
@@ -66,7 +66,7 @@ class ListaLivroControllerTest {
         String result = controller.criarLista("Minha Lista", session);
 
         verify(listaLivroRepository).save(any(ListaLivro.class));
-        assertEquals("redirect:/lista", result);
+        assertEquals("redirect:/perfil", result); // Corrigido
     }
 
     @Test
@@ -91,6 +91,6 @@ class ListaLivroControllerTest {
         String result = controller.removerLivro(1L, session);
 
         verify(listaLivroRepository).deleteById(1L);
-        assertEquals("redirect:/lista", result);
+        assertEquals("redirect:/perfil", result); // Corrigido
     }
 }

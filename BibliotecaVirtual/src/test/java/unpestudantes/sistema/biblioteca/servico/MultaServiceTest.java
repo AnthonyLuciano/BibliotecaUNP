@@ -1,6 +1,5 @@
 package unpestudantes.sistema.biblioteca.servico;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -9,7 +8,6 @@ import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
 import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;

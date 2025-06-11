@@ -3,10 +3,10 @@ left to right direction
 skinparam packageStyle rectangle
 
 actor "Usuário" as Usuario <<Geral>>
-actor "Usuário Comum" as UsuarioComum <<Cliente>>
+actor "Cliente Novo" as ClienteNovo <<Visitante>>
 actor "Administrador" as Administrador <<Funcionário>>
 
-UsuarioComum --|> Usuario
+ClienteNovo --|> Usuario
 Administrador --|> Usuario
 
 package "Biblioteca Virtual" {
@@ -24,13 +24,18 @@ package "Biblioteca Virtual" {
     usecase "RF11 - Gerar relatórios de empréstimos" as RF011_Relatorios
     usecase "RF12 - Aprovar/gerir cadastro de usuários" as RF012_Aprovar
     usecase "RF13 - Recomendar livros" as RF013_Recomendar
+    usecase "RF14 - Adicionar livro à lista" as RF014_Lista
 }
 
 Usuario --> RF001_Login
 Usuario --> RF005_Busca
 Usuario --> RF006_Detalhes
+Usuario --> RF007_Emprestimo
+Usuario --> RF013_Recomendar
+Usuario --> RF014_Lista
 
-UsuarioComum --> RF002_Cadastro
+
+ClienteNovo --> RF002_Cadastro
 
 Administrador --> RF003_Controle
 Administrador --> RF004_CadLivro
@@ -45,5 +50,6 @@ RF001_Login --> (RF007_Emprestimo) : <<include>>
 RF007_Emprestimo <-- (RF008_Disponibilidade) : <<include>>
 RF007_Emprestimo <-- (RF009_Multas) : <<extend>> \nEm caso de atraso
 RF007_Emprestimo <-- (RF010_Lembrete) : <<include>>
+
 
 @enduml

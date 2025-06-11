@@ -10,9 +10,15 @@ import unpestudantes.sistema.biblioteca.repositorio.LivroLocalRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Controller responsável pelo CRUD de livros locais para o painel administrativo.
+ */
 @Controller
 @RequestMapping("/admin/livros")
 public class AdminLivroController {
@@ -20,17 +26,23 @@ public class AdminLivroController {
     @Autowired
     private LivroLocalRepository livroLocalRepository;
 
+    /**
+     * Cadastra um novo livro local, incluindo upload de capa.
+     * Valida o ISBN e salva o livro no banco.
+     */
     @PostMapping("/cadastrar")
     public String cadastrarLivro(@RequestParam String titulo,
                                  @RequestParam String autor,
                                  @RequestParam String isbn,
+                                 @RequestParam int quantidade,
                                  @RequestParam(value = "capa", required = false) MultipartFile capa,
-                                 Model model) throws IOException {
+                                 Model model) {
         LivroLocal livro = new LivroLocal();
         livro.setTitulo(titulo);
         livro.setAutor(autor);
+        livro.setQuantidade(quantidade);
 
-        String isbnLimpo = isbn.replaceAll("[^0-9Xx]", ""); // Remove traços e espaços
+        String isbnLimpo = isbn.replaceAll("[^0-9Xx]", "");
         if (isbnLimpo.length() == 10) {
             livro.setIsbn10(isbnLimpo);
         } else if (isbnLimpo.length() == 13) {
@@ -40,29 +52,39 @@ public class AdminLivroController {
             return "redirect:/admin";
         }
 
-        // Upload da capa (igual antes)
-        if (capa != null && !capa.isEmpty()) {
-            String uploadDir = "/home/anthony/GitHub/BibliotecaUNP/SistemaLogin(portar)/src/main/resources/static/capas/";
-            File pasta = new File(uploadDir);
-            if (!pasta.exists()) pasta.mkdirs();
-
-            String nomeArquivo = UUID.randomUUID() + "_" + capa.getOriginalFilename();
-            String caminho = uploadDir + nomeArquivo;
-            capa.transferTo(new File(caminho));
-            livro.setCapaUrl("/capas/" + nomeArquivo);
-        } else {
-            livro.setCapaUrl("/img/placeholder-book.png");
+        try {
+            String uploadDir = new File("uploads/capas").getAbsolutePath();
+            Files.createDirectories(Paths.get(uploadDir));
+            if (capa != null && !capa.isEmpty()) {
+                String extensao = "";
+                String original = capa.getOriginalFilename();
+                if (original != null && original.contains(".")) {
+                    extensao = original.substring(original.lastIndexOf('.'));
+                }
+                String nomeArquivo = UUID.randomUUID() + extensao;
+                Path caminho = Paths.get(uploadDir, nomeArquivo);
+                capa.transferTo(caminho.toFile());
+                livro.setCapaUrl("/uploads/capas/" + nomeArquivo);
+            } else {
+                livro.setCapaUrl("/img/placeholder-book.png");
+            }
+            livroLocalRepository.save(livro);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("erro", "Erro ao salvar o livro ou a capa.");
+            return "admin/cadastrar-livro";
         }
-
-        livroLocalRepository.save(livro);
-        model.addAttribute("mensagem", "Livro cadastrado com sucesso!");
-        return "redirect:/admin";
+        return "redirect:/admin/livros/listar";
     }
 
+    /**
+     * Lista todos os livros locais cadastrados.
+     * Exibe no painel do administrador.
+     */
     @GetMapping("/listar")
     public String listarLivros(Model model) {
         List<LivroLocal> livros = livroLocalRepository.findAll();
         model.addAttribute("livros", livros);
-        return "admin-livros"; // crie um template se quiser listar
+        return "Administrador"; // ou o template correto
     }
 }
