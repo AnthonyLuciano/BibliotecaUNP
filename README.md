@@ -1,6 +1,6 @@
 ---
 
-# 📚 BibliotecaUNP
+# 📚 BibliotecaVirtual
 
 Sistema web de biblioteca universitária desenvolvido como projeto de turma da **Universidade Potiguar (UNP)**.
 Criado com **Java**, **Spring Boot**, **Thymeleaf** e **OpenLibrary API**, o sistema oferece funcionalidades completas de gerenciamento de livros, usuários, empréstimos, devoluções, notificações e recomendações personalizadas.
@@ -35,7 +35,7 @@ O **BibliotecaUNP** tem como foco facilitar a gestão de acervos físicos e virt
 
 ### 📚 Lucas – Gerenciamento de Livros
 
-* ⚠️ RF4: Cadastro de novos livros/exemplares (apenas administradores) *(parcial)*
+* ✅ RF4: Cadastro de novos livros/exemplares (apenas administradores) *(parcial)*
 * ✅ RF5: Busca de livros por título, autor, gênero ou ISBN
 * ✅ RF6: Visualização de detalhes dos livros
 
@@ -44,7 +44,7 @@ O **BibliotecaUNP** tem como foco facilitar a gestão de acervos físicos e virt
 ### 📦 Tyago – Empréstimos e Devoluções
 
 * ✅ RF7: Empréstimos virtuais com prazos definidos
-* ⚠️ RF8: Controle de disponibilidade de exemplares *(parcial/incompleto)*
+* ✅ RF8: Controle de disponibilidade de exemplares *(parcial/incompleto)*
 * ✅ RF9: Multas por atraso
 * ✅ RF10: Lembretes por e-mail sobre devolução (via agendamento)
 
@@ -68,19 +68,19 @@ O **BibliotecaUNP** tem como foco facilitar a gestão de acervos físicos e virt
 
 | Requisito | Descrição                                         | Responsável | Status        |
 | --------- | ------------------------------------------------- | ----------- | ------------- |
-| RF1       | Login para usuários e administradores             | Anthony     | ✅             |
-| RF2       | Cadastro de novos usuários                        | Anthony     | ✅             |
-| RF3       | Edição/desativação de usuários                    | Anthony     | ✅             |
-| RF4       | Cadastro de livros/exemplares                     | Lucas       | ⬜️            |
-| RF5       | Busca de livros por título, autor, gênero ou ISBN | Lucas       | ✅             |
-| RF6       | Visualização de detalhes dos livros               | Lucas       | ✅             |
-| RF7       | Empréstimos virtuais com prazo                    | Tyago       | ✅             |
-| RF8       | Controle de disponibilidade de exemplares         | Tyago       | ⚠️ Parcial    |
-| RF9       | Multas por atraso                                 | Tyago       | ⬜️            |
-| RF10      | Lembretes por e-mail/notificação                  | Tyago       | ✅             |
-| RF11      | Relatórios administrativos                        | Maurilio    | ⬜️            |
-| RF12      | Aprovação/gestão de cadastro de usuários          | Maurilio    | ✅\* (parcial) |
-| RF13      | Recomendação baseada em histórico                 | Ygor        | ✅             |
+| RF1       | Login para usuários e administradores             | Anthony     | ✅            |
+| RF2       | Cadastro de novos usuários                        | Anthony     | ✅            |
+| RF3       | Edição/desativação de usuários                    | Anthony     | ✅            |
+| RF4       | Cadastro de livros/exemplares                     | Lucas       | ✅            |
+| RF5       | Busca de livros por título, autor, gênero ou ISBN | Lucas       | ✅            |
+| RF6       | Visualização de detalhes dos livros               | Lucas       | ✅            |
+| RF7       | Empréstimos virtuais com prazo                    | Tyago       | ✅            |
+| RF8       | Controle de disponibilidade de exemplares         | Tyago       | ✅            |
+| RF9       | Multas por atraso                                 | Tyago       | ✅            |
+| RF10      | Lembretes por e-mail/notificação                  | Tyago       | ✅            |
+| RF11      | Relatórios administrativos                        | Maurilio    | ✅            |
+| RF12      | Aprovação/gestão de cadastro de usuários          | Maurilio    | ✅            |
+| RF13      | Recomendação baseada em histórico                 | Ygor        | ✅            |
 
 ---
 
@@ -88,13 +88,12 @@ O **BibliotecaUNP** tem como foco facilitar a gestão de acervos físicos e virt
 
 | Integrante   | Itens Pendentes                   |
 | ------------ | --------------------------------- |
-| **Anthony**  | 🔧 Auxílio técnico + documentação |
-| **Lucas**    | RF4                               |
-| **Tyago**    | RF8, RF9                          |
-| **Maurilio** | RF11, RF12\*                      |
-| **Ygor**     | 📝 Documentação técnica/manual    |
-
-> ⚠️ \*RF12 está parcialmente implementado (falta aprovação explícita no fluxo de cadastro)
+| **Anthony**  | Revisando Documentação            |
+| **Lucas**    | tudo feito ✅                     |
+| **Tyago**    | tudo feito ✅                     |
+| **Maurilio** | tudo feito ✅                     |
+| **Ygor**     | tudo feito ✅                     |
+| **Cosme**    | Documentação e Slides             |
 
 ---
 
@@ -157,6 +156,7 @@ Este projeto foi desenvolvido como parte da disciplina de Programação na **Uni
 * **Tyago**
 * **Maurilio**
 * **Ygor**
+* **Cosme**
 
 ---
 
