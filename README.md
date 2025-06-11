@@ -1,6 +1,6 @@
 ---
 
-# 📚 BibliotecaUNP
+# 📚 BibliotecaVirtual
 
 Sistema web de biblioteca universitária desenvolvido como projeto de turma da **Universidade Potiguar (UNP)**.
 Criado com **Java**, **Spring Boot**, **Thymeleaf** e **OpenLibrary API**, o sistema oferece funcionalidades completas de gerenciamento de livros, usuários, empréstimos, devoluções, notificações e recomendações personalizadas.
