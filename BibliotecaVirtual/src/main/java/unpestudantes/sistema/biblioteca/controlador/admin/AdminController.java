@@ -10,10 +10,7 @@ import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.UsuarioRepository;
 
 import java.math.BigDecimal;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import unpestudantes.sistema.biblioteca.modelo.emprestimo.Emprestimo;
 import unpestudantes.sistema.biblioteca.repositorio.EmprestimoRepository;
 import unpestudantes.sistema.biblioteca.repositorio.LivroLocalRepository;
