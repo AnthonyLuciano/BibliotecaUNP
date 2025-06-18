@@ -9,6 +9,7 @@ Criado com **Java**, **Spring Boot**, **Thymeleaf** e **OpenLibrary API**, o sis
 
 ## 🧠 Visão Geral
 
+
 A **BibliotecaVirtual** tem como foco facilitar a gestão de acervos físicos e virtuais, proporcionando uma experiência completa para alunos e administradores. Entre os destaques estão:
 
 * Autenticação de usuários com confirmação de e-mail

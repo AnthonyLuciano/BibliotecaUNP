@@ -18,11 +18,23 @@
     <!-- Seção Perfil -->
     <div id="perfil">
       <h2>Informações do Usuário</h2>
-      <img th:src="${usuario.fotoUrl != null ? usuario.fotoUrl : '/img/placeholder-user.png'}"
+      <img th:if="${usuario != null}" th:src="${usuario.fotoUrl != null} ? ${usuario.fotoUrl} : '/img/placeholder-user.png'"
            alt="Foto de perfil" class="profile-picture"/>
       <p><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
       <p><strong>Usuário:</strong> <span th:text="${usuario.username}"></span></p>
-      <p><strong>Senha:</strong> ******** <button class="btn btn-save">Alterar</button></p>
+      <p><strong>Senha:</strong> ******** <button type="button" onclick="document.getElementById('trocarSenha').style.display='block'" class="btn btn-save">Alterar</button></p>
+
+      <div id="trocarSenha" style="display:none; margin-bottom:20px;">
+        <form th:action="@{/perfil/trocar-senha}" method="post">
+          <input type="password" name="senhaAtual" placeholder="Senha atual" required>
+          <input type="password" name="novaSenha" placeholder="Nova senha" required>
+          <input type="password" name="confirmarSenha" placeholder="Confirmar nova senha" required>
+          <button type="submit" class="btn btn-save">Salvar Nova Senha</button>
+          <button type="button" onclick="document.getElementById('trocarSenha').style.display='none'" class="btn btn-delete">Cancelar</button>
+        </form>
+        <div th:if="${erroSenha}" style="color:red;" th:text="${erroSenha}"></div>
+        <div th:if="${msgSenha}" style="color:green;" th:text="${msgSenha}"></div>
+      </div>
 
       <form th:action="@{/perfil/foto}" method="post" enctype="multipart/form-data">
         <input type="file" name="foto" accept="image/*" required>
@@ -34,40 +46,45 @@
     <div id="emprestimos">
       <h2>Meus Empréstimos</h2>
       <table>
-          <thead>
-              <tr>
-                  <th>Título</th>
-                  <th>Data de Empréstimo</th>
-                  <th>Data de Devolução Prevista</th>
-                  <th>Data de Devolução Real</th>
-                  <th>Multa</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr th:each="emprestimo : ${emprestimos}">
-                  <td th:text="${emprestimo.titulo}"></td>
-                  <td th:text="${#temporals.format(emprestimo.dataEmprestimo, 'dd/MM/yyyy')}"></td>
-                  <td th:text="${#temporals.format(emprestimo.dataDevolucaoPrevista, 'dd/MM/yyyy')}"></td>
-                  <td th:text="${emprestimo.dataDevolucaoReal != null ? #temporals.format(emprestimo.dataDevolucaoReal, 'dd/MM/yyyy') : '-'}"></td>
-                  <td>
-                    <span th:text="|R$ ${#numbers.formatDecimal(emprestimo.multa != null ? emprestimo.multa : 0, 1, 'COMMA', 2, 'POINT')}|"></span>
-                  </td>
-              </tr>
-          </tbody>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Data de Empréstimo</th>
+            <th>Data de Devolução Prevista</th>
+            <th>Data de Devolução Real</th>
+            <th>Multa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="emprestimo : ${emprestimos}">
+            <td th:text="${emprestimo.titulo}"></td>
+            <td th:text="${#temporals.format(emprestimo.dataEmprestimo, 'dd/MM/yyyy')}"></td>
+            <td th:text="${#temporals.format(emprestimo.dataDevolucaoPrevista, 'dd/MM/yyyy')}"></td>
+            <td th:text="${emprestimo.dataDevolucaoReal != null ? #temporals.format(emprestimo.dataDevolucaoReal, 'dd/MM/yyyy') : '-'}"></td>
+            <td>
+              <span th:text="|R$ ${#numbers.formatDecimal(emprestimo.multa != null ? emprestimo.multa : 0, 1, 'COMMA', 2, 'POINT')}|"></span>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
     <!-- Seção Minhas Listas -->
     <div id="lista">
       <h2>Minhas Listas</h2>
+      <div style="color: red; margin-bottom: 10px;">
+        Atenção: Ao deletar todos os livros associados a lista, ela serã removida permanentemente. <br>
+        na criaçao de uma nova lista, aparecera um campo vazio temporariamente ate voce adicionar um livro a ela.
+      </div>
       <form th:action="@{/lista/criar}" method="post" style="margin-bottom: 20px;">
         <input type="text" name="nomeLista" placeholder="Nome da nova lista" required>
         <button type="submit" class="btn btn-save">Criar Lista</button>
       </form>
-      <div th:each="nomeLista : ${nomesListas}">
-        <h3 th:text="${nomeLista}" style="display:inline;"></h3>
+      <!-- Use entry para garantir acesso correto ao Map -->
+      <div th:each="entry : ${listasPorNome}">
+        <h3 th:text="${entry.key}" style="display:inline;"></h3>
         <form th:action="@{/lista/deletar}" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta lista?');">
-          <input type="hidden" name="nomeLista" th:value="${nomeLista}" />
+          <input type="hidden" name="nomeLista" th:value="${entry.key}" />
           <button class="btn btn-delete" type="submit">Deletar Lista</button>
         </form>
         <table class="table">
@@ -75,11 +92,11 @@
             <tr><th>Título</th><th>ISBN</th><th>Ação</th></tr>
           </thead>
           <tbody>
-            <tr th:each="livro : ${listasPorNome[nomeLista]}">
+            <tr th:each="livro : ${entry.value}">
               <td th:text="${livro.titulo}"></td>
               <td th:text="${livro.isbn}"></td>
               <td>
-                <form th:action="@{/lista/remover}" method="post" style="display:inline;">
+                <form th:action="@{/lista/remover}" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja remover este livro da lista?');">
                   <input type="hidden" name="id" th:value="${livro.id}" />
                   <button class="btn btn-delete" type="submit">Remover</button>
                 </form>

@@ -1,41 +1,65 @@
-CREATE DATABASE IF NOT EXISTS loginapp;
-USE loginapp;
+CREATE DATABASE IF NOT EXISTS bibliotecavirtual;
+USE bibliotecavirtual;
 
--- Criação da tabela usuario
 CREATE TABLE usuario (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    username VARCHAR(255),
+    password VARCHAR(255),
     email VARCHAR(255),
     email_verificado BOOLEAN,
     codigo_verificacao VARCHAR(255),
-    admin BOOLEAN NOT NULL
+    admin BOOLEAN,
+    foto_url VARCHAR(255),
+    ativo BOOLEAN
 );
 
--- Atualização da tabela livro para usar edition_key
-CREATE TABLE livro (
+CREATE TABLE livro_local (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    autor VARCHAR(255) NOT NULL,
-    genero VARCHAR(100),
-    dataLancamento VARCHAR(20),
-    edition_key VARCHAR(40), -- novo campo para editionKey
-    disponivel BOOLEAN NOT NULL,
-    sinopse TEXT
+    titulo VARCHAR(255),
+    autor VARCHAR(255),
+    isbn10 VARCHAR(20),
+    isbn13 VARCHAR(20),
+    capa_url VARCHAR(255),
+    disponivel BOOLEAN,
+    quantidade INT
 );
 
--- Exemplo de inserção (edition_key fictício, ajuste conforme necessário)
-INSERT INTO livro (titulo, autor, genero, datalancamento, edition_key, disponivel, sinopse) VALUES
-('Dom Casmurro', 'Machado de Assis', 'Romance', '1899', 'OL12345M', 1, 'Narrado por Bentinho, o romance explora dúvidas sobre a fidelidade de sua esposa Capitu, marcada por sua ambiguidade e ciúmes.'),
-('O Pequeno Príncipe', 'Antoine de Saint-Exupéry', 'Fábula', '1943', 'OL23456M', 1, 'Um jovem príncipe viaja por planetas e compartilha reflexões sobre a vida, o amor e a amizade, em uma fábula poética e filosófica.'),
-('1984', 'George Orwell', 'Distopia', '1949', 'OL34567M', 1, 'Em um regime totalitário liderado pelo Grande Irmão, Winston Smith luta contra a opressão e manipulação da verdade.'),
-('Capitães da Areia', 'Jorge Amado', 'Romance', '1937', 'OL45678M', 1, 'Conta a história de um grupo de meninos de rua em Salvador e suas lutas por sobrevivência e dignidade.'),
-('Harry Potter e a Pedra Filosofal', 'J.K. Rowling', 'Fantasia', '1997', 'OL56789M', 1, 'O jovem Harry descobre ser um bruxo e inicia sua jornada em Hogwarts, onde enfrenta perigos e descobre seu passado.'),
-('A Revolução dos Bichos', 'George Orwell', 'Sátira', '1945', 'OL67890M', 0, 'Os animais de uma fazenda se rebelam contra seus donos humanos, mas acabam recriando uma tirania semelhante entre eles.'),
-('Memórias Póstumas de Brás Cubas', 'Machado de Assis', 'Romance', '1881', 'OL78901M', 1, 'Brás Cubas narra sua vida após a morte, com ironia e crítica à sociedade brasileira do século XIX.'),
-('O Hobbit', 'J.R.R. Tolkien', 'Fantasia', '1937', 'OL89012M', 1, 'Bilbo Bolseiro embarca em uma aventura com anões para recuperar um tesouro guardado por um dragão.'),
-('A Moreninha', 'Joaquim Manuel de Macedo', 'Romance', '1844', 'OL90123M', 1, 'Augusto, um estudante de medicina, se apaixona por Carolina durante um fim de semana em uma ilha, cumprindo uma antiga promessa.'),
-('Senhora', 'José de Alencar', 'Romance', '1875', 'OL01234M', 0, 'Aurélia Camargo, enriquecida repentinamente, compra o casamento com seu antigo amor para se vingar da rejeição que sofreu.');
+CREATE TABLE lista_livro (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id BIGINT,
+    nome_lista VARCHAR(255),
+    isbn VARCHAR(20),
+    titulo VARCHAR(255),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
+CREATE TABLE emprestimo (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id BIGINT,
+    isbn VARCHAR(20),
+    titulo VARCHAR(255),
+    data_emprestimo DATETIME,
+    data_devolucao_prevista DATETIME,
+    data_devolucao_real DATETIME,
+    edition_key VARCHAR(255),
+    multa DECIMAL(10,2),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
+INSERT INTO emprestimo (id, data_devolucao_prevista, data_devolucao_real, data_emprestimo, isbn, titulo, usuario_id, edition_key, multa)
+VALUES 
+(5, '2025-06-13 14:53:19.696347', '2025-06-03 16:45:46.221033', '2025-05-30 14:53:19.696136', '-', 'Harry Potter and the Philosopher\'s Stone', 5, 'OL22856696M', NULL),
+(6, '2025-06-13 15:08:07.814929', NULL, '2025-05-30 15:08:07.814895', '-', 'Harry Potter and the Philosopher\'s Stone', 6, 'OL22856696M', NULL),
+(7, '2025-06-13 15:16:28.456661', NULL, '2025-05-30 15:16:28.456603', '-', 'Harry Potter and the Order of the Phoenix', 6, 'OL25662116M', NULL),
+(8, '2025-06-16 09:33:07.801001', NULL, '2025-06-02 09:33:07.800916', '-', 'Jurassic Park', 5, 'OL38582593M', NULL),
+(9, '2025-06-16 15:00:12.088532', NULL, '2025-06-02 15:00:12.088456', '-', 'Dom Casmurro (Classicos Da Literatura Brasileira)', 5, 'OL8265063M', NULL);
+
+insert into `lista_livro` (`id`, `isbn`, `nome_lista`, `titulo`, `usuario_id`) values
+(1, NULL, 'joaozinho', '', 5),
+(2, NULL, 'pedrinho', '', 5),
+(3, NULL, 'gustavinho', '', 5),
+(4, NULL, 'livros legais', '', 5),
+(5, NULL, 'pedrinho2', NULL, 5);
 
 -- Tabela usuario permanece igual
 INSERT INTO usuario (username, password, admin, email, email_verificado, codigo_verificacao) VALUES
@@ -53,14 +77,14 @@ INSERT INTO usuario (username, password, admin, email, email_verificado, codigo_
 ('lucas','$2b$12$Shl77K6tMjUT3A44mAPPbu/WNzEVRu2bzJjER2UzEo.l.nae2gRhq',0,'lucas@email.com',0,541102);
 
 -- Funcionários (admin = 1)
---('func1', 'senha123', 1),
---('func2', 'senha456', 1),
---('bibliotecario', 'admin2025', 1),
---('gerente', 'supervisor', 1);
+-- ('func1', 'senha123', 1),
+-- ('func2', 'senha456', 1),
+-- ('bibliotecario', 'admin2025', 1),
+-- ('gerente', 'supervisor', 1);
 
 -- Clientes (admin = 0)
---'joao', 'joao123',
---'maria', 'maria456'
---'ana', 'ana789'
---'carlos', 'carlos321',
+-- 'joao', 'joao123',
+-- 'maria', 'maria456'
+-- 'ana', 'ana789'
+-- 'carlos', 'carlos321',
 -- 'lucas', 'lucas654'

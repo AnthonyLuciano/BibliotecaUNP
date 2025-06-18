@@ -11,6 +11,7 @@ import unpestudantes.sistema.biblioteca.modelo.usuario.Usuario;
 import unpestudantes.sistema.biblioteca.repositorio.ListaLivroRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,12 +33,14 @@ public class ListaLivroController {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
         if (usuario == null) return "redirect:/login";
         List<ListaLivro> listas = listaLivroRepository.findByUsuario(usuario);
-        // Supondo que 'listas' é uma lista de objetos com o campo 'nomeLista'
         Set<String> nomesListas = listas.stream()
             .map(ListaLivro::getNomeLista)
             .collect(Collectors.toSet());
+        Map<String, List<ListaLivro>> listasPorNome = listas.stream()
+            .collect(Collectors.groupingBy(ListaLivro::getNomeLista));
         model.addAttribute("nomesListas", nomesListas);
         model.addAttribute("listas", listas);
+        model.addAttribute("listasPorNome", listasPorNome); // <-- Adicione esta linha
         return "perfil"; // Corrija aqui
     }
 
@@ -81,11 +84,16 @@ public class ListaLivroController {
      * Adiciona um livro a uma lista do usuário (versão com ID da lista e editionKey).
      */
     @PostMapping("/adicionar-livro")
-    public String adicionarLivroALista(@RequestParam Long listaId, @RequestParam String editionKey, @RequestParam String titulo, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String adicionarLivroALista(
+            @RequestParam Long listaId,
+            @RequestParam String editionKey,
+            @RequestParam String titulo,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
         if (usuario == null) return "redirect:/login";
         ListaLivro lista = listaLivroRepository.findById(listaId).orElse(null);
-        if (lista != null && lista.getUsuario().equals(usuario)) {
+        if (lista != null && lista.getUsuario() != null && lista.getUsuario().getId().equals(usuario.getId())) {
             // Evita duplicidade
             boolean jaExiste = listaLivroRepository.findByUsuarioAndNomeLista(usuario, lista.getNomeLista())
                 .stream().anyMatch(l -> editionKey.equals(l.getIsbn()));
@@ -95,6 +103,7 @@ public class ListaLivroController {
                 novo.setNomeLista(lista.getNomeLista());
                 novo.setIsbn(editionKey); // Usando editionKey como identificador
                 novo.setTitulo(titulo);
+                System.out.println("Salvando livro na lista: " + novo.getTitulo() + " | Lista: " + novo.getNomeLista() + " | Usuário: " + usuario.getUsername());
                 listaLivroRepository.save(novo);
                 redirectAttributes.addFlashAttribute("mensagem", "Livro adicionado à lista!");
             } else {

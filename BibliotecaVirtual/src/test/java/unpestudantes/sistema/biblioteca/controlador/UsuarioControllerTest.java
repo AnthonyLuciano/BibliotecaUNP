@@ -1,7 +1,7 @@
 package unpestudantes.sistema.biblioteca.controlador;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.springframework.ui.Model;
 import unpestudantes.sistema.biblioteca.controlador.usuario.UsuarioController;
@@ -14,13 +14,13 @@ import unpestudantes.sistema.biblioteca.modelo.livro.LivroOpenLibrary;
 
 import java.util.Optional;
 import java.util.List;
-import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
 class UsuarioControllerTest {
 
     @Mock
@@ -44,13 +44,8 @@ class UsuarioControllerTest {
     @InjectMocks
     private UsuarioController usuarioController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
-    void cadastro_DeveRetornarConfirmarEmail_QuandoUsuarioNovo() {
+    void deveRetornarConfirmarEmailQuandoUsuarioNovo() {
         when(usuarioRepository.findByUsername("novoUsuario")).thenReturn(Optional.empty());
 
         String view = usuarioController.cadastro("novoUsuario", "novo@email.com", "senha123", model);
@@ -58,10 +53,11 @@ class UsuarioControllerTest {
         verify(usuarioRepository, times(1)).save(any(Usuario.class));
         verify(emailService, times(1)).enviarCodigoVerificacao(eq("novo@email.com"), anyString());
         assertEquals("confirmar-email", view);
+        System.out.println("✅ Cadastro de novo usuário retorna confirmar-email.");
     }
 
     @Test
-    void cadastro_DeveRetornarCadastro_QuandoUsuarioJaExiste() {
+    void deveRetornarCadastroQuandoUsuarioJaExiste() {
         when(usuarioRepository.findByUsername("existente")).thenReturn(Optional.of(new Usuario()));
 
         String view = usuarioController.cadastro("existente", "existente@email.com", "senha123", model);
@@ -69,20 +65,22 @@ class UsuarioControllerTest {
         verify(usuarioRepository, never()).save(any(Usuario.class));
         verify(emailService, never()).enviarCodigoVerificacao(anyString(), anyString());
         assertEquals("cadastro", view);
+        System.out.println("✅ Cadastro de usuário existente retorna cadastro.");
     }
 
     @Test
-    void cadastro_DeveCadastrarUsuarioComSucesso() {
+    void deveCadastrarUsuarioComSucesso() {
         when(usuarioRepository.findByUsername("joao")).thenReturn(Optional.empty());
 
         String view = usuarioController.cadastro("joao", "joao@email.com", "senha123", model);
 
         verify(usuarioRepository).save(any(Usuario.class));
         assertEquals("confirmar-email", view);
+        System.out.println("✅ Cadastro de usuário com sucesso.");
     }
 
     @Test
-    void cadastro_DeveTratarSqlInjectionComoTexto() {
+    void deveTratarSqlInjectionComoTexto() {
         String injecao = "usuario' OR '1'='1";
         when(usuarioRepository.findByUsername(injecao)).thenReturn(Optional.empty());
 
@@ -90,21 +88,22 @@ class UsuarioControllerTest {
 
         verify(usuarioRepository).save(any(Usuario.class));
         assertEquals("confirmar-email", view);
+        System.out.println("✅ SQL Injection tratado como texto.");
     }
 
     @Test
-    void login_DeveFalharComSenhaIncorreta() {
+    void deveFalharLoginComSenhaIncorreta() {
         Usuario usuario = new Usuario();
         usuario.setUsername("joao");
         usuario.setPassword("senha123");
         when(usuarioRepository.findByUsername("joao")).thenReturn(Optional.of(usuario));
-
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
         jakarta.servlet.http.HttpSession session = mock(jakarta.servlet.http.HttpSession.class);
         String view = usuarioController.login("joao", "senhaErrada", model, session);
 
         assertEquals("login", view);
+        System.out.println("✅ Login falha com senha incorreta.");
     }
 
     @Test
@@ -124,5 +123,6 @@ class UsuarioControllerTest {
         verify(model).addAttribute(eq("generosPopulares"), anyList());
         verify(model).addAttribute(eq("livrosPorGenero"), anyList());
         assertEquals("home", view);
+        System.out.println("✅ Home adiciona todos os atributos no model.");
     }
 }

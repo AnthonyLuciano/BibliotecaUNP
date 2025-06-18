@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -250,21 +249,27 @@ public class UsuarioController {
     public String perfil(Model model, HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
         if (usuario == null) return "redirect:/login";
+        model.addAttribute("usuario", usuario); // <-- ESSENCIAL
         List<ListaLivro> listas = listaLivroRepository.findByUsuario(usuario);
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("listas", listas);
-
-        // Agrupa por nomeLista
+        Set<String> nomesListas = listas.stream()
+            .map(ListaLivro::getNomeLista)
+            .collect(Collectors.toSet());
         Map<String, List<ListaLivro>> listasPorNome = listas.stream()
             .collect(Collectors.groupingBy(ListaLivro::getNomeLista));
-        model.addAttribute("listasPorNome", listasPorNome);
-
-        Set<String> nomesListas = listasPorNome.keySet();
         model.addAttribute("nomesListas", nomesListas);
+        model.addAttribute("listas", listas);
+        model.addAttribute("listasPorNome", listasPorNome);
 
         // Histórico de empréstimos
         List<Emprestimo> emprestimos = emprestimoRepository.findByUsuario(usuario);
         model.addAttribute("emprestimos", emprestimos);
+
+        System.out.println("Listas encontradas para o usuário: " + listas.size());
+        listas.forEach(l -> System.out.println(l.getTitulo() + " | " + l.getNomeLista()));
+        System.out.println("nomesListas:");
+        nomesListas.forEach(System.out::println);
+        System.out.println("listasPorNome keys:");
+        listasPorNome.keySet().forEach(System.out::println);
 
         return "perfil";
     }
@@ -299,6 +304,49 @@ public class UsuarioController {
             e.printStackTrace();
         }
         return "redirect:/perfil";
+    }
+
+    /**
+     * Atualiza a senha do usuário.
+     * Recebe a senha atual, nova senha e confirmação.
+     * Valida e altera a senha, mostrando mensagem de sucesso ou erro.
+     * -Anthony
+     */
+    @PostMapping("/perfil/trocar-senha")
+    public String trocarSenha(
+        @RequestParam String senhaAtual,
+        @RequestParam String novaSenha,
+        @RequestParam String confirmarSenha,
+        Model model,
+        HttpSession session
+    ) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuario == null) return "redirect:/login";
+
+        // Valida senha atual
+        if (!passwordEncoder.matches(senhaAtual, usuario.getPassword())) {
+            model.addAttribute("erroSenha", "Senha atual incorreta.");
+        } else if (!novaSenha.equals(confirmarSenha)) {
+            model.addAttribute("erroSenha", "Nova senha e confirmação não coincidem.");
+        } else {
+            usuario.setPassword(passwordEncoder.encode(novaSenha));
+            usuarioRepository.save(usuario);
+            session.setAttribute("usuarioLogado", usuario);
+            model.addAttribute("msgSenha", "Senha alterada com sucesso!");
+        }
+
+        // Recarrega dados do perfil
+        List<ListaLivro> listas = listaLivroRepository.findByUsuario(usuario);
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("listas", listas);
+        Map<String, List<ListaLivro>> listasPorNome = listas.stream()
+            .collect(Collectors.groupingBy(ListaLivro::getNomeLista));
+        model.addAttribute("listasPorNome", listasPorNome);
+        model.addAttribute("nomesListas", listasPorNome.keySet());
+        List<Emprestimo> emprestimos = emprestimoRepository.findByUsuario(usuario);
+        model.addAttribute("emprestimos", emprestimos);
+
+        return "perfil";
     }
 
 }
